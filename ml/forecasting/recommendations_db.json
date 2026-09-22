@@ -1,0 +1,104 @@
+{
+  "Anthracnose": [
+    {
+      "treatment_type": "Chemical",
+      "title": "Foliar Fungicide Spray (Blossom Emergence)",
+      "product_name": "Copper Oxychloride 50% WP (Blitox / Blue Copper)",
+      "active_ingredient": "Copper Oxychloride 50% WP",
+      "dosage_rate": "3.0 g per Litre of water (0.3%)",
+      "application_guidance": "Spray thoroughly at blossom emergence and repeat at 15-day intervals during humid conditions.",
+      "waiting_period_days": 14,
+      "citation_source": "TNAU Agritech Portal (Crop Protection: Diseases of Mango)",
+      "citation_url": "https://agritech.tnau.ac.in"
+    },
+    {
+      "treatment_type": "Chemical",
+      "title": "Systemic Fungicide Spray (Post-Flush)",
+      "product_name": "Azoxystrobin 23% SC (Amistar)",
+      "active_ingredient": "Azoxystrobin 23% SC",
+      "dosage_rate": "1.0 mL per Litre of water",
+      "application_guidance": "Apply during leaf flush or early panicle development.",
+      "waiting_period_days": 21,
+      "citation_source": "ICAR-CISH Lucknow Advisory Monograph",
+      "citation_url": "https://cish.icar.gov.in"
+    }
+  ],
+  "Bacterial Canker": [
+    {
+      "treatment_type": "Chemical",
+      "title": "Antibiotic + Copper Combination Spray",
+      "product_name": "Streptocycline + Copper Oxychloride",
+      "active_ingredient": "Streptomycin sulphate 90% + Tetracycline hydrochloride 10% + COC 50% WP",
+      "dosage_rate": "Streptocycline 100 ppm (1 g in 10 L) + COC 2.5 g/L",
+      "application_guidance": "Spray at 15-day intervals starting from first leaf lesions.",
+      "waiting_period_days": 20,
+      "citation_source": "DPPQS Standard Pest Management Guidelines; ICAR-CISH Bulletin",
+      "citation_url": "https://ppqs.gov.in"
+    }
+  ],
+  "Powdery Mildew": [
+    {
+      "treatment_type": "Chemical",
+      "title": "Inorganic Sulphur Protective Spray",
+      "product_name": "Wettable Sulphur 80% WP (Sulfex)",
+      "active_ingredient": "Sulphur 80% WP",
+      "dosage_rate": "2.0 g to 3.0 g per Litre of water",
+      "application_guidance": "Apply first spray at initiation of flower panicles. Avoid spraying in direct hot sunlight (>35°C).",
+      "waiting_period_days": 10,
+      "citation_source": "TNAU Agritech Portal (Diseases of Mango)",
+      "citation_url": "https://agritech.tnau.ac.in"
+    }
+  ],
+  "Sooty Mold": [
+    {
+      "treatment_type": "Cultural",
+      "title": "Starch Flaking Foliar Wash",
+      "product_name": "Boiled Maida / Cassava Starch Solution",
+      "active_ingredient": "Starch 2.0% w/v",
+      "dosage_rate": "20 g starch boiled in 1 Litre of water",
+      "application_guidance": "Spray cooled starch solution. As it dries, it peels off and removes the mold crust mechanically.",
+      "waiting_period_days": 0,
+      "citation_source": "TNAU Horticultural College & Research Institute, Periyakulam",
+      "citation_url": "https://agritech.tnau.ac.in"
+    }
+  ],
+  "Fruit Fly": [
+    {
+      "treatment_type": "Biological",
+      "title": "Para-Pheromone Lure Trapping",
+      "product_name": "Methyl Eugenol Trap (CISH / TNAU Design)",
+      "active_ingredient": "Methyl Eugenol + Malathion 50% EC",
+      "dosage_rate": "10 to 15 traps per hectare",
+      "application_guidance": "Hang traps in mid-canopy 1.5-2.0m above ground 60 days before fruit harvest.",
+      "waiting_period_days": 0,
+      "citation_source": "ICAR-CISH IPM Package for Bactrocera dorsalis",
+      "citation_url": "https://cish.icar.gov.in"
+    }
+  ],
+  "Mealy Bug": [
+    {
+      "treatment_type": "Cultural",
+      "title": "Trunk Polythene Barrier Banding",
+      "product_name": "Polythene Banding (400 gauge, 30 cm wide)",
+      "active_ingredient": "Slippery Polyethylene Film + Grease band",
+      "dosage_rate": "1 band per tree trunk 50 cm above ground",
+      "application_guidance": "Wrap band tightly in November-December before crawler emergence from soil.",
+      "waiting_period_days": 0,
+      "citation_source": "ICAR-CISH IPM Bulletin for Drosicha mangiferae",
+      "citation_url": "https://cish.icar.gov.in"
+    }
+  ],
+  "Scale Insect": [
+    {
+      "treatment_type": "Chemical",
+      "title": "Systemic Spray for Scale Encrustations",
+      "product_name": "Dimethoate 30% EC (Rogor)",
+      "active_ingredient": "Dimethoate 30% EC",
+      "dosage_rate": "1.7 mL per Litre of water",
+      "application_guidance": "Direct high-pressure spray to underside of leaves and young green stems.",
+      "waiting_period_days": 21,
+      "citation_source": "TNAU Agritech Portal (Crop Protection: Mango Pests)",
+      "citation_url": "https://agritech.tnau.ac.in"
+    }
+  ]
+}

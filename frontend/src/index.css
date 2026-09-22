@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-900 text-slate-100 font-sans;
+  }
+}
+
+/* Glassmorphism & Micro-animations */
+.glass-panel {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card-hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 12px 24px -10px rgba(245, 158, 11, 0.15);
+}
+
+/* Pulse Glow Effects */
+.pulse-emerald {
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.pulse-amber {
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
