@@ -14,9 +14,9 @@ An AI-powered precision agriculture decision support system for mango orchards. 
 | **Phase 3** | **Pest Detection (YOLOv8)** + Unreliable Class Flagging | **COMPLETED** |
 | **Phase 4** | **Severity Assessment + OHI Engine + Weather Forecasting** | **COMPLETED** |
 | **Phase 5** | **FastAPI Backend + Supabase PostgreSQL & Auth** | **COMPLETED** |
-| **Phase 6** | **React Frontend Dashboard + WeasyPrint PDF Reports** | **CURRENT (ACTIVE)** |
-| **Phase 7** | **Bilingual Advisory Chatbot (English + Tamil)** | Queued |
-| **Phase 8** | **Model Comparison Study & Publication Paper** | Queued |
+| **Phase 6** | **React Frontend Dashboard + WeasyPrint PDF Reports** | **COMPLETED** |
+| **Phase 7** | **Bilingual Advisory Chatbot (English + Tamil)** | **COMPLETED** |
+| **Phase 8** | **Model Comparison Study & Publication Paper Summary** | **COMPLETED** (See `CONFERENCE_PAPER_SUMMARY.md`) |
 
 ---
 
