@@ -1,39 +1,20 @@
 #!/usr/bin/env bash
+# Creates backend/venv and installs the backend + ML + test dependencies.
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
-
-echo "===================================================================="
-echo "🥭 Setting up Python Virtual Environment for Mango Orchard AI"
-echo "===================================================================="
-
-VENV_DIR="$SCRIPT_DIR/.venv"
+VENV_DIR="$SCRIPT_DIR/backend/venv"
 
 if [ ! -d "$VENV_DIR" ]; then
     echo "Creating virtual environment at $VENV_DIR..."
-    python3 -m venv "$VENV_DIR"
-else
-    echo "Virtual environment already exists at $VENV_DIR."
+    python3 -m venv "$VENV_DIR" || python -m venv "$VENV_DIR"
 fi
 
-echo "Upgrading pip and installing core ML and processing dependencies..."
-"$VENV_DIR/bin/python" -m pip install --upgrade pip setuptools wheel
+if [ -x "$VENV_DIR/bin/python" ]; then PY="$VENV_DIR/bin/python"; else PY="$VENV_DIR/Scripts/python.exe"; fi
 
-# Install core dependencies for Phase 1 & Phase 2
-"$VENV_DIR/bin/python" -m pip install \
-    numpy \
-    pillow \
-    scikit-learn \
-    requests \
-    timm \
-    torch \
-    torchvision \
-    opencv-python-headless \
-    ultralytics \
-    kaggle \
-    roboflow
+"$PY" -m pip install --upgrade pip
+"$PY" -m pip install -r "$SCRIPT_DIR/backend/requirements-dev.txt"
+# Optional: dataset download tools (Kaggle / Roboflow)
+# "$PY" -m pip install kaggle roboflow
 
-echo "===================================================================="
-echo "✅ Environment setup complete! Activate with: source .venv/bin/activate"
-echo "===================================================================="
+echo "Done. Activate with: source backend/venv/bin/activate  (Windows: backend\venv\Scripts\activate)"
