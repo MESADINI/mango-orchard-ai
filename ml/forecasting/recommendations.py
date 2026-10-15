@@ -17,8 +17,12 @@ class RecommendationEngine:
                 self.db = json.load(f)
 
     def get_recommendations_for_condition(self, condition_name: str) -> List[Dict[str, Any]]:
-        """Returns verified ICAR/TNAU recommendations for a given disease or pest."""
-        return self.db.get(condition_name, [])
+        """Returns verified ICAR/TNAU recommendations for a given disease or pest (copies, tagged with the condition)."""
+        return [{**rec, "condition": condition_name} for rec in self.db.get(condition_name, [])]
+
+    @property
+    def conditions(self) -> List[str]:
+        return list(self.db.keys())
 
     def get_recommendations_for_scan(self, disease_name: str, pest_names: List[str]) -> List[Dict[str, Any]]:
         results = []

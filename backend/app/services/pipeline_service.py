@@ -1,126 +1,148 @@
 """
 AI Mango Orchard Health & Pest Intelligence — Live Pipeline Service
-Bridges FastAPI endpoints with the trained PyTorch, Grad-CAM, YOLOv8, and OHI engines.
+Bridges FastAPI endpoints with the PyTorch, Grad-CAM, YOLOv8, and OHI engines.
 """
 
-import os
-import sys
+import io
+import logging
+import threading
 import uuid
-import shutil
 from pathlib import Path
-from typing import Dict, Any, Optional, List
-from PIL import Image
+from typing import Any, Dict, Optional
+
+from PIL import Image, UnidentifiedImageError
 
 from app.core.config import settings
-
-# Ensure ML package is on sys.path
-REPO_DIR = settings.REPO_DIR
-if str(REPO_DIR) not in sys.path:
-    sys.path.insert(0, str(REPO_DIR))
+from app.core.store import utcnow
 
 from ml.pipeline import MangoOrchardPipeline
 
+logger = logging.getLogger(__name__)
+
+# Saved extension is derived from the decoded image format, never from the client's filename.
+ALLOWED_FORMATS = {"JPEG": ".jpg", "PNG": ".png", "WEBP": ".webp"}
+
+
+class InvalidImageError(ValueError):
+    pass
+
+
+def validate_image(data: bytes, label: str) -> str:
+    """Checks that `data` is a decodable JPEG/PNG/WebP image and returns the file extension to use."""
+    if not data:
+        raise InvalidImageError(f"The {label} file is empty.")
+    if len(data) > settings.max_upload_bytes:
+        raise InvalidImageError(f"The {label} file exceeds the {settings.MAX_UPLOAD_MB} MB limit.")
+    try:
+        with Image.open(io.BytesIO(data)) as img:
+            fmt = img.format
+            img.verify()
+    except (UnidentifiedImageError, Image.DecompressionBombError, OSError, SyntaxError) as e:
+        raise InvalidImageError(f"The {label} file is not a valid image.") from e
+    if fmt not in ALLOWED_FORMATS:
+        raise InvalidImageError(f"The {label} file must be JPEG, PNG or WebP (got {fmt}).")
+    return ALLOWED_FORMATS[fmt]
+
+
+def media_url(path: Optional[str]) -> Optional[str]:
+    """Converts a file path under MEDIA_DIR into its public /media URL."""
+    if not path:
+        return None
+    rel = Path(path).resolve().relative_to(settings.MEDIA_DIR.resolve())
+    return "/media/" + rel.as_posix()
+
+
 class PipelineService:
     def __init__(self):
-        self.pipeline: Optional[MangoOrchardPipeline] = None
-        self.scans_cache: Dict[str, Dict[str, Any]] = {}
+        self._pipeline: Optional[MangoOrchardPipeline] = None
+        self._init_lock = threading.Lock()
 
     def get_pipeline(self) -> MangoOrchardPipeline:
-        if self.pipeline is None:
-            disease_weights = str(settings.DISEASE_WEIGHTS_PATH) if settings.DISEASE_WEIGHTS_PATH.exists() else None
-            pest_weights = str(settings.PEST_WEIGHTS_PATH) if settings.PEST_WEIGHTS_PATH.exists() else None
-            print(f"Initializing MangoOrchardPipeline with:\n  Disease: {disease_weights}\n  Pest: {pest_weights}")
-            self.pipeline = MangoOrchardPipeline(disease_weights=disease_weights, pest_weights=pest_weights)
-        return self.pipeline
+        with self._init_lock:
+            if self._pipeline is None:
+                self._pipeline = MangoOrchardPipeline(
+                    disease_weights=str(settings.DISEASE_WEIGHTS_PATH),
+                    pest_weights=str(settings.PEST_WEIGHTS_PATH),
+                )
+            return self._pipeline
+
+    def model_status(self) -> Dict[str, bool]:
+        return self.get_pipeline().model_status
 
     def analyze_scan(
         self,
-        leaf_bytes: bytes,
-        leaf_filename: str,
+        leaf_bytes: Optional[bytes],
         pest_bytes: Optional[bytes] = None,
-        pest_filename: Optional[str] = None,
         latitude: Optional[float] = None,
         longitude: Optional[float] = None,
         scan_type: str = "dual",
         farm_id: Optional[str] = None,
-        tree_id: Optional[str] = None
+        tree_id: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """
-        Executes end-to-end multi-modal scan using live ML pipelines.
-        """
+        """Validates and stores the uploads, runs the ML pipeline and returns the API response payload."""
         scan_id = str(uuid.uuid4())
         lat = latitude if latitude is not None else settings.DEFAULT_LATITUDE
         lon = longitude if longitude is not None else settings.DEFAULT_LONGITUDE
 
-        # 1. Save uploaded files to media directory preserving original file stems
-        leaf_ext = Path(leaf_filename).suffix or ".jpg"
-        leaf_stem = Path(leaf_filename).stem or "leaf"
-        leaf_save_path = settings.MEDIA_DIR / "uploads" / f"{scan_id}_{leaf_stem}{leaf_ext}"
-        with open(leaf_save_path, "wb") as f:
-            f.write(leaf_bytes)
+        uploads_dir = settings.MEDIA_DIR / "uploads"
+        results_dir = settings.MEDIA_DIR / "results"
+        uploads_dir.mkdir(parents=True, exist_ok=True)
+        results_dir.mkdir(parents=True, exist_ok=True)
 
-        pest_save_path = None
+        leaf_path = pest_path = None
+        if leaf_bytes is not None:
+            leaf_path = uploads_dir / f"{scan_id}_leaf{validate_image(leaf_bytes, 'leaf image')}"
         if pest_bytes is not None:
-            pest_ext = Path(pest_filename).suffix or ".jpg" if pest_filename else ".jpg"
-            pest_stem = Path(pest_filename).stem if pest_filename else "pest"
-            pest_save_path = settings.MEDIA_DIR / "uploads" / f"{scan_id}_{pest_stem}{pest_ext}"
-            with open(pest_save_path, "wb") as f:
-                f.write(pest_bytes)
+            pest_path = uploads_dir / f"{scan_id}_pest{validate_image(pest_bytes, 'pest image')}"
+        if leaf_path:
+            leaf_path.write_bytes(leaf_bytes)
+        if pest_path:
+            pest_path.write_bytes(pest_bytes)
 
-        pipeline = self.get_pipeline()
-
-        # 2. Execute analysis
-        raw_result = pipeline.analyze_orchard(
-            leaf_image=leaf_save_path,
-            pest_image=pest_save_path if pest_save_path is not None else leaf_save_path,
+        raw = self.get_pipeline().analyze_orchard(
+            leaf_image=leaf_path,
+            pest_image=pest_path,
             latitude=lat,
             longitude=lon,
             generate_gradcam=True,
-            pest_conf_threshold=0.01
+            pest_conf_threshold=settings.PEST_CONFIDENCE_THRESHOLD,
+            scan_type=scan_type,
+            output_dir=results_dir,
+            output_prefix=scan_id,
         )
+        return self._to_response(scan_id, raw, farm_id, tree_id, leaf_path, pest_path)
 
-        d_diag = raw_result["disease_diagnosis"]
-        p_intel = raw_result["pest_intelligence"]
-        ohi = raw_result["orchard_health_index"]
-        weather = raw_result["weather_vulnerability"]
-        protocols = raw_result["treatment_protocols"]["protocols"]
+    @staticmethod
+    def _to_response(scan_id, raw, farm_id, tree_id, leaf_path, pest_path) -> Dict[str, Any]:
+        d_diag = raw["disease_diagnosis"]
+        p_intel = raw["pest_intelligence"]
+        ohi = raw["orchard_health_index"]
 
-        # 3. Publish visual overlays to /media
-        gradcam_url = None
-        if d_diag.get("gradcam_overlay_path") and os.path.exists(d_diag["gradcam_overlay_path"]):
-            target_gradcam = settings.MEDIA_DIR / "gradcam" / f"{scan_id}_gradcam.jpg"
-            shutil.copy(d_diag["gradcam_overlay_path"], target_gradcam)
-            gradcam_url = f"/media/gradcam/{scan_id}_gradcam.jpg"
-
-        pest_url = None
-        if p_intel.get("pest_overlay_path") and os.path.exists(p_intel["pest_overlay_path"]):
-            target_pest = settings.MEDIA_DIR / "pests" / f"{scan_id}_pests.jpg"
-            shutil.copy(p_intel["pest_overlay_path"], target_pest)
-            pest_url = f"/media/pests/{scan_id}_pests.jpg"
-
-        # 4. Map Pydantic compatible objects
-        disease_results = [
-            {
+        disease_results = []
+        if d_diag["performed"] and d_diag["model_available"]:
+            disease_results.append({
                 "disease_name": d_diag["disease_name"],
                 "confidence": round(d_diag["confidence"], 4),
                 "severity_percentage": round(d_diag["lesion_severity_percentage"], 2),
                 "is_healthy": d_diag["disease_name"] == "Healthy",
-                "gradcam_overlay_url": gradcam_url
-            }
-        ]
+                "gradcam_overlay_url": media_url(d_diag["gradcam_overlay_path"]),
+                "probabilities": {k: round(v, 4) for k, v in d_diag["probabilities"].items()},
+            })
 
-        pest_results = []
-        for det in p_intel["detections"]:
-            pest_results.append({
+        pest_results = [
+            {
                 "pest_name": det["pest_name"],
                 "confidence": round(det["confidence"], 4),
                 "bbox": [round(v, 2) for v in det["bbox"]],
-                "is_unreliable": det["is_unreliable"]
-            })
+                "is_unreliable": det["is_unreliable"],
+                "warning": det.get("warning"),
+            }
+            for det in p_intel["detections"]
+        ]
 
-        recommendations = []
-        for r in protocols:
-            recommendations.append({
+        recommendations = [
+            {
+                "condition": r.get("condition", ""),
                 "treatment_type": r.get("treatment_type", "Cultural"),
                 "title": r.get("title", "Management Advisory"),
                 "product_name": r.get("product_name", "N/A"),
@@ -128,39 +150,42 @@ class PipelineService:
                 "dosage_rate": r.get("dosage_rate", "Follow label directions"),
                 "application_guidance": r.get("application_guidance", "Apply as directed"),
                 "waiting_period_days": r.get("waiting_period_days", 0),
-                "citation_source": r.get("citation_source", "ICAR/TNAU"),
-                "citation_url": r.get("citation_url", "https://agritech.tnau.ac.in")
-            })
+                "citation_source": r.get("citation_source", ""),
+                "citation_url": r.get("citation_url", ""),
+            }
+            for r in raw["treatment_protocols"]["protocols"]
+        ]
 
-        # Compile final response dictionary
-        penalties_dict = ohi.get("penalties", {})
-        breakdown_dict = dict(ohi.get("penalty_breakdown", penalties_dict))
-        breakdown_dict["penalties"] = penalties_dict
-
-        response_data = {
+        return {
             "scan_id": scan_id,
-            "scan_type": scan_type,
+            "created_at": utcnow(),
+            "scan_type": raw["scan_type"],
             "farm_id": farm_id,
             "tree_id": tree_id,
+            "latitude": raw["location"]["latitude"],
+            "longitude": raw["location"]["longitude"],
+            "model_status": raw["model_status"],
             "ohi_score": ohi["ohi_score"],
             "health_status": ohi["health_status"],
+            "badge_color": ohi["badge_color"],
+            "ohi_is_partial": ohi["is_partial"],
+            "ohi_missing_components": ohi["missing_components"],
+            "lesion_severity_percentage": (
+                round(d_diag["lesion_severity_percentage"], 2) if d_diag["performed"] else None
+            ),
             "disease_results": disease_results,
             "pest_results": pest_results,
+            "unreliable_pest_warning": p_intel["unreliable_warning"],
             "recommendations": recommendations,
             "nutrient_input_was_defaulted": ohi["nutrient_input_was_defaulted"],
             "caveats": ohi["caveats"],
-            "penalty_breakdown": breakdown_dict,
-            "penalties": penalties_dict,
-            "weather_vulnerability": weather,
-            "image_url": f"/media/uploads/{scan_id}_{leaf_stem}{leaf_ext}",
-            "pest_image_url": pest_url
+            "penalty_breakdown": ohi["penalty_breakdown"],
+            "weights_used": ohi["weights_used"],
+            "weather_vulnerability": raw["weather_vulnerability"],
+            "image_url": media_url(str(leaf_path)) if leaf_path else None,
+            "pest_image_url": media_url(str(pest_path)) if pest_path else None,
+            "pest_overlay_url": media_url(p_intel["pest_overlay_path"]),
         }
 
-        # Cache scan in memory for PDF report generation and history
-        self.scans_cache[scan_id] = response_data
-        return response_data
-
-    def get_scan(self, scan_id: str) -> Optional[Dict[str, Any]]:
-        return self.scans_cache.get(scan_id)
 
 pipeline_service = PipelineService()
