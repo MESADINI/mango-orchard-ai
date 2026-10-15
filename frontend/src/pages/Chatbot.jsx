@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { sendChatMessage } from '../services/api'
+import { errorMessage, sendChatMessage } from '../services/api'
 import toast from 'react-hot-toast'
 
 export default function Chatbot() {
@@ -8,7 +8,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([
     {
       sender: 'assistant',
-      text: 'Hello! I am your AI Mango Orchard Advisor. You can ask questions about diseases (Anthracnose, Powdery Mildew, Canker) or pests (Fruit Fly, Mealybug). All recommendations are strictly source-verified against ICAR and TNAU publications.',
+      text: 'Hello! I am your Mango Orchard Advisor. Ask about diseases (Anthracnose, Powdery Mildew, Bacterial Canker, Sooty Mold) or pests (Fruit Fly, Mealy Bug, Scale Insect, Mango Hopper, Stem Borer). Answers are keyword-matched to ICAR and TNAU-cited guidance.',
       sources: ['ICAR-CISH Lucknow', 'TNAU Agritech Portal']
     }
   ])
@@ -57,8 +57,7 @@ export default function Chatbot() {
         }
       ])
     } catch (err) {
-      console.error(err)
-      toast.error('Failed to receive response from advisor bot.')
+      toast.error(errorMessage(err, 'Failed to receive response from advisor bot.'))
     } finally {
       setLoading(false)
     }
@@ -119,7 +118,7 @@ export default function Chatbot() {
                   : 'bg-slate-800/90 text-slate-200 border border-slate-700 rounded-bl-none shadow-lg'
               }`}
             >
-              <p>{m.text}</p>
+              <p className="whitespace-pre-line">{m.text}</p>
               {m.sources && m.sources.length > 0 && (
                 <div className="mt-2.5 pt-2 border-t border-slate-700/60 flex items-center gap-1.5 text-[10px] text-emerald-400">
                   <span>📚 Source:</span>
@@ -149,7 +148,7 @@ export default function Chatbot() {
           onChange={(e) => setInput(e.target.value)}
           placeholder={
             language === 'ta'
-              ? 'மா நோய் அல்லது பூச்சி தாக்குதல் பற்றி கேளுங்கள் (उदा. ஆந்த்ராக்னோஸ் மருந்தளவு என்ன?)...'
+              ? 'மா நோய் அல்லது பூச்சி தாக்குதல் பற்றி கேளுங்கள் (எ.கா. ஆந்த்ராக்னோஸ் மருந்தளவு என்ன?)...'
               : 'Ask about mango diseases, dosages, or pest management (e.g. How to treat Anthracnose?)...'
           }
           className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"

@@ -1,38 +1,44 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import { supabase } from './supabaseClient'
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import * as api from './api'
 
 const AuthContext = createContext({})
 
+/**
+ * Authentication against the FastAPI backend (/api/auth). The JWT is kept in
+ * localStorage and validated with /api/auth/me on load.
+ */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    // Check initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    }).catch(() => {
-      setLoading(false)
-    })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
-
-    return () => subscription.unsubscribe()
+  const signOut = useCallback(() => {
+    localStorage.removeItem(api.TOKEN_KEY)
+    setUser(null)
   }, [])
 
-  const signIn = (email, password) => supabase.auth.signInWithPassword({ email, password })
-  const signUp = (email, password) => supabase.auth.signUp({ email, password })
-  const signOut = () => supabase.auth.signOut()
+  useEffect(() => {
+    api.onUnauthorized(signOut)
+    if (!localStorage.getItem(api.TOKEN_KEY)) {
+      setLoading(false)
+      return
+    }
+    api.getMe()
+      .then((res) => setUser(res.data))
+      .catch(() => signOut())
+      .finally(() => setLoading(false))
+  }, [signOut])
+
+  const handleAuth = (res) => {
+    localStorage.setItem(api.TOKEN_KEY, res.data.access_token)
+    setUser(res.data.user)
+    return res.data.user
+  }
+
+  const signIn = async (email, password) => handleAuth(await api.login(email, password))
+  const signUp = async (email, password, fullName) => handleAuth(await api.register(email, password, fullName))
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   )
