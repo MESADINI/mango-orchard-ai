@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { checkHealth } from '../services/api'
 
 const navigation = [
   { name: 'Dashboard & OHI', href: '/', icon: '📊' },
@@ -9,7 +10,25 @@ const navigation = [
   { name: 'Farm Admin', href: '/admin', icon: '🚜' },
 ]
 
+function ModelStatus({ label, trained }) {
+  return (
+    <div className="flex items-center justify-between text-[11px]">
+      <span className="text-slate-400">{label}</span>
+      <span className={trained ? 'text-emerald-400' : 'text-amber-400'}>{trained ? 'Trained' : 'Not installed'}</span>
+    </div>
+  )
+}
+
 export default function Sidebar() {
+  const [health, setHealth] = useState(null)
+  const [offline, setOffline] = useState(false)
+
+  useEffect(() => {
+    checkHealth()
+      .then((res) => setHealth(res.data))
+      .catch(() => setOffline(true))
+  }, [])
+
   return (
     <aside className="w-64 bg-slate-950 border-r border-slate-800 flex flex-col justify-between shrink-0">
       <div>
@@ -50,16 +69,21 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      {/* Footer System Status */}
-      <div className="p-4 border-t border-slate-800/80 bg-slate-950/40">
-        <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+      {/* Footer System Status (from /health) */}
+      <div className="p-4 border-t border-slate-800/80 bg-slate-950/40 space-y-1.5">
+        <div className="flex items-center justify-between text-xs text-slate-400">
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Vision Core
+            <span className={`w-2 h-2 rounded-full ${offline ? 'bg-rose-500' : health ? 'bg-emerald-500' : 'bg-slate-500 animate-pulse'}`}></span>
+            {offline ? 'Backend offline' : 'Backend'}
           </span>
-          <span className="font-mono text-[11px] text-slate-500">v0.1.0</span>
+          <span className="font-mono text-[11px] text-slate-500">{health ? `v${health.version}` : ''}</span>
         </div>
-        <p className="text-[11px] text-slate-500">EfficientNet-B3 + YOLOv8</p>
+        {health && (
+          <>
+            <ModelStatus label="Disease model" trained={health.models.disease_model_trained} />
+            <ModelStatus label="Pest model" trained={health.models.pest_model_trained} />
+          </>
+        )}
       </div>
     </aside>
   )

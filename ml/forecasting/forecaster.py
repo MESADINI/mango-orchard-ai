@@ -5,6 +5,14 @@ Combines microclimate forecast with pathogen growth epidemiology curves.
 
 from typing import Dict, Any, List
 
+
+def _value_at(values: List[Any], i: int, default: float) -> float:
+    """Returns values[i] as float, or default when missing or null (Open-Meteo may return null)."""
+    if i < len(values) and values[i] is not None:
+        return float(values[i])
+    return default
+
+
 def forecast_disease_spread(daily_weather: Dict[str, Any]) -> List[Dict[str, Any]]:
     """
     Computes disease outbreak probability for the next 7 days based on
@@ -18,10 +26,10 @@ def forecast_disease_spread(daily_weather: Dict[str, Any]) -> List[Dict[str, Any
 
     forecasts = []
     for i in range(len(dates)):
-        t_max = max_t[i] if i < len(max_t) else 30.0
-        t_min = min_t[i] if i < len(min_t) else 22.0
-        rh = rh_mean[i] if i < len(rh_mean) else 65.0
-        p = precip[i] if i < len(precip) else 0.0
+        t_max = _value_at(max_t, i, 30.0)
+        t_min = _value_at(min_t, i, 22.0)
+        rh = _value_at(rh_mean, i, 65.0)
+        p = _value_at(precip, i, 0.0)
 
         # Anthracnose: Colletotrichum requires >80% RH and >2mm rain
         anthracnose_risk = min(1.0, (rh / 100.0) * (1.0 if p > 1.5 else 0.4))

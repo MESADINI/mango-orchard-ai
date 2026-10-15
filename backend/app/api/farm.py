@@ -1,28 +1,44 @@
 """
 AI Mango Orchard Health & Pest Intelligence — Farm & Tree Management Endpoints
+Farms are owned by the authenticated user.
 """
 
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
-import uuid
+from typing import Any, Dict, List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
+
+from app.core.deps import get_current_user, get_store
+from app.core.store import Store
 
 router = APIRouter()
 
+
 class FarmCreate(BaseModel):
-    name: str
-    latitude: float
-    longitude: float
-    cultivar: str = "Alphonso"
-    acreage: float = 5.0
-    tree_count: int = 150
+    name: str = Field(min_length=1, max_length=120)
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
+    cultivar: str = Field(default="Alphonso", max_length=120)
+    acreage: float = Field(default=5.0, ge=0)
+    tree_count: int = Field(default=0, ge=0)
+
+
+class FarmUpdate(BaseModel):
+    name: Optional[str] = Field(default=None, min_length=1, max_length=120)
+    latitude: Optional[float] = Field(default=None, ge=-90, le=90)
+    longitude: Optional[float] = Field(default=None, ge=-180, le=180)
+    cultivar: Optional[str] = Field(default=None, max_length=120)
+    acreage: Optional[float] = Field(default=None, ge=0)
+    tree_count: Optional[int] = Field(default=None, ge=0)
+
 
 class TreeCreate(BaseModel):
-    tag_code: str
-    row_number: int
-    tree_number: int
-    variety: Optional[str] = "Alphonso"
-    planted_year: Optional[int] = 2018
+    tag_code: str = Field(min_length=1, max_length=50)
+    row_number: int = Field(ge=0)
+    tree_number: int = Field(ge=0)
+    variety: str = Field(default="Alphonso", max_length=100)
+    planted_year: Optional[int] = Field(default=None, ge=1800, le=2100)
+
 
 class TreeItem(BaseModel):
     id: str
@@ -31,7 +47,8 @@ class TreeItem(BaseModel):
     row_number: int
     tree_number: int
     variety: str
-    planted_year: int
+    planted_year: Optional[int] = None
+
 
 class FarmItem(BaseModel):
     id: str
@@ -42,105 +59,49 @@ class FarmItem(BaseModel):
     acreage: float
     tree_count: int
 
-# In-memory storage for local farm management
-FARMS_DB: Dict[str, Dict[str, Any]] = {
-    "farm-001": {
-        "id": "farm-001",
-        "name": "Krishnagiri Mango Valley",
-        "latitude": 12.5266,
-        "longitude": 78.2146,
-        "cultivar": "Alphonso & Banganapalli",
-        "acreage": 12.5,
-        "tree_count": 350
-    },
-    "farm-002": {
-        "id": "farm-002",
-        "name": "Malihabad Dussehri Estate",
-        "latitude": 26.9200,
-        "longitude": 80.7100,
-        "cultivar": "Dussehri",
-        "acreage": 8.0,
-        "tree_count": 220
-    }
-}
 
-TREES_DB: Dict[str, List[Dict[str, Any]]] = {
-    "farm-001": [
-        {
-            "id": "tree-001",
-            "farm_id": "farm-001",
-            "tag_code": "KG-R01-T01",
-            "row_number": 1,
-            "tree_number": 1,
-            "variety": "Alphonso",
-            "planted_year": 2016
-        },
-        {
-            "id": "tree-002",
-            "farm_id": "farm-001",
-            "tag_code": "KG-R01-T02",
-            "row_number": 1,
-            "tree_number": 2,
-            "variety": "Banganapalli",
-            "planted_year": 2017
-        }
-    ]
-}
-
-@router.get("/", response_model=List[FarmItem])
-async def list_farms():
-    """Returns the list of registered mango orchards."""
-    return [FarmItem(**f) for f in FARMS_DB.values()]
-
-@router.post("/", response_model=FarmItem)
-async def create_farm(data: FarmCreate):
-    """Registers a new mango orchard."""
-    farm_id = f"farm-{len(FARMS_DB) + 1:03d}"
-    farm_record = {
-        "id": farm_id,
-        "name": data.name,
-        "latitude": data.latitude,
-        "longitude": data.longitude,
-        "cultivar": data.cultivar,
-        "acreage": data.acreage,
-        "tree_count": data.tree_count
-    }
-    FARMS_DB[farm_id] = farm_record
-    TREES_DB[farm_id] = []
-    return FarmItem(**farm_record)
-
-@router.get("/{farm_id}", response_model=FarmItem)
-async def get_farm(farm_id: str):
-    """Retrieves orchard details by ID."""
-    farm = FARMS_DB.get(farm_id)
+def _require_farm(store: Store, user: Dict[str, Any], farm_id: str) -> Dict[str, Any]:
+    farm = store.get_farm(user["id"], farm_id)
     if not farm:
         raise HTTPException(status_code=404, detail="Farm not found.")
-    return FarmItem(**farm)
+    return farm
+
+
+@router.get("/", response_model=List[FarmItem])
+def list_farms(user=Depends(get_current_user), store: Store = Depends(get_store)):
+    """Returns the current user's registered mango orchards."""
+    return [FarmItem(**f) for f in store.list_farms(user["id"])]
+
+
+@router.post("/", response_model=FarmItem, status_code=201)
+def create_farm(data: FarmCreate, user=Depends(get_current_user), store: Store = Depends(get_store)):
+    """Registers a new mango orchard."""
+    return FarmItem(**store.create_farm(user["id"], data.model_dump()))
+
+
+@router.get("/{farm_id}", response_model=FarmItem)
+def get_farm(farm_id: str, user=Depends(get_current_user), store: Store = Depends(get_store)):
+    """Retrieves orchard details by ID."""
+    return FarmItem(**_require_farm(store, user, farm_id))
+
+
+@router.put("/{farm_id}", response_model=FarmItem)
+def update_farm(farm_id: str, data: FarmUpdate, user=Depends(get_current_user), store: Store = Depends(get_store)):
+    """Updates orchard metadata (name, coordinates, cultivar, acreage, tree count)."""
+    _require_farm(store, user, farm_id)
+    return FarmItem(**store.update_farm(user["id"], farm_id, data.model_dump(exclude_none=True)))
+
 
 @router.get("/{farm_id}/trees", response_model=List[TreeItem])
-async def list_farm_trees(farm_id: str):
+def list_farm_trees(farm_id: str, user=Depends(get_current_user), store: Store = Depends(get_store)):
     """Lists tagged mango trees in an orchard block."""
-    if farm_id not in FARMS_DB:
-        raise HTTPException(status_code=404, detail="Farm not found.")
-    trees = TREES_DB.get(farm_id, [])
-    return [TreeItem(**t) for t in trees]
+    _require_farm(store, user, farm_id)
+    return [TreeItem(**t) for t in store.list_trees(farm_id)]
 
-@router.post("/{farm_id}/trees", response_model=TreeItem)
-async def add_tree_to_farm(farm_id: str, data: TreeCreate):
-    """Registers a geotagged tree in an orchard."""
-    if farm_id not in FARMS_DB:
-        raise HTTPException(status_code=404, detail="Farm not found.")
-    
-    tree_id = f"tree-{uuid.uuid4().hex[:6]}"
-    tree_record = {
-        "id": tree_id,
-        "farm_id": farm_id,
-        "tag_code": data.tag_code,
-        "row_number": data.row_number,
-        "tree_number": data.tree_number,
-        "variety": data.variety or "Alphonso",
-        "planted_year": data.planted_year or 2018
-    }
-    TREES_DB.setdefault(farm_id, []).append(tree_record)
-    FARMS_DB[farm_id]["tree_count"] = len(TREES_DB[farm_id])
-    return TreeItem(**tree_record)
+
+@router.post("/{farm_id}/trees", response_model=TreeItem, status_code=201)
+def add_tree_to_farm(farm_id: str, data: TreeCreate, user=Depends(get_current_user),
+                     store: Store = Depends(get_store)):
+    """Registers a tagged tree in an orchard."""
+    _require_farm(store, user, farm_id)
+    return TreeItem(**store.add_tree(farm_id, data.model_dump()))

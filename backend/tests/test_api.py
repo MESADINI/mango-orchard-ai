@@ -1,178 +1,258 @@
 """
-AI Mango Orchard Health & Pest Intelligence — Backend API Test Suite
-Validates all FastAPI routers using TestClient.
+Backend API test suite (FastAPI TestClient).
+
+Runs against a temporary SQLite database and media directory (configured in the
+repository-root conftest.py) with Open-Meteo stubbed out, so it needs no network.
 """
 
-import sys
-import unittest
-from pathlib import Path
+import io
+
+import pytest
 from fastapi.testclient import TestClient
+from PIL import Image
 
-# Ensure backend and repository root are on sys.path
-BACKEND_DIR = Path(__file__).resolve().parent.parent
-REPO_DIR = BACKEND_DIR.parent
-if str(BACKEND_DIR) not in sys.path:
-    sys.path.insert(0, str(BACKEND_DIR))
-if str(REPO_DIR) not in sys.path:
-    sys.path.insert(0, str(REPO_DIR))
-
+from testing_support import SAMPLE_LEAF, SAMPLE_PEST, fake_weather, offline_weather
+from app.core.config import settings
 from app.main import app
+from app.services.pipeline_service import pipeline_service
+import app.api.weather as weather_api
 
-class TestBackendAPI(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.client = TestClient(app)
-        cls.leaf_path = REPO_DIR / "ml" / "datasets" / "sample_leaves" / "anthracnose_sample.jpg"
-        cls.pest_path = REPO_DIR / "ml" / "datasets" / "sample_pests" / "fruit_fly_sample.jpg"
-        cls.unreliable_pest_path = REPO_DIR / "ml" / "datasets" / "sample_pests" / "mango_hopper_sample.jpg"
+DEMO = {"email": settings.DEMO_USER_EMAIL, "password": settings.DEMO_USER_PASSWORD}
 
-    def test_01_health_check(self):
-        """Validates API health and architectural metadata."""
-        response = self.client.get("/health")
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertEqual(data["status"], "healthy")
-        self.assertIn("models", data)
-        self.assertIn("Rule 1: Deterministic OHI", data["models"]["rules_enforced"])
-        self.assertIn("Rule 3: Unreliable Class Flagging", data["models"]["rules_enforced"])
 
-    def test_02_analyze_image_endpoint(self):
-        """Validates multi-modal scan execution with live PyTorch & YOLOv8 models."""
-        self.assertTrue(self.leaf_path.exists(), f"Missing sample leaf at {self.leaf_path}")
-        
-        with open(self.leaf_path, "rb") as lf, open(self.pest_path, "rb") as pf:
-            response = self.client.post(
-                "/api/analyze/",
-                files={
-                    "file": ("anthracnose_sample.jpg", lf, "image/jpeg"),
-                    "pest_file": ("fruit_fly_sample.jpg", pf, "image/jpeg")
-                },
-                data={
-                    "scan_type": "dual",
-                    "latitude": 12.5266,
-                    "longitude": 78.2147
-                }
-            )
+@pytest.fixture(scope="module")
+def client():
+    with TestClient(app) as c:  # runs lifespan (seeds demo account, loads pipeline)
+        pipeline_service.get_pipeline().weather_fetcher = fake_weather
+        yield c
 
-        self.assertEqual(response.status_code, 200, response.text)
-        data = response.json()
 
-        # OHI bounds and deterministic adherence
-        self.assertIn("ohi_score", data)
-        self.assertTrue(0.0 <= data["ohi_score"] <= 100.0)
-        self.assertTrue(data["nutrient_input_was_defaulted"])
-        self.assertIn("penalties", data.get("penalty_breakdown", {}) or data)
+@pytest.fixture(scope="module")
+def auth(client):
+    res = client.post("/api/auth/login", json=DEMO)
+    assert res.status_code == 200, res.text
+    return {"Authorization": f"Bearer {res.json()['access_token']}"}
 
-        # Disease Diagnosis & Grad-CAM
-        self.assertGreaterEqual(len(data["disease_results"]), 1)
-        d_res = data["disease_results"][0]
-        self.assertEqual(d_res["disease_name"], "Anthracnose")
-        self.assertIsNotNone(d_res["gradcam_overlay_url"])
-        self.assertTrue(d_res["gradcam_overlay_url"].startswith("/media/gradcam/"))
 
-        # Pest Detection
-        self.assertIn("pest_results", data)
-
-        # Source Citations
-        self.assertGreater(len(data["recommendations"]), 0)
-        for rec in data["recommendations"]:
-            self.assertTrue(any(src in rec["citation_source"] for src in ["ICAR", "TNAU", "DPPQS", "Agritech"]))
-
-    def test_03_unreliable_class_flagging(self):
-        """Inviolable Rule 3: Gated classes (Mango Hopper) must be flagged is_unreliable=True."""
-        with open(self.leaf_path, "rb") as lf, open(self.unreliable_pest_path, "rb") as pf:
-            response = self.client.post(
-                "/api/analyze/",
-                files={
-                    "file": ("anthracnose_sample.jpg", lf, "image/jpeg"),
-                    "pest_file": ("mango_hopper_sample.jpg", pf, "image/jpeg")
-                },
-                data={"scan_type": "dual"}
-            )
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        unreliable_found = any(p.get("is_unreliable") for p in data.get("pest_results", []))
-        self.assertTrue(unreliable_found, "Expected Mango Hopper to be flagged as unreliable")
-
-    def test_04_weather_forecast(self):
-        """Validates Open-Meteo weather endpoint."""
-        response = self.client.get("/api/weather/forecast?latitude=12.5266&longitude=78.2147")
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertIn("current_temperature", data)
-        self.assertIn("forecast_days", data)
-        self.assertGreater(len(data["forecast_days"]), 0)
-
-    def test_05_pdf_report_generation(self):
-        """Validates WeasyPrint executive PDF report generation."""
-        response = self.client.get("/api/report/generate/test-scan-uuid-12345")
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(response.headers.get("content-type"), ["application/pdf", "text/html; charset=utf-8", "text/html"])
-        self.assertGreater(len(response.content), 100)
-
-    def test_06_auth_flow(self):
-        """Validates user login, registration, and JWT token issuance."""
-        # 1. Login with developer credentials
-        login_res = self.client.post(
-            "/api/auth/login",
-            json={"email": "grower@mango.ai", "password": "orchard123"}
+def _analyze(client, auth, **data):
+    with open(SAMPLE_LEAF, "rb") as lf, open(SAMPLE_PEST, "rb") as pf:
+        return client.post(
+            "/api/analyze/",
+            files={"file": ("leaf.jpg", lf, "image/jpeg"), "pest_file": ("pest.jpg", pf, "image/jpeg")},
+            data={"scan_type": "dual", **data},
+            headers=auth,
         )
-        self.assertEqual(login_res.status_code, 200)
-        token = login_res.json()["access_token"]
-        self.assertIsNotNone(token)
 
-        # 2. Get profile with JWT
-        me_res = self.client.get(
-            "/api/auth/me",
-            headers={"Authorization": f"Bearer {token}"}
-        )
-        self.assertEqual(me_res.status_code, 200)
-        self.assertEqual(me_res.json()["email"], "grower@mango.ai")
 
-    def test_07_farm_management(self):
-        """Validates farm listing and registration."""
-        # List farms
-        list_res = self.client.get("/api/farm/")
-        self.assertEqual(list_res.status_code, 200)
-        farms = list_res.json()
-        self.assertGreaterEqual(len(farms), 1)
+# ---------------- Health ----------------
+def test_health_reports_rules_and_model_status(client):
+    data = client.get("/health").json()
+    assert data["status"] == "healthy"
+    assert "Rule 3: Unreliable Class Flagging" in data["models"]["rules_enforced"]
+    assert data["models"]["disease_model_trained"] is False
+    assert data["models"]["pest_model_trained"] is False
 
-        # Create new farm
-        create_res = self.client.post(
-            "/api/farm/",
-            json={
-                "name": "Dharmapuri Alphonso Orchard",
-                "latitude": 12.1211,
-                "longitude": 78.1582,
-                "cultivar": "Alphonso",
-                "acreage": 10.0,
-                "tree_count": 280
-            }
-        )
-        self.assertEqual(create_res.status_code, 200)
-        self.assertEqual(create_res.json()["name"], "Dharmapuri Alphonso Orchard")
 
-    def test_08_bilingual_chatbot(self):
-        """Validates English and Tamil advisory responses with source citations."""
-        # English query
-        en_res = self.client.post(
-            "/api/chatbot/",
-            json={"message": "What is the treatment for Anthracnose?", "language": "en"}
-        )
-        self.assertEqual(en_res.status_code, 200)
-        en_data = en_res.json()
-        self.assertIn("copper oxychloride", en_data["reply"].lower())
-        self.assertGreater(len(en_data["sources"]), 0)
+# ---------------- Auth ----------------
+def test_login_and_me(client, auth):
+    me = client.get("/api/auth/me", headers=auth)
+    assert me.status_code == 200
+    assert me.json()["email"] == DEMO["email"]
 
-        # Tamil query
-        ta_res = self.client.post(
-            "/api/chatbot/",
-            json={"message": "ஆந்த்ராக்னோஸ் இலை நோய் தீர்வு என்ன?", "language": "ta"}
-        )
-        self.assertEqual(ta_res.status_code, 200)
-        ta_data = ta_res.json()
-        self.assertEqual(ta_data["language"], "ta")
-        self.assertIn("காப்பர் ஆக்சிகுளோரைடு", ta_data["reply"])
 
-if __name__ == "__main__":
-    unittest.main()
+def test_login_rejects_wrong_password_and_unknown_user(client):
+    assert client.post("/api/auth/login", json={**DEMO, "password": "wrong"}).status_code == 401
+    # Regression: any email used to be accepted with the demo password
+    res = client.post("/api/auth/login", json={"email": "stranger@example.com", "password": DEMO["password"]})
+    assert res.status_code == 401
+
+
+def test_register_forces_grower_role_and_rejects_duplicates(client):
+    res = client.post("/api/auth/register", json={
+        "email": "new.grower@example.com", "password": "longpassword1", "full_name": "New Grower", "role": "admin",
+    })
+    assert res.status_code == 200, res.text
+    assert res.json()["user"]["role"] == "grower"
+    dup = client.post("/api/auth/register", json={"email": "NEW.grower@example.com", "password": "longpassword1"})
+    assert dup.status_code == 400
+
+
+def test_register_validates_input(client):
+    assert client.post("/api/auth/register", json={"email": "x@y.com", "password": "short"}).status_code == 422
+    assert client.post("/api/auth/register", json={"email": "not-an-email", "password": "longpassword1"}).status_code == 422
+
+
+def test_protected_endpoints_require_token(client):
+    assert client.get("/api/farm/").status_code == 401
+    assert client.get("/api/analyze/").status_code == 401
+    assert client.get("/api/auth/me", headers={"Authorization": "Bearer garbage"}).status_code == 401
+
+
+# ---------------- Analysis ----------------
+def test_analyze_dual_scan_is_honest_without_weights(client, auth):
+    res = _analyze(client, auth, latitude=12.5266, longitude=78.2147)
+    assert res.status_code == 200, res.text
+    data = res.json()
+
+    assert 0.0 <= data["ohi_score"] <= 100.0
+    assert data["nutrient_input_was_defaulted"] is True
+    assert data["model_status"] == {"disease_model_trained": False, "pest_model_trained": False}
+    assert data["disease_results"] == []  # no fabricated diagnosis
+    assert data["pest_results"] == []
+    assert data["ohi_is_partial"] is True
+    assert any("Disease classification unavailable" in c for c in data["caveats"])
+    assert data["lesion_severity_percentage"] is not None
+    assert data["weather_vulnerability"]["live_data"] is True
+    assert data["image_url"].startswith("/media/uploads/") and data["image_url"].endswith("_leaf.jpg")
+
+    # The uploaded image is served back
+    assert client.get(data["image_url"]).status_code == 200
+
+
+def test_analyze_with_trained_disease_model(client, auth, monkeypatch, random_disease_checkpoint):
+    from ml.disease_detection.inference import DISEASE_CLASSES, DiseaseDetector
+
+    pipeline = pipeline_service.get_pipeline()
+    monkeypatch.setattr(pipeline, "disease_detector", DiseaseDetector(random_disease_checkpoint, device="cpu"))
+
+    res = _analyze(client, auth, scan_type="disease")
+    assert res.status_code == 200, res.text
+    data = res.json()
+    assert len(data["disease_results"]) == 1
+    d = data["disease_results"][0]
+    assert d["disease_name"] in DISEASE_CLASSES
+    assert d["gradcam_overlay_url"].startswith("/media/results/")
+    assert client.get(d["gradcam_overlay_url"]).status_code == 200
+    for rec in data["recommendations"]:
+        assert any(src in rec["citation_source"] for src in ["ICAR", "TNAU", "DPPQS", "Agritech"])
+
+
+def test_analyze_rejects_bad_inputs(client, auth):
+    # Not an image, even though it claims to be one (and would previously be saved as .html)
+    res = client.post("/api/analyze/", files={"file": ("x.html", b"<script>alert(1)</script>", "image/png")},
+                      data={"scan_type": "disease"}, headers=auth)
+    assert res.status_code == 400
+
+    # Unsupported image format
+    buf = io.BytesIO()
+    Image.new("RGB", (10, 10)).save(buf, "BMP")
+    res = client.post("/api/analyze/", files={"file": ("x.bmp", buf.getvalue(), "image/bmp")},
+                      data={"scan_type": "disease"}, headers=auth)
+    assert res.status_code == 400
+
+    # Invalid scan type and coordinates
+    assert _analyze(client, auth, scan_type="everything").status_code == 422
+    assert _analyze(client, auth, latitude=123).status_code == 422
+
+    # Missing leaf image for a disease scan
+    res = client.post("/api/analyze/", data={"scan_type": "disease"}, headers=auth)
+    assert res.status_code == 400
+
+
+def test_upload_size_limit(client, auth, monkeypatch):
+    monkeypatch.setattr(settings, "MAX_UPLOAD_MB", 0)
+    res = _analyze(client, auth)
+    assert res.status_code == 400
+    assert "limit" in res.json()["detail"]
+
+
+def test_scan_history_and_retrieval_are_per_user(client, auth):
+    created = _analyze(client, auth).json()
+    history = client.get("/api/analyze/", headers=auth).json()
+    assert history[0]["scan_id"] == created["scan_id"]
+    assert client.get(f"/api/analyze/{created['scan_id']}", headers=auth).status_code == 200
+
+    other = client.post("/api/auth/register", json={"email": "other@example.com", "password": "longpassword1"})
+    other_auth = {"Authorization": f"Bearer {other.json()['access_token']}"}
+    assert client.get(f"/api/analyze/{created['scan_id']}", headers=other_auth).status_code == 404
+    assert client.get("/api/analyze/", headers=other_auth).json() == []
+
+
+# ---------------- Reports ----------------
+def test_report_reflects_real_scan_data(client, auth):
+    scan = _analyze(client, auth).json()
+    res = client.get(f"/api/report/generate/{scan['scan_id']}", headers=auth)
+    assert res.status_code == 200
+    assert res.headers["content-type"].split(";")[0] in ("application/pdf", "text/html")
+    if res.headers["content-type"].startswith("text/html"):
+        body = res.text
+        assert f"{scan['ohi_score']:.1f} / 100" in body
+        assert scan["scan_id"] in body
+        assert "82.5" not in body  # regression: the score used to be hard-coded
+
+
+def test_report_unknown_scan_is_404(client, auth):
+    assert client.get("/api/report/generate/does-not-exist", headers=auth).status_code == 404
+
+
+# ---------------- Weather ----------------
+def test_weather_forecast(client, monkeypatch):
+    monkeypatch.setattr(weather_api, "fetch_open_meteo_forecast", fake_weather)
+    res = client.get("/api/weather/forecast?latitude=12.5266&longitude=78.2147")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["current_temperature"] == 27.0
+    assert len(data["forecast_days"]) == 7
+    assert data["forecast_days"][0]["disease_spread_risk"] in ("Low", "Moderate", "High")
+    assert data["pathogen_alerts"]
+
+
+def test_weather_offline_returns_503_not_fake_data(client, monkeypatch):
+    monkeypatch.setattr(weather_api, "fetch_open_meteo_forecast", offline_weather)
+    assert client.get("/api/weather/forecast").status_code == 503
+
+
+# ---------------- Farms ----------------
+def test_farm_management(client, auth):
+    farms = client.get("/api/farm/", headers=auth).json()
+    assert farms[0]["name"] == "Krishnagiri Mango Valley"
+
+    created = client.post("/api/farm/", headers=auth, json={
+        "name": "Dharmapuri Alphonso Orchard", "latitude": 12.1211, "longitude": 78.1582,
+        "cultivar": "Alphonso", "acreage": 10.0, "tree_count": 280,
+    })
+    assert created.status_code == 201
+    farm_id = created.json()["id"]
+
+    updated = client.put(f"/api/farm/{farm_id}", headers=auth, json={"acreage": 11.5})
+    assert updated.json()["acreage"] == 11.5
+    assert updated.json()["name"] == "Dharmapuri Alphonso Orchard"
+
+    tree = client.post(f"/api/farm/{farm_id}/trees", headers=auth,
+                       json={"tag_code": "DP-R01-T01", "row_number": 1, "tree_number": 1})
+    assert tree.status_code == 201
+    assert len(client.get(f"/api/farm/{farm_id}/trees", headers=auth).json()) == 1
+
+    assert client.post("/api/farm/", headers=auth, json={"name": "Bad", "latitude": 95, "longitude": 0}).status_code == 422
+    assert client.get("/api/farm/farm-missing", headers=auth).status_code == 404
+
+
+def test_analyze_uses_farm_coordinates(client, auth):
+    farm = client.get("/api/farm/", headers=auth).json()[0]
+    data = _analyze(client, auth, farm_id=farm["id"]).json()
+    assert (data["latitude"], data["longitude"]) == (farm["latitude"], farm["longitude"])
+    assert data["farm_id"] == farm["id"]
+
+
+# ---------------- Chatbot ----------------
+def test_chatbot_english_answers_come_from_cited_database(client):
+    data = client.post("/api/chatbot/", json={"message": "What is the treatment for Anthracnose?"}).json()
+    assert "copper oxychloride" in data["reply"].lower()
+    assert any("TNAU" in s or "ICAR" in s for s in data["sources"])
+
+    mildew = client.post("/api/chatbot/", json={"message": "powdery mildew on panicles"}).json()
+    assert "sulphur" in mildew["reply"].lower()
+
+    hopper = client.post("/api/chatbot/", json={"message": "mango hopper control"}).json()
+    assert "Rule 3" in hopper["reply"]
+
+
+def test_chatbot_tamil(client):
+    data = client.post("/api/chatbot/", json={"message": "ஆந்த்ராக்னோஸ் இலை நோய் தீர்வு என்ன?", "language": "ta"}).json()
+    assert data["language"] == "ta"
+    assert "காப்பர் ஆக்சிகுளோரைடு" in data["reply"]
+
+
+def test_chatbot_validates_input(client):
+    assert client.post("/api/chatbot/", json={"message": "", "language": "en"}).status_code == 422
+    assert client.post("/api/chatbot/", json={"message": "hi", "language": "fr"}).status_code == 422

@@ -1,35 +1,38 @@
 from datetime import datetime, timedelta, timezone
-from typing import Optional, Union, Any
-from jose import jwt, JWTError
-from app.core.config import settings
+from typing import Any, Optional, Union
 
 import bcrypt
+import jwt
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
+from app.core.config import settings
+
+# bcrypt only uses the first 72 bytes of a password (bcrypt>=5 raises instead of truncating)
+BCRYPT_MAX_BYTES = 72
+
+
+def verify_password(plain_password: str, hashed_password: Optional[str]) -> bool:
+    if not hashed_password:
+        return False
     try:
         return bcrypt.checkpw(
-            plain_password.encode("utf-8")[:72],
+            plain_password.encode("utf-8")[:BCRYPT_MAX_BYTES],
             hashed_password.encode("utf-8")
         )
-    except Exception:
+    except ValueError:
         return False
 
+
 def get_password_hash(password: str) -> str:
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(password.encode("utf-8")[:72], salt).decode("utf-8")
+    return bcrypt.hashpw(password.encode("utf-8")[:BCRYPT_MAX_BYTES], bcrypt.gensalt()).decode("utf-8")
+
 
 def create_access_token(subject: Union[str, Any], expires_delta: Optional[timedelta] = None) -> str:
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.ALGORITHM)
-    return encoded_jwt
+    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
+    return jwt.encode({"exp": expire, "sub": str(subject)}, settings.JWT_SECRET, algorithm=settings.ALGORITHM)
+
 
 def decode_access_token(token: str) -> Optional[dict]:
     try:
-        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.ALGORITHM])
-        return payload
-    except JWTError:
+        return jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.ALGORITHM])
+    except jwt.PyJWTError:
         return None

@@ -1,89 +1,72 @@
 """
-AI Mango Orchard Health & Pest Intelligence — Pest Detection Unit Tests
-Validates YOLOv8 output structures and Inviolable Rule 3 (Unreliable Class Flagging).
+Pest detection unit tests: YOLOv8 output parsing and Inviolable Rule 3 (unreliable class flagging).
+The YOLO model is replaced by a stub with the same call interface; no weights are needed.
 """
 
-import os
-import sys
-import unittest
 from pathlib import Path
-from PIL import Image
+
 import numpy as np
+from PIL import Image
 
-# Ensure repository root is on sys.path
-REPO_ROOT = Path(__file__).resolve().parents[3]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+from ml.pest_detection.inference import (
+    CONFIRMED_CLASSES, UNRELIABLE_CLASSES, PestDetector, build_detection,
+)
 
-from ml.pest_detection.inference import PestDetector, CONFIRMED_CLASSES, UNRELIABLE_CLASSES
+SAMPLE_IMG = Image.new("RGB", (640, 640), color=(100, 140, 80))
 
-class TestPestDetection(unittest.TestCase):
-    def setUp(self):
-        self.detector = PestDetector(weights_path="nonexistent_test_weights.pt")
-        self.sample_img = Image.new("RGB", (640, 640), color=(100, 140, 80))
 
-    def test_class_definitions(self):
-        """Inviolable Rule 3: Confirmed and Unreliable classes must be properly segmented."""
-        self.assertIn("Fruit Fly", CONFIRMED_CLASSES)
-        self.assertIn("Mealy Bug", CONFIRMED_CLASSES)
-        self.assertIn("Scale Insect", CONFIRMED_CLASSES)
+def test_class_definitions():
+    assert set(CONFIRMED_CLASSES) == {"Fruit Fly", "Mealy Bug", "Scale Insect"}
+    assert set(UNRELIABLE_CLASSES) == {"Mango Hopper", "Stem Borer"}
+    assert not set(CONFIRMED_CLASSES) & set(UNRELIABLE_CLASSES)
 
-        self.assertIn("Mango Hopper", UNRELIABLE_CLASSES)
-        self.assertIn("Stem Borer", UNRELIABLE_CLASSES)
-        
-        # Ensure no overlap between confirmed and unreliable sets
-        overlap = set(CONFIRMED_CLASSES).intersection(set(UNRELIABLE_CLASSES))
-        self.assertEqual(len(overlap), 0, f"Overlap detected between confirmed and unreliable classes: {overlap}")
 
-    def test_unreliable_class_gating_mango_hopper(self):
-        """Inviolable Rule 3: Mango Hopper must be flagged with is_unreliable=True and warning."""
-        sample_path = REPO_ROOT / "ml" / "datasets" / "sample_pests" / "mango_hopper_sample.jpg"
-        
-        detections = self.detector.predict(sample_path)
-        self.assertGreaterEqual(len(detections), 1)
-        det = detections[0]
-        self.assertEqual(det["pest_name"], "Mango Hopper")
-        self.assertTrue(det["is_unreliable"], "Mango Hopper must be marked as unreliable!")
-        self.assertIsNotNone(det["warning"])
-        self.assertIn("Sample size < 100", det["warning"])
+def test_build_detection_flags_unreliable_classes():
+    for name in UNRELIABLE_CLASSES:
+        det = build_detection(name, 0.9, [1, 2, 3, 4])
+        assert det["is_unreliable"] is True
+        assert "Sample size < 100" in det["warning"]
+    det = build_detection("Fruit Fly", 0.9, [1, 2, 3, 4])
+    assert det["is_unreliable"] is False and det["warning"] is None
 
-    def test_unreliable_class_gating_stem_borer(self):
-        """Inviolable Rule 3: Stem Borer must be flagged with is_unreliable=True and warning."""
-        sample_path = REPO_ROOT / "ml" / "datasets" / "sample_pests" / "stem_borer_sample.jpg"
 
-        detections = self.detector.predict(sample_path)
-        self.assertGreaterEqual(len(detections), 1)
-        det = detections[0]
-        self.assertEqual(det["pest_name"], "Stem Borer")
-        self.assertTrue(det["is_unreliable"], "Stem Borer must be marked as unreliable!")
-        self.assertIsNotNone(det["warning"])
-        self.assertIn("Sample size < 100", det["warning"])
+def test_missing_weights_returns_no_detections(tmp_path):
+    detector = PestDetector(weights_path=str(tmp_path / "missing.pt"))
+    assert detector.is_trained is False
+    assert detector.predict(SAMPLE_IMG) == []
 
-    def test_draw_detections_overlay(self):
-        """Tests that draw_detections renders bounding boxes and badges cleanly."""
-        detections = [
-            {
-                "pest_name": "Fruit Fly",
-                "confidence": 0.92,
-                "bbox": [100.0, 100.0, 200.0, 200.0],
-                "is_unreliable": False,
-                "warning": None
-            },
-            {
-                "pest_name": "Mango Hopper",
-                "confidence": 0.85,
-                "bbox": [300.0, 300.0, 420.0, 420.0],
-                "is_unreliable": True,
-                "warning": "Sample size < 100 images; detection is marked unverified"
-            }
-        ]
 
-        out_path = Path(__file__).resolve().parent.parent / "artifacts" / "test_detection_overlay.jpg"
-        annotated_np = self.detector.draw_detections(self.sample_img, detections, output_path=out_path)
+def test_filename_does_not_create_detections(tmp_path):
+    """Regression: detections used to be fabricated from the image filename."""
+    img_path = tmp_path / "mango_hopper_sample.jpg"
+    SAMPLE_IMG.save(img_path)
+    detector = PestDetector(weights_path=str(tmp_path / "missing.pt"))
+    assert detector.predict(img_path) == []
 
-        self.assertIsInstance(annotated_np, np.ndarray)
-        self.assertEqual(annotated_np.shape, (640, 640, 3))
-        self.assertTrue(out_path.exists())
 
-if __name__ == "__main__":
-    unittest.main()
+def test_predict_parses_yolo_output_and_applies_threshold(tmp_path, fake_yolo):
+    detector = PestDetector(weights_path=str(tmp_path / "missing.pt"))
+    detector.model = fake_yolo([(0, 0.95, [10, 20, 30, 40]), (3, 0.5, [50, 50, 90, 90]), (2, 0.1, [0, 0, 5, 5])])
+
+    dets = detector.predict(SAMPLE_IMG, conf_threshold=0.25)
+    assert [d["pest_name"] for d in dets] == ["Fruit Fly", "Mango Hopper"]
+    assert dets[0]["bbox"] == [10.0, 20.0, 30.0, 40.0]
+    assert dets[0]["is_unreliable"] is False
+    assert dets[1]["is_unreliable"] is True
+    assert detector.model.calls == [0.25]
+
+
+def test_draw_detections_overlay(tmp_path):
+    detector = PestDetector(weights_path=str(tmp_path / "missing.pt"))
+    detections = [
+        build_detection("Fruit Fly", 0.92, [100.0, 100.0, 200.0, 200.0]),
+        build_detection("Mango Hopper", 0.85, [300.0, 300.0, 420.0, 420.0]),
+    ]
+    out_path = tmp_path / "overlay.jpg"
+    annotated = detector.draw_detections(SAMPLE_IMG, detections, output_path=out_path)
+
+    assert isinstance(annotated, np.ndarray)
+    assert annotated.shape == (640, 640, 3)
+    assert Path(out_path).is_file()
+    # Boxes were actually drawn: the annotated image differs from the input
+    assert not np.array_equal(annotated, np.array(SAMPLE_IMG))

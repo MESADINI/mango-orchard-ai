@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   backend:
     build:
@@ -8,15 +6,16 @@ services:
     container_name: mango_backend
     ports:
       - "8000:8000"
+    env_file:
+      - path: ./backend/.env
+        required: false
     environment:
-      - SUPABASE_URL=${SUPABASE_URL:-https://your-project.supabase.co}
-      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-placeholder}
-      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY:-placeholder}
-      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
       - OPEN_METEO_BASE_URL=${OPEN_METEO_BASE_URL:-https://api.open-meteo.com/v1}
+      - CORS_ORIGINS=http://localhost:3000
     volumes:
-      - ./backend:/app
-      - ./ml:/ml
+      - ./ml:/ml                       # ML package, model weights and recommendations DB
+      - backend_data:/app/data         # SQLite database
+      - backend_media:/app/media       # uploads and result overlays
     restart: unless-stopped
 
   frontend:
@@ -25,9 +24,11 @@ services:
       dockerfile: Dockerfile
     container_name: mango_frontend
     ports:
-      - "3000:3000"
-    environment:
-      - VITE_API_BASE_URL=http://localhost:8000
+      - "3000:80"
     depends_on:
       - backend
     restart: unless-stopped
+
+volumes:
+  backend_data:
+  backend_media:

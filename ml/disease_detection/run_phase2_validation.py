@@ -22,6 +22,10 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+# Emoji output must not crash consoles that are not UTF-8
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(errors="replace")
+
 def run_phase2_validation(quick_train: bool = True):
     print("================================================================================")
     print("🥭 Phase 2: Disease Detection & Explainability Validation Suite")
@@ -91,6 +95,10 @@ def run_phase2_validation(quick_train: bool = True):
 
         # Disease Inference
         detector = DiseaseDetector(weights_path=str(weights_path), device=device)
+        if not detector.is_trained:
+            print(f"  No trained weights at {weights_path}; skipping inference, Grad-CAM and OHI steps.")
+            print("  Train first: python ml/disease_detection/train.py")
+            return
         pred_res = detector.predict(pil_img)
         print(f"  Prediction: {pred_res['disease_name']} (Confidence: {pred_res['confidence']:.3f})")
 

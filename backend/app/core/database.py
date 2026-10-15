@@ -1,10 +1,11 @@
-from supabase import create_client, Client
+"""Optional Supabase client. Only used when SUPABASE_URL / SUPABASE_ANON_KEY are configured."""
+
 from app.core.config import settings
 
-def get_supabase_client() -> Client:
-    """Initialize and return Supabase client instance."""
-    return create_client(settings.SUPABASE_URL, settings.SUPABASE_ANON_KEY)
 
-def get_supabase_admin() -> Client:
-    """Initialize and return Supabase service role client instance for administrative operations."""
-    return create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_ROLE_KEY)
+def get_supabase_client():
+    """Returns a Supabase client using the anon key, or None when Supabase is not configured."""
+    if not settings.supabase_configured:
+        return None
+    from supabase import create_client
+    return create_client(settings.SUPABASE_URL, settings.SUPABASE_ANON_KEY)

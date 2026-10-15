@@ -1,262 +1,187 @@
-import io
-from fastapi import APIRouter, HTTPException, Response
-from app.services.pipeline_service import pipeline_service
+"""
+AI Mango Orchard Health & Pest Intelligence — Scan Report Endpoint
+Renders a stored scan as HTML and converts it to PDF with WeasyPrint. When WeasyPrint's
+native libraries (Pango/Cairo) are unavailable, the same HTML is returned instead.
+"""
 
+import logging
+from html import escape
+from typing import Any, Dict, List
+
+from fastapi import APIRouter, Depends, HTTPException, Response
+
+from app.core.deps import get_current_user, get_store
+from app.core.store import Store
+
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
-@router.get("/generate/{scan_id}")
-async def generate_pdf_report(scan_id: str):
-    """
-    Generates a professional executive PDF audit report using WeasyPrint (required library).
-    Converts semantic HTML5 + CSS to high-fidelity PDF with dynamic scan metrics.
-    """
-    scan = pipeline_service.get_scan(scan_id)
-    ohi_score = scan.get("ohi_score", 82.5) if scan else 82.5
-    health_status = scan.get("health_status", "Mild Stress / Warning") if scan else "Mild Stress / Warning"
-    
-    disease_rows = ""
-    if scan and scan.get("disease_results"):
-        for d in scan["disease_results"]:
-            disease_rows += f"""
-            <tr>
-                <td>Foliar Disease</td>
-                <td>{d['disease_name']}</td>
-                <td>{d['confidence']*100:.1f}%</td>
-                <td>{d['severity_percentage']:.1f}% Leaf Surface</td>
-                <td>VERIFIED (EfficientNet-B3)</td>
-            </tr>
-            """
-    else:
-        disease_rows = """
-        <tr>
-            <td>Foliar Disease</td>
-            <td>Anthracnose (Colletotrichum gloeosporioides)</td>
-            <td>89.2%</td>
-            <td>14.5% Leaf Surface</td>
-            <td>VERIFIED (EfficientNet-B3)</td>
-        </tr>
-        """
+REPORT_CSS = """
+@page { size: A4; margin: 18mm; }
+body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1e293b; line-height: 1.45; font-size: 12px; }
+.header { border-bottom: 3px solid #059669; padding-bottom: 10px; margin-bottom: 18px; }
+.logo { font-size: 20px; font-weight: bold; color: #059669; }
+.muted { color: #64748b; }
+.card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 16px; }
+.score { font-size: 34px; font-weight: 800; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 9999px; background: #f1f5f9; font-weight: bold; font-size: 11px; }
+table { width: 100%; border-collapse: collapse; margin: 8px 0 16px 0; }
+th, td { border: 1px solid #cbd5e1; padding: 6px 9px; text-align: left; font-size: 11px; vertical-align: top; }
+th { background: #f1f5f9; }
+h3 { font-size: 13px; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin-top: 18px; }
+.caveat { color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 6px 9px; margin: 4px 0; font-size: 11px; }
+.citation { font-size: 10px; color: #64748b; font-style: italic; }
+.footer { margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 8px; font-size: 10px; color: #94a3b8; text-align: center; }
+"""
 
-    pest_rows = ""
-    if scan and scan.get("pest_results"):
-        for p in scan["pest_results"]:
-            rel_badge = "⚠️ UNVERIFIED (Rule 3)" if p.get("is_unreliable") else "VERIFIED (YOLOv8)"
-            pest_rows += f"""
-            <tr>
-                <td>Canopy Pest</td>
-                <td>{p['pest_name']}</td>
-                <td>{p['confidence']*100:.1f}%</td>
-                <td>Bounding Box: {p['bbox']}</td>
-                <td>{rel_badge}</td>
-            </tr>
-            """
-    else:
-        pest_rows = """
-        <tr>
-            <td>Canopy Pest</td>
-            <td>Fruit Fly (Bactrocera dorsalis)</td>
-            <td>91.4%</td>
-            <td>2 Bounding Boxes</td>
-            <td>VERIFIED (YOLOv8)</td>
-        </tr>
-        """
 
-    rec_rows = ""
-    if scan and scan.get("recommendations"):
-        for r in scan["recommendations"]:
-            rec_rows += f"""
-            <tr>
-                <td>{r.get('title', 'Target Treatment')}</td>
-                <td>{r.get('treatment_type', 'Chemical')}</td>
-                <td>{r.get('product_name', 'N/A')}</td>
-                <td>{r.get('dosage_rate', 'As per label')}. {r.get('application_guidance', '')}</td>
-                <td class="citation">{r.get('citation_source', 'ICAR/TNAU')}</td>
-            </tr>
-            """
-    else:
-        rec_rows = """
-        <tr>
-            <td>Anthracnose</td>
-            <td>Chemical</td>
-            <td>Copper Oxychloride 50% WP (Blitox)</td>
-            <td>3.0 g / L water. Thorough foliar coverage at flush.</td>
-            <td class="citation">TNAU Agritech Portal (Diseases of Mango); ICAR-CISH</td>
-        </tr>
-        """
-    html_content = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Orchard Health & Pest Intelligence Report - {scan_id}</title>
-        <style>
-            @page {{
-                size: A4;
-                margin: 20mm;
-            }}
-            body {{
-                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                color: #1e293b;
-                line-height: 1.5;
-            }}
-            .header {{
-                border-bottom: 3px solid #059669;
-                padding-bottom: 12px;
-                margin-bottom: 24px;
-            }}
-            .logo {{
-                font-size: 24px;
-                font-weight: bold;
-                color: #059669;
-            }}
-            .badge {{
-                display: inline-block;
-                padding: 4px 10px;
-                border-radius: 9999px;
-                background-color: #fef3c7;
-                color: #d97706;
-                font-weight: bold;
-                font-size: 13px;
-            }}
-            .ohi-card {{
-                background-color: #f8fafc;
-                border: 1px solid #e2e8f0;
-                border-radius: 8px;
-                padding: 16px;
-                margin-bottom: 20px;
-            }}
-            .score {{
-                font-size: 38px;
-                font-weight: 800;
-                color: #d97706;
-            }}
-            table {{
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 14px;
-                margin-bottom: 20px;
-            }}
-            th, td {{
-                border: 1px solid #cbd5e1;
-                padding: 8px 12px;
-                text-align: left;
-                font-size: 12px;
-            }}
-            th {{
-                background-color: #f1f5f9;
-                font-weight: bold;
-            }}
-            .citation {{
-                font-size: 10px;
-                color: #64748b;
-                font-style: italic;
-            }}
-            .footer {{
-                margin-top: 30px;
-                border-top: 1px solid #e2e8f0;
-                padding-top: 10px;
-                font-size: 10px;
-                color: #94a3b8;
-                text-align: center;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="header">
-            <div class="logo">🥭 AI Mango Orchard Health & Pest Intelligence</div>
-            <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b;">Precision Crop Diagnostics & Decision Support System</p>
-        </div>
+def _rows(rows: List[List[Any]]) -> str:
+    return "".join("<tr>" + "".join(f"<td>{cell}</td>" for cell in row) + "</tr>" for row in rows)
 
-        <div class="ohi-card">
-            <div style="float: right;">
-                <span class="badge">Scan ID: {scan_id[:8]}</span>
-            </div>
-            <div style="font-size: 14px; color: #64748b; font-weight: 600;">ORCHARD HEALTH INDEX (OHI)</div>
-            <div class="score">82.5 / 100</div>
-            <div style="font-size: 12px; color: #475569;">Status: <strong>Mild Stress / Warning</strong> (Prophylactic intervention advised)</div>
-            <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">* Nutrient input defaulted to 0; penalty weight reallocated per OHI protocol.</div>
-        </div>
 
-        <h3 style="font-size: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">Diagnosis Breakdown</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Domain</th>
-                    <th>Diagnosis / Target</th>
-                    <th>Confidence</th>
-                    <th>Severity Area / Density</th>
-                    <th>Reliability</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Foliar Disease</td>
-                    <td>Anthracnose (Colletotrichum gloeosporioides)</td>
-                    <td>89.2%</td>
-                    <td>14.5% Leaf Surface</td>
-                    <td>VERIFIED (EfficientNet-B3)</td>
-                </tr>
-                <tr>
-                    <td>Canopy Pest</td>
-                    <td>Fruit Fly (Bactrocera dorsalis)</td>
-                    <td>91.4%</td>
-                    <td>2 Bounding Boxes</td>
-                    <td>VERIFIED (YOLOv8)</td>
-                </tr>
-            </tbody>
-        </table>
+def _empty_row(message: str, colspan: int) -> str:
+    return f'<tr><td colspan="{colspan}" class="muted">{escape(message)}</td></tr>'
 
-        <h3 style="font-size: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">Verified Treatment Recommendations</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Target</th>
-                    <th>Type</th>
-                    <th>Product & Active Ingredient</th>
-                    <th>Dosage & Guidance</th>
-                    <th>Source Citation</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Anthracnose</td>
-                    <td>Chemical</td>
-                    <td>Copper Oxychloride 50% WP (Blitox)</td>
-                    <td>3.0 g / L water. Thorough foliar coverage at flush.</td>
-                    <td class="citation">TNAU Agritech Portal (Diseases of Mango); ICAR-CISH</td>
-                </tr>
-                <tr>
-                    <td>Fruit Fly</td>
-                    <td>Biocontrol</td>
-                    <td>Methyl Eugenol Parapheromone Trap</td>
-                    <td>10-15 traps/hectare hung 1.5m above ground.</td>
-                    <td class="citation">ICAR-CISH IPM Package for Bactrocera dorsalis</td>
-                </tr>
-            </tbody>
-        </table>
 
-        <div class="footer">
-            Generated autonomously by AI Mango Orchard Health & Pest Intelligence &bull; Verified under ICAR & TNAU Standards
-        </div>
-    </body>
-    </html>
-    """
+def render_report_html(scan: Dict[str, Any]) -> str:
+    e = lambda v: escape(str(v))  # noqa: E731
 
+    model_status = scan.get("model_status", {})
+    detection_rows = [
+        [
+            "Foliar Disease",
+            e(d["disease_name"]),
+            f"{d['confidence'] * 100:.1f}%",
+            f"{d['severity_percentage']:.1f}% of leaf surface",
+            "EfficientNet-B3",
+        ]
+        for d in scan.get("disease_results", [])
+    ]
+    detection_rows += [
+        [
+            "Canopy Pest",
+            e(p["pest_name"]),
+            f"{p['confidence'] * 100:.1f}%",
+            "bbox " + e(", ".join(f"{v:.0f}" for v in p["bbox"])),
+            "UNVERIFIED (Rule 3)" if p.get("is_unreliable") else "YOLOv8",
+        ]
+        for p in scan.get("pest_results", [])
+    ]
+    detections_html = _rows(detection_rows) or _empty_row("No disease or pest detections in this scan.", 5)
+
+    rec_html = _rows([
+        [
+            e(r.get("condition") or r.get("title")),
+            e(r["treatment_type"]),
+            e(r["product_name"]),
+            f"{e(r['dosage_rate'])}. {e(r['application_guidance'])} "
+            f"(Waiting period: {int(r.get('waiting_period_days', 0))} days)",
+            f'<span class="citation">{e(r["citation_source"])}</span>',
+        ]
+        for r in scan.get("recommendations", [])
+    ]) or _empty_row("No treatment protocol required for the detected conditions.", 5)
+
+    penalties = scan.get("penalty_breakdown", {})
+    weights = scan.get("weights_used", {})
+    penalty_html = _rows([
+        ["Disease severity (S<sub>d</sub>)", f"{penalties.get('disease_severity_penalty', 0):.2f}", f"{weights.get('disease', 0):.2f}"],
+        ["Pest pressure (P<sub>p</sub>)", f"{penalties.get('pest_pressure_penalty', 0):.2f}", f"{weights.get('pest', 0):.2f}"],
+        ["Weather vulnerability (W<sub>v</sub>)", f"{penalties.get('weather_vulnerability_index', 0):.2f}", f"{weights.get('weather', 0):.2f}"],
+        ["Nutrient deficiency (N<sub>d</sub>)", f"{penalties.get('nutrient_penalty', 0):.2f}", f"{weights.get('nutrient', 0):.2f}"],
+        ["<strong>Weighted total penalty</strong>", f"<strong>{penalties.get('weighted_total_penalty', 0):.2f}</strong>", ""],
+    ])
+
+    weather = scan.get("weather_vulnerability", {})
+    weather_line = (
+        f"{weather.get('current_temperature_c', 0):.1f}°C, {weather.get('current_relative_humidity_pct', 0):.0f}% RH, "
+        f"{weather.get('current_precipitation_mm', 0):.1f} mm rain "
+        f"({'live Open-Meteo data' if weather.get('live_data') else 'defaults - live data unavailable'})"
+    )
+
+    caveats_html = "".join(f'<div class="caveat">{e(c)}</div>' for c in scan.get("caveats", []))
+    color = e(scan.get("badge_color", "#1e293b"))
+    partial_note = (
+        f'<div class="muted">Partial index: {e(", ".join(scan.get("ohi_missing_components", [])))} component(s) unavailable.</div>'
+        if scan.get("ohi_is_partial") else ""
+    )
+
+    return f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Orchard Health Report - {e(scan['scan_id'])}</title>
+<style>{REPORT_CSS}</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">AI Mango Orchard Health &amp; Pest Intelligence</div>
+  <div class="muted">Scan report &middot; ID {e(scan['scan_id'])} &middot; {e(scan.get('created_at', ''))}</div>
+</div>
+
+<div class="card">
+  <div class="muted" style="font-weight:600;">ORCHARD HEALTH INDEX (OHI)</div>
+  <div class="score" style="color:{color};">{scan['ohi_score']:.1f} / 100</div>
+  <span class="badge" style="color:{color};">{e(scan['health_status'])}</span>
+  {partial_note}
+  <div class="muted" style="margin-top:6px;">Location: {scan.get('latitude', 0):.4f}, {scan.get('longitude', 0):.4f}
+   &middot; Scan type: {e(scan.get('scan_type', ''))} &middot; Weather: {e(weather_line)}</div>
+  <div class="muted">Models: disease {'trained' if model_status.get('disease_model_trained') else 'NOT INSTALLED'},
+   pest {'trained' if model_status.get('pest_model_trained') else 'NOT INSTALLED'}</div>
+</div>
+
+{('<h3>Caveats &amp; Disclosures</h3>' + caveats_html) if caveats_html else ''}
+
+<h3>Diagnosis Breakdown</h3>
+<table>
+  <thead><tr><th>Domain</th><th>Diagnosis / Target</th><th>Confidence</th><th>Severity / Location</th><th>Source</th></tr></thead>
+  <tbody>{detections_html}</tbody>
+</table>
+
+<h3>OHI Penalty Breakdown</h3>
+<table>
+  <thead><tr><th>Component</th><th>Penalty (0-100)</th><th>Weight</th></tr></thead>
+  <tbody>{penalty_html}</tbody>
+</table>
+
+<h3>Verified Treatment Recommendations</h3>
+<table>
+  <thead><tr><th>Target</th><th>Type</th><th>Product</th><th>Dosage &amp; Guidance</th><th>Source Citation</th></tr></thead>
+  <tbody>{rec_html}</tbody>
+</table>
+
+<div class="footer">Generated by AI Mango Orchard Health &amp; Pest Intelligence. Decision support only;
+confirm diagnoses in the field and follow product labels and local extension advice.</div>
+</body>
+</html>"""
+
+
+def html_to_pdf(html_content: str):
+    """Returns PDF bytes, or None when WeasyPrint or its native libraries are unavailable."""
     try:
         from weasyprint import HTML
-        pdf_buffer = io.BytesIO()
-        HTML(string=html_content).write_pdf(pdf_buffer)
-        pdf_buffer.seek(0)
+    except (ImportError, OSError) as e:
+        logger.warning("WeasyPrint unavailable (%s); serving HTML report instead.", e)
+        return None
+    return HTML(string=html_content).write_pdf()
+
+
+@router.get("/generate/{scan_id}")
+def generate_pdf_report(scan_id: str, user=Depends(get_current_user), store: Store = Depends(get_store)):
+    """Generates a PDF report for a stored scan (HTML if WeasyPrint's native libraries are missing)."""
+    scan = store.get_scan(user["id"], scan_id)
+    if not scan:
+        raise HTTPException(status_code=404, detail=f"Scan ID {scan_id} not found.")
+
+    html_content = render_report_html(scan)
+    pdf = html_to_pdf(html_content)
+    if pdf is not None:
         return Response(
-            content=pdf_buffer.getvalue(),
+            content=pdf,
             media_type="application/pdf",
-            headers={"Content-Disposition": f"attachment; filename=mango_orchard_report_{scan_id}.pdf"}
+            headers={"Content-Disposition": f'attachment; filename="mango_orchard_report_{scan_id}.pdf"'},
         )
-    except Exception as e:
-        # If WeasyPrint system C libraries are missing in local dev environment
-        # return semantic HTML for viewing/printing
-        return Response(
-            content=html_content,
-            media_type="text/html",
-            headers={"X-Fallback": "WeasyPrint C libraries not found; rendered HTML"}
-        )
+    return Response(
+        content=html_content,
+        media_type="text/html; charset=utf-8",
+        headers={"X-Report-Fallback": "WeasyPrint native libraries not found; rendered HTML"},
+    )

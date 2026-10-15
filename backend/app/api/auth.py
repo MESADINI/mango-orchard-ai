@@ -1,37 +1,48 @@
 """
 AI Mango Orchard Health & Pest Intelligence — Authentication Endpoint
 Handles user registration, login, JWT token issuance, and profile retrieval.
+
+Accounts live in the local SQLite store. If Supabase is configured, login is
+first attempted against Supabase Auth and the user is mirrored locally; the
+backend always issues its own JWT so every endpoint validates tokens the same way.
 """
 
-from fastapi import APIRouter, HTTPException, Depends, Header
-from pydantic import BaseModel, EmailStr
-from typing import Optional, Dict, Any
+import logging
+from typing import Any, Dict, Optional
 
-from app.core.security import create_access_token, decode_access_token, get_password_hash, verify_password
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field, field_validator
+
 from app.core.database import get_supabase_client
+from app.core.deps import get_current_user, get_store
+from app.core.security import create_access_token, get_password_hash, verify_password
+from app.core.store import Store
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
-# In-memory user store for standalone local development
-LOCAL_USERS_DB: Dict[str, Dict[str, Any]] = {
-    "grower@mango.ai": {
-        "id": "usr-001",
-        "email": "grower@mango.ai",
-        "full_name": "Krishnagiri Mango Farmer",
-        "role": "grower",
-        "hashed_password": get_password_hash("orchard123")
-    }
-}
+
+def _normalise_email(value: str) -> str:
+    value = value.strip().lower()
+    if "@" not in value or value.startswith("@") or value.endswith("@") or len(value) > 254:
+        raise ValueError("Enter a valid email address.")
+    return value
+
 
 class UserLogin(BaseModel):
     email: str
-    password: str
+    password: str = Field(min_length=1, max_length=128)
+
+    _email = field_validator("email")(_normalise_email)
+
 
 class UserRegister(BaseModel):
     email: str
-    password: str
-    full_name: Optional[str] = None
-    role: str = "grower"
+    password: str = Field(min_length=8, max_length=128)
+    full_name: Optional[str] = Field(default=None, max_length=120)
+
+    _email = field_validator("email")(_normalise_email)
+
 
 class UserProfile(BaseModel):
     user_id: str
@@ -39,112 +50,70 @@ class UserProfile(BaseModel):
     full_name: Optional[str] = None
     role: str = "grower"
 
+
 class AuthResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserProfile
 
-@router.post("/login", response_model=AuthResponse)
-async def login(credentials: UserLogin):
-    """Authenticate user with Supabase Auth or standalone local authentication."""
-    # 1. Try Supabase Auth if credentials configured
-    try:
-        supabase = get_supabase_client()
-        res = supabase.auth.sign_in_with_password({
-            "email": credentials.email,
-            "password": credentials.password
-        })
-        if res.user:
-            return AuthResponse(
-                access_token=res.session.access_token,
-                user=UserProfile(
-                    user_id=res.user.id,
-                    email=res.user.email,
-                    full_name=res.user.user_metadata.get("full_name", "Grower"),
-                    role=res.user.user_metadata.get("role", "grower")
-                )
-            )
-    except Exception:
-        pass
 
-    # 2. Local fallback verification
-    user = LOCAL_USERS_DB.get(credentials.email.lower())
+def _profile(user: Dict[str, Any]) -> UserProfile:
+    return UserProfile(user_id=user["id"], email=user["email"], full_name=user.get("full_name"), role=user["role"])
+
+
+def _auth_response(user: Dict[str, Any]) -> AuthResponse:
+    return AuthResponse(access_token=create_access_token(user["id"]), user=_profile(user))
+
+
+def _try_supabase_login(credentials: UserLogin, store: Store) -> Optional[Dict[str, Any]]:
+    supabase = get_supabase_client()
+    if supabase is None:
+        return None
+    try:
+        res = supabase.auth.sign_in_with_password({"email": credentials.email, "password": credentials.password})
+    except Exception as e:
+        logger.info("Supabase login rejected for %s: %s", credentials.email, e)
+        return None
+    if not res.user:
+        return None
+    user = store.get_user_by_email(credentials.email)
+    if user is None:
+        user = store.create_user(
+            email=credentials.email,
+            hashed_password=None,
+            full_name=(res.user.user_metadata or {}).get("full_name"),
+        )
+    return user
+
+
+@router.post("/login", response_model=AuthResponse)
+def login(credentials: UserLogin, store: Store = Depends(get_store)):
+    """Authenticate with email and password."""
+    user = store.get_user_by_email(credentials.email)
     if user and verify_password(credentials.password, user["hashed_password"]):
-        token = create_access_token(user["email"])
-        return AuthResponse(
-            access_token=token,
-            user=UserProfile(
-                user_id=user["id"],
-                email=user["email"],
-                full_name=user["full_name"],
-                role=user["role"]
-            )
-        )
-    
-    # 3. Developer mode fallback for rapid prototyping
-    if credentials.password == "orchard123":
-        token = create_access_token(credentials.email)
-        return AuthResponse(
-            access_token=token,
-            user=UserProfile(
-                user_id="dev-user-001",
-                email=credentials.email,
-                full_name="Orchard Cultivator",
-                role="grower"
-            )
-        )
+        return _auth_response(user)
+
+    supabase_user = _try_supabase_login(credentials, store)
+    if supabase_user:
+        return _auth_response(supabase_user)
 
     raise HTTPException(status_code=401, detail="Invalid email or password.")
 
+
 @router.post("/register", response_model=AuthResponse)
-async def register(data: UserRegister):
-    """Register new grower account."""
-    email = data.email.lower()
-    if email in LOCAL_USERS_DB:
+def register(data: UserRegister, store: Store = Depends(get_store)):
+    """Register a new grower account. Self-registration always creates the 'grower' role."""
+    if store.get_user_by_email(data.email):
         raise HTTPException(status_code=400, detail="Account with this email already exists.")
-
-    user_id = f"usr-{len(LOCAL_USERS_DB) + 1:03d}"
-    LOCAL_USERS_DB[email] = {
-        "id": user_id,
-        "email": email,
-        "full_name": data.full_name or "Grower",
-        "role": data.role,
-        "hashed_password": get_password_hash(data.password)
-    }
-
-    token = create_access_token(email)
-    return AuthResponse(
-        access_token=token,
-        user=UserProfile(
-            user_id=user_id,
-            email=email,
-            full_name=data.full_name or "Grower",
-            role=data.role
-        )
+    user = store.create_user(
+        email=data.email,
+        hashed_password=get_password_hash(data.password),
+        full_name=data.full_name or None,
     )
+    return _auth_response(user)
+
 
 @router.get("/me", response_model=UserProfile)
-async def get_current_user(authorization: Optional[str] = Header(None)):
-    """Validates JWT bearer token and returns grower profile."""
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Missing or invalid authorization header.")
-
-    token = authorization.split(" ")[1]
-    payload = decode_access_token(token)
-    if not payload or "sub" not in payload:
-        raise HTTPException(status_code=401, detail="Token has expired or is invalid.")
-
-    email = payload["sub"].lower()
-    user = LOCAL_USERS_DB.get(email, {
-        "id": "dev-user-001",
-        "email": email,
-        "full_name": "Orchard Cultivator",
-        "role": "grower"
-    })
-
-    return UserProfile(
-        user_id=user["id"],
-        email=user["email"],
-        full_name=user["full_name"],
-        role=user["role"]
-    )
+def get_me(user: Dict[str, Any] = Depends(get_current_user)):
+    """Validates the JWT bearer token and returns the grower profile."""
+    return _profile(user)

@@ -44,7 +44,7 @@ class TestGradCAMHook(unittest.TestCase):
         self.assertEqual(heatmap.shape, (32, 32))
         self.assertTrue(0.0 <= np.max(heatmap) <= 1.0)
         gradcam.remove_hooks()
-        print("✅ Grad-CAM hook test passed successfully!")
+        self.assertEqual(len(gradcam.handles), 0)
 
 if __name__ == "__main__":
     unittest.main()

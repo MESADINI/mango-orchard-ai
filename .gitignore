@@ -101,3 +101,10 @@ node_modules/
 __pycache__/
 venv/
 *.pyc
+# Runtime data written by the backend and ML pipeline (scans, uploads, local database)
+backend/data/
+backend/media/
+ml/artifacts/
+ml/*/artifacts/
+ml/disease_detection/weights/
+ml/pest_detection/weights/
