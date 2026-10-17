@@ -77,7 +77,7 @@ class FakeYOLO:
         self.detections = detections  # list of (cls_id, conf, [x1, y1, x2, y2])
         self.calls = []
 
-    def __call__(self, image, conf=0.25, verbose=False):
+    def __call__(self, image, conf=0.25, device=None, verbose=False):
         self.calls.append(conf)
         boxes = [_Box(c, p, b) for c, p, b in self.detections if p >= conf]
         return [_Result(boxes, self.NAMES)]

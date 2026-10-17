@@ -4,6 +4,9 @@
 **Target Venues:** To be decided once real results exist (see `PROGRESS.md`)  
 **File:** `CONFERENCE_PAPER_SUMMARY.md`  
 
+> **Superseded:** the current manuscript is `paper/main.tex` (IEEE format), whose numbers are generated from
+> `results/` by `python tasks.py paper-tables`. This outline is kept for history only.
+>
 > ⚠️ **UNVERIFIED DRAFT — DO NOT SUBMIT OR QUOTE.**
 > An audit on 2026-10-17 found that no model in this repository has been trained and no experiment has been
 > run: there are no weights, training logs, processed datasets or result files. All performance numbers,

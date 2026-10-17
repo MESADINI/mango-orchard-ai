@@ -10,8 +10,8 @@ Read this first when resuming. Every number in docs/paper must come from a file 
 | 3 | Pest detector | ✅ Done (reduced: YOLOv8n, YOLO11n) | `docs/phases/PHASE_3.md`, `docs/models/pest_detector.md`, `results/pest/` | Proxy data: every class `host_verified: false`, pest excluded from OHI; Mealy Bug AP50 0.26 |
 | 4 | Severity & explainability | 🔄 Partial (committed): segmenter fixed, tooling, Grad-CAM deletion/insertion | `docs/phases/PHASE_4.md`, `results/xai/` | **Blocked on user:** ≥50 expert lesion masks (`docs/annotation/SEVERITY_MASKS.md`) for severity validation and the pointing game |
 | 5 | OHI & forecaster | ✅ Done | `docs/phases/PHASE_5.md`, `results/ohi/`, `results/forecaster/` | Expert OHI ratings needed (`docs/annotation/OHI_EXPERT_RATING.md`); Open-Meteo archive unreachable, NASA POWER used |
-| 6 | Integration & product quality | 🔄 In progress: registry, citations, chatbot, e2e tests done | `docs/phases/PHASE_6.md`, `docs/sources.md`, `ml/model_registry.json` | API latency (after GPU work), Docker build (daemon not running) |
-| 7 | Documentation & paper | 🔄 Skeleton: results generator, ARCHITECTURE.md | `docs/RESULTS.md`, `docs/ARCHITECTURE.md`, `paper/generated/numbers.tex` | Waits for Phases 3–6 results |
+| 6 | Integration & product quality | 🔄 Partial (committed): registry, citations, chatbot, e2e tests | `docs/phases/PHASE_6.md`, `docs/sources.md`, `ml/model_registry.json` | API latency + Docker build: machine busy (another process) / Docker daemon not running |
+| 7 | Documentation & paper | ✅ Done (PDF not compiled: no TeX installed) | `docs/phases/PHASE_7.md`, `README.md`, `docs/RESULTS.md`, `docs/ARCHITECTURE.md`, `CLAIMS_EVIDENCE.md`, `paper/` | — |
 | 8 | Final audit | Pending | — | — |
 
 ## Environment facts
@@ -46,3 +46,4 @@ CLAIMS_EVIDENCE.md. The code still supports them (`--archs convnext_tiny,swin_ti
   - Citations re-verified (banned and unsupported chemicals removed, see docs/sources.md); chatbot fixed; model registry and /api/models added.
   - CPU-device bug in select_device fixed; frontend dependencies trimmed; results tables generated from results/.
 - 2026-10-17 — Phases 4 (partial) and 5 committed. Phase 3: YOLOv8n test mAP50-95 0.519, YOLO11n 0.520 (deployed, selected by val 0.537); YOLOv8s stopped by low memory at epoch 12 (not run); all classes host-unverified.
+- 2026-10-17 — Phase 6 committed (partial). Phase 7: README rewritten, results/LaTeX generated from results/, ARCHITECTURE, CLAIMS_EVIDENCE, IEEE manuscript; 21/26 references machine-verified.

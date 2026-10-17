@@ -55,9 +55,21 @@ def build_detection(pest_name: str, confidence: float, bbox: List[float],
     }
 
 
+def select_yolo_device(device: Optional[str] = None) -> str:
+    """Device string for Ultralytics. Its own auto-selection queries CUDA whenever torch is a CUDA build, which
+    fails when no device is visible (e.g. CUDA_VISIBLE_DEVICES=""), so a visible device is required explicitly."""
+    if device is not None:
+        return "0" if device == "cuda" else device
+    import torch
+    if torch.cuda.is_available() and torch.cuda.device_count() > 0:
+        return "0"
+    return "cpu"
+
+
 class PestDetector:
-    def __init__(self, weights_path: Optional[str] = None):
+    def __init__(self, weights_path: Optional[str] = None, device: Optional[str] = None):
         self.weights_path = str(weights_path) if weights_path else str(DEFAULT_WEIGHTS_PATH)
+        self.device = select_yolo_device(device)
         self.model = None
         self.host_verified = load_host_verified(self.weights_path)
         if Path(self.weights_path).is_file():
@@ -103,7 +115,7 @@ class PestDetector:
         if self.model is None:
             return detections
 
-        results = self.model(pil_image, conf=conf_threshold, verbose=False)
+        results = self.model(pil_image, conf=conf_threshold, device=self.device, verbose=False)
         for r in results:
             for box in r.boxes:
                 cls_id = int(box.cls[0].item())

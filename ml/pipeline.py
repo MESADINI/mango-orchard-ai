@@ -82,7 +82,7 @@ class MangoOrchardPipeline:
     ):
         self.disease_detector = DiseaseDetector(weights_path=disease_weights or str(DEFAULT_DISEASE_WEIGHTS),
                                                 device=device)
-        self.pest_detector = PestDetector(weights_path=pest_weights or str(DEFAULT_PEST_WEIGHTS))
+        self.pest_detector = PestDetector(weights_path=pest_weights or str(DEFAULT_PEST_WEIGHTS), device=device)
         self.ohi_engine = OrchardHealthIndexEngine()
         self.weather_fetcher = weather_fetcher
         self.artifacts_dir = Path(artifacts_dir) if artifacts_dir else DEFAULT_ARTIFACTS_DIR

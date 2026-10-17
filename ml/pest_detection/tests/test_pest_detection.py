@@ -92,3 +92,14 @@ def test_host_verified_is_read_from_deployment_metadata(tmp_path, fake_yolo):
     assert [d["host_verified"] for d in detector.predict(SAMPLE_IMG)] == [False, True]
     detector.host_verified = {"Fruit Fly": False}
     assert detector.has_host_verified_classes is False
+
+
+def test_yolo_device_requires_a_visible_cuda_device(monkeypatch):
+    import torch
+    from ml.pest_detection.inference import select_yolo_device
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "device_count", lambda: 0)
+    assert select_yolo_device() == "cpu"
+    monkeypatch.setattr(torch.cuda, "device_count", lambda: 1)
+    assert select_yolo_device() == "0"
+    assert select_yolo_device("cuda") == "0" and select_yolo_device("cpu") == "cpu"

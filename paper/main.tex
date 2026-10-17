@@ -1,0 +1,237 @@
+% IEEE conference manuscript. Every result is a macro or table generated from results/ by
+%   python tasks.py paper-tables   (-> paper/generated/numbers.tex, paper/generated/tables.tex)
+% Dataset counts typed in the text are copied from results/data_stats.json and docs/phases/PHASE_1.md.
+\documentclass[conference]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{cite}
+\input{generated/numbers.tex}
+
+\begin{document}
+
+\title{Near-Perfect Benchmark Accuracy Is Not Field Readiness:\\
+An Audited Decision-Support Pipeline for Mango Leaf Disease, Pests and Orchard Health}
+
+\author{\IEEEauthorblockN{[Authors withheld for review]}
+\IEEEauthorblockA{[Affiliation]}}
+
+\maketitle
+
+\begin{abstract}
+We present an open, fully reproducible decision-support pipeline for mango orchards. It combines a leaf-disease
+classifier with Grad-CAM explanations, a colour-based lesion-area estimator, a pest detector, a transparent
+rule-based Orchard Health Index (OHI), weather rules taken from a national IPM bulletin, and treatment advice
+verified against official sources.
+
+Every reported number is produced by code in the repository. With leakage-controlled group splits on MangoLeafBD,
+three ImageNet-pretrained backbones reach a cross-validated macro-F1 of \cvMacroFOne{} and are statistically
+indistinguishable. On an independent external set, however, the selected model reaches a macro-F1 of only
+\extMacroFOne{} \extMacroFOneCI{}. A calibrated low-confidence rule routes \extFlagged{} of those images to a
+``retake photo'' path.
+
+The pest detector reaches a test mAP$_{50:95}$ of \pestTestMap{}. Every class comes from a single non-mango source,
+so its detections are labelled unverified and kept out of the OHI. A sensitivity analysis shows that OHI rankings
+are robust to the weights, but its tier labels are not: up to \ohiMaxTierChange{} of scenarios change tier under
+$\pm$20\% changes to a single weight.
+
+We report these limitations as primary results and release the pipeline, the audit trail and the protocols for
+the missing expert validations.
+\end{abstract}
+
+\begin{IEEEkeywords}
+mango, plant disease, domain shift, calibration, explainability, decision support, reproducibility
+\end{IEEEkeywords}
+
+\section{Introduction}
+Image-based plant-disease classifiers routinely report accuracies close to 100\% on public datasets
+\cite{mohanty2016plantvillage,ferentinos2018deep}. Such figures are often taken as evidence that a tool is ready for
+growers. Two failure modes undermine that inference:
+\begin{itemize}
+\item \emph{leakage} between training and test images, for example multiple photographs of the same leaf
+\cite{kapoor2023leakage};
+\item \emph{domain shift} between curated dataset photographs and field conditions.
+\end{itemize}
+Decision-support systems add a third risk: scores and treatment advice that look authoritative but were never
+validated.
+
+We built a complete mango-orchard pipeline and audited every component with the same rule: a claim is made only if
+a file under \texttt{results/} supports it. Our contributions are:
+\begin{enumerate}
+\item a leakage-controlled benchmark of three backbones on MangoLeafBD \cite{ahmed2023mangoleafbd}, including group
+cross-validation, an independent external set, calibration and out-of-distribution (OOD) analysis
+(Section~\ref{sec:disease});
+\item an OHI that excludes unassessed inputs instead of scoring them as healthy, together with a global sensitivity
+analysis of its expert-assigned constants (Section~\ref{sec:ohi});
+\item a back-test of published disease-favourable weather conditions on ten years of reanalysis data, with an
+explicit list of what it can and cannot claim (Section~\ref{sec:forecast});
+\item a treatment database checked against official extension sources and the Indian banned-pesticide list, and a
+reproducible artefact in which all numbers, tables and references are generated and checked by code.
+\end{enumerate}
+
+\section{Related Work}
+Deep CNNs for leaf-disease recognition were popularised on PlantVillage \cite{mohanty2016plantvillage}, and a large
+architecture comparison followed \cite{ferentinos2018deep}. For mango, MangoLeafBD provides eight classes of leaf
+images \cite{ahmed2023mangoleafbd}.
+
+We compare EfficientNet \cite{tan2019efficientnet}, ResNet \cite{he2016resnet} and MobileNetV3
+\cite{howard2019mobilenetv3} classifiers, and YOLO-family detectors \cite{redmon2016yolo,jocher2023ultralytics}
+pretrained on COCO \cite{lin2014coco}.
+
+For the evaluation, we use:
+\begin{itemize}
+\item temperature scaling \cite{guo2017calibration} and maximum-softmax OOD scoring \cite{hendrycks2017baseline};
+\item Grad-CAM \cite{selvaraju2017gradcam}, evaluated with deletion/insertion curves \cite{petsiuk2018rise}, whose
+pitfalls are discussed in \cite{hooker2019roar}, and with the pointing game \cite{zhang2018excitation};
+\item McNemar's test \cite{dietterich1998tests} with Holm correction \cite{holm1979}, and sensitivity analysis
+following \cite{saltelli2008gsa}.
+\end{itemize}
+
+\section{Data}
+\textbf{Disease.} We use five MangoLeafBD classes: Anthracnose, Bacterial Canker, Powdery Mildew, Sooty Mold and
+Healthy. Leaf Spot is excluded because no licensed training data exist for it. The authors note that the 4{,}000
+images contain only about 1{,}800 distinct leaves.
+
+We grouped copies of the same leaf in two steps:
+\begin{enumerate}
+\item DINOv2 retrieval \cite{oquab2024dinov2};
+\item verification with one-to-one SIFT matching \cite{lowe2004sift} and a RANSAC similarity transform
+\cite{fischler1981ransac}.
+\end{enumerate}
+All splits are group-aware. This leaves 2{,}486 images from 1{,}085 leaves, with a held-out test split of 239 images.
+
+\textbf{External set.} 381 independent images of four disease classes form the external set. 972 candidate images
+were excluded because they derive from MangoLeafBD.
+
+\textbf{Pests.} Three public sets (CC BY 4.0) give 2{,}559 images in 1{,}400 groups. A host-plant review found:
+\begin{itemize}
+\item fruit flies photographed on traps;
+\item mealybugs on grape and in stock photos;
+\item scale insects on coffee leaves.
+\end{itemize}
+None shows mango, so all three classes are treated as \emph{proxy} data.
+
+\section{Methods}
+\subsection{Disease classifier}\label{sec:disease}
+\textbf{Protocol.} Each backbone is trained with 5-fold group cross-validation. Fold $k$ is held out, fold $k{+}1$
+is used for early stopping, and the selection rule (highest mean macro-F1) was fixed before training.
+
+\textbf{Training.} 224\,px inputs, strong augmentation, AdamW, label smoothing, class weights, seed 42.
+
+\textbf{Final models.} Each final model is trained on the train split and evaluated once on the test split, the
+external set, a near-OOD set (three MangoLeafBD classes unknown to the model) and a far-OOD set (pest images). All
+evaluation runs in fp32: fp16 autocast produced non-finite logits on OOD inputs.
+
+\textbf{Temperature and threshold.} A temperature is fitted on the validation split. Because validation accuracy is
+100\%, the fit is not identifiable: the NLL decreases monotonically as $T\to0$. We therefore deploy $T{=}1$; this
+rule was added post hoc and is disclosed as such. The low-confidence threshold is the maximum-softmax value that
+keeps 95\% of validation images. Images below it trigger a ``retake photo'' message, and their disease result
+enters neither the OHI nor the treatment advice.
+
+\subsection{Lesion area and explanations}
+\textbf{Lesion area.} A rule-based HSV segmenter defines the leaf as the largest filled green component, grown
+through attached lesion tissue. Lesions are brown pixels plus pixels that are dark relative to the leaf, which
+captures the low-saturation sooty-mould coating.
+
+\textbf{Explanations.} Grad-CAM \cite{selvaraju2017gradcam} on the last convolutional layer is scored with
+deletion/insertion AUC \cite{petsiuk2018rise} against two baselines: random ranking and a centred Gaussian prior.
+
+\subsection{Pest detector}
+YOLOv8n and YOLO11n \cite{jocher2023ultralytics} start from COCO weights pinned by SHA-256. Each is trained once
+(seed 42, deterministic mode) and selected on validation mAP$_{50:95}$. The deployment metadata marks every class
+\texttt{host\_verified: false}.
+
+\subsection{Orchard Health Index}\label{sec:ohi}
+$\mathrm{OHI}=\mathrm{clip}(100-\sum_{i\in A}\tilde w_i X_i)$, where $X_i\in[0,100]$ are penalties for disease,
+pest, weather and nutrient status, and $\tilde w_i=w_i/\sum_{j\in A}w_j$ renormalises the nominal weights
+$(0.40,0.35,0.15,0.10)$ over the set $A$ of components actually assessed.
+
+A component is excluded when:
+\begin{itemize}
+\item it has no model;
+\item the prediction is low-confidence;
+\item weather is offline;
+\item no nutrient sensor exists;
+\item no pest class is host-verified.
+\end{itemize}
+Without an image-based component, no OHI is reported. All constants are expert-assigned. We perturb them:
+\begin{itemize}
+\item one at a time, by $\pm$10/20\%;
+\item jointly, with Dirichlet-distributed weights;
+\item by component ablation.
+\end{itemize}
+The 239 scenarios combine test-split predictions, segmented lesion area, randomly paired pest annotations and
+randomly drawn hours of weather.
+
+\subsection{Weather rules and back-test}\label{sec:forecast}
+Thresholds are quoted from the National Horticulture Mission IPM bulletin \cite{nhm2012ipmmango}:
+\begin{itemize}
+\item anthracnose: RH${\ge}$95\% at 25--30\,$^\circ$C for 12\,h;
+\item powdery mildew: T$_{\min}$ 10--13\,$^\circ$C, T$_{\max}$ 27--31\,$^\circ$C and RH 82--91\%;
+\item bacterial canker: RH${\ge}$90\% and 25--30\,$^\circ$C.
+\end{itemize}
+They are applied to hourly NASA POWER/MERRA-2 \cite{gelaro2017merra2} data for Krishnagiri, Tamil Nadu, for
+2015--2024. We also compare them with the rules the prototype used before the audit.
+
+\subsection{Treatment advice}
+Every recommendation links to a TNAU page \cite{tnau2026mango} or to the NHM bulletin, quotes it verbatim, and is
+checked against the CIB\&RC list of banned and restricted pesticides \cite{cibrc2026banned}.
+
+\section{Results}
+\input{generated/tables.tex}
+
+\textbf{In-distribution benchmark.} All backbones are near-ceiling and statistically indistinguishable under
+cross-validation (Table~\ref{tab:cv}). The only ablation with a measurable effect is removing ImageNet pretraining
+(Table~\ref{tab:ablation}).
+
+\textbf{Domain shift.} The test-split accuracy of \testAcc{} does not transfer (Table~\ref{tab:final}): external
+macro-F1 is \extMacroFOne{} \extMacroFOneCI{} for the selected model. The low-confidence rule flags \testFlagged{} of
+test images but \extFlagged{} of external images. In practice, the deployed system therefore asks for a retake
+rather than issuing a confident wrong diagnosis on most out-of-domain photos. OOD AUROC is \aurocNear{} (near) and
+\aurocFar{} (far).
+
+\textbf{Pests.} The two detectors are equivalent (Table~\ref{tab:pest}). Fruit Fly and Scale Insect score high, but
+each is a single homogeneous source, so background cues are confounded with the class. Mealy Bug, the heterogeneous
+source, is poor.
+
+\textbf{Explanations.} Grad-CAM beats the centre prior on both curves, but only modestly, on about 60\% of images
+(Table~\ref{tab:xai}). Random-order deletion collapses the prediction faster than any saliency order. We attribute
+this to the out-of-distribution artefact described in \cite{hooker2019roar}, so we do not use random deletion as a
+lower bound.
+
+\textbf{OHI.} Rankings are robust to the weights: $\rho\ge0.99$ for $\pm$20\% changes to a single weight
+(Table~\ref{tab:ohi}). Tier labels are not: up to \ohiMaxTierChange{} of scenarios change tier one weight at a time,
+and \ohiUniformTierChange{} (median) under uninformative weights.
+
+\textbf{Weather rules.} In ten years of hourly reanalysis data, the bulletin's ``High'' conditions never occur. RH
+${\ge}95\%$ is common, but never between 25 and 30\,$^\circ$C. The pre-audit rules raised a High alert on
+\fcPrevHighDays{} days per year.
+
+\section{Discussion and Limitations}
+\textbf{Field readiness.} The central finding is negative. A leakage-controlled, near-perfect MangoLeafBD
+benchmark says little about field photographs. Calibrated abstention mitigates the risk of confident errors, but it
+does not create accuracy; field data from Indian orchards are required.
+
+\textbf{Pest detector.} It cannot be claimed to work on mango trees.
+
+\textbf{OHI and weather rules.} Their tiers and alerts rest on expert constants and on thresholds stated for other
+regions. Coarse reanalysis data cannot resolve canopy leaf wetness, and no outbreak records were available.
+
+\textbf{Pending validations.} Expert lesion masks (lesion area and the pointing game) and expert OHI ratings are
+pending. Protocols and code are released with the artefact.
+
+\textbf{Reduced scope.} ConvNeXt and Swin backbones, multi-seed ablations and a third detector were planned but not
+run on the available 4\,GB GPU. We report no results for them.
+
+\section{Conclusion}
+Auditing every claim against generated evidence changed the story of this system: from ``accurate and ready'' to
+``accurate in-distribution, safely abstaining out of distribution, and waiting for field validation''. We release
+the pipeline, all results and the validation protocols so that the missing evidence can be collected.
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}
