@@ -1,0 +1,18 @@
+{
+  "classes": [
+    "Fruit Fly",
+    "Mealy Bug",
+    "Scale Insect"
+  ],
+  "host_verified": {
+    "Fruit Fly": false,
+    "Mealy Bug": false,
+    "Scale Insect": false
+  },
+  "model": "yolo11n",
+  "selection": "highest val mAP50-95",
+  "sha256": "dfd2d0e2db4714d38ff2f75e32c4f5be04027960c462d127286d9501d13c4315",
+  "source_checkpoint": "results\\pest\\yolo11n\\train\\weights\\best.pt",
+  "test_map50_95": 0.5195896328290323,
+  "val_map50_95": 0.5372733849873434
+}

@@ -7,9 +7,9 @@ Read this first when resuming. Every number in docs/paper must come from a file 
 | 0 | Baseline & cleanup | ✅ Done | `docs/phases/PHASE_0.md`, `results/environment/`, `results/tests/phase0_pytest.txt` | — |
 | 1 | Real datasets | ✅ Done | `docs/phases/PHASE_1.md`, `docs/datasets/`, `results/data_stats.json`, `results/data/`, `results/tests/phase1_pytest.txt` | — (pest data is flagged non-mango proxy data) |
 | 2 | Disease classifier training | ✅ Done (reduced scope) | `docs/phases/PHASE_2.md`, `docs/models/disease_classifier.md`, `results/disease/`, `results/tests/phase2_pytest.txt` | External-set macro-F1 0.119: does not transfer (see PHASE_2 §4) |
-| 3 | Pest detector | 🔄 In progress (GPU training YOLOv8n / YOLO11n / YOLOv8s) | `results/pest/` | Proxy data (trap/grape/coffee): every class `host_verified: false` |
-| 4 | Severity & explainability | 🔄 Partial: segmenter fixed, tooling + Grad-CAM deletion/insertion done | `docs/phases/PHASE_4.md`, `results/xai/` | **Blocked on user:** ≥50 expert lesion masks (`docs/annotation/SEVERITY_MASKS.md`) for severity validation and the pointing game |
-| 5 | OHI & forecaster | 🔄 Done in working tree, not yet committed | `docs/phases/PHASE_5.md`, `results/ohi/`, `results/forecaster/` | Expert OHI ratings needed for validation (`docs/annotation/OHI_EXPERT_RATING.md`); Open-Meteo archive unreachable here, NASA POWER used |
+| 3 | Pest detector | ✅ Done (reduced: YOLOv8n, YOLO11n) | `docs/phases/PHASE_3.md`, `docs/models/pest_detector.md`, `results/pest/` | Proxy data: every class `host_verified: false`, pest excluded from OHI; Mealy Bug AP50 0.26 |
+| 4 | Severity & explainability | 🔄 Partial (committed): segmenter fixed, tooling, Grad-CAM deletion/insertion | `docs/phases/PHASE_4.md`, `results/xai/` | **Blocked on user:** ≥50 expert lesion masks (`docs/annotation/SEVERITY_MASKS.md`) for severity validation and the pointing game |
+| 5 | OHI & forecaster | ✅ Done | `docs/phases/PHASE_5.md`, `results/ohi/`, `results/forecaster/` | Expert OHI ratings needed (`docs/annotation/OHI_EXPERT_RATING.md`); Open-Meteo archive unreachable, NASA POWER used |
 | 6 | Integration & product quality | 🔄 In progress: registry, citations, chatbot, e2e tests done | `docs/phases/PHASE_6.md`, `docs/sources.md`, `ml/model_registry.json` | API latency (after GPU work), Docker build (daemon not running) |
 | 7 | Documentation & paper | 🔄 Skeleton: results generator, ARCHITECTURE.md | `docs/RESULTS.md`, `docs/ARCHITECTURE.md`, `paper/generated/numbers.tex` | Waits for Phases 3–6 results |
 | 8 | Final audit | Pending | — | — |
@@ -29,6 +29,8 @@ CLAIMS_EVIDENCE.md. The code still supports them (`--archs convnext_tiny,swin_ti
   no pretraining, basic augmentation, no label smoothing + no class weights, leaky image-level random split).
   Replaced by 3 single runs on CV fold 0 (pretrained vs scratch, strong vs basic augmentation, 224 vs 256 px),
   each compared with the existing EfficientNet-B3 CV fold-0 run. No seed variance is estimated.
+- Phase 3, YOLOv8s: stopped at epoch 12/50 when the system ran low on memory; not restarted; partial output
+  moved out of `results/`. RT-DETR: not run.
 - Phase 2, 288 px input size: does not fit in 4 GB at batch 32 (measured peak 4.52 GB); 256 px used instead
   (3.63 GB).
 
@@ -43,3 +45,4 @@ CLAIMS_EVIDENCE.md. The code still supports them (`--archs convnext_tiny,swin_ti
   - Forecaster back-test on 10 years of NASA POWER data: the documented 'High' conditions never occur; the previous rules flagged 216.2 days/year.
   - Citations re-verified (banned and unsupported chemicals removed, see docs/sources.md); chatbot fixed; model registry and /api/models added.
   - CPU-device bug in select_device fixed; frontend dependencies trimmed; results tables generated from results/.
+- 2026-10-17 — Phases 4 (partial) and 5 committed. Phase 3: YOLOv8n test mAP50-95 0.519, YOLO11n 0.520 (deployed, selected by val 0.537); YOLOv8s stopped by low memory at epoch 12 (not run); all classes host-unverified.

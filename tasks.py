@@ -10,6 +10,7 @@ Targets:
     train-pest     train the pest detector
     eval           evaluate trained models on the held-out test split
     test           run the full pytest suite
+    paper-tables   regenerate docs/RESULTS.md and the README results table from results/
     all            data -> train-disease -> train-pest -> eval -> test
 """
 
@@ -53,7 +54,9 @@ def train_disease() -> None:
 
 
 def train_pest() -> None:
-    run(PY, "ml/pest_detection/train.py", "--data", str(REPO / "ml/datasets/processed/pest/data.yaml"))
+    run(PY, "ml/pest_detection/train.py", "train")       # YOLOv8n, YOLO11n, YOLOv8s -> results/pest/
+    run(PY, "ml/pest_detection/train.py", "deploy")      # selected by val mAP50-95, SHA-verified copy
+    run(PY, "ml/model_registry.py", "build")
 
 
 def evaluate() -> None:
@@ -62,6 +65,10 @@ def evaluate() -> None:
 
 def test() -> None:
     run(PY, "-m", "pytest", "-q")
+
+
+def paper_tables() -> None:
+    run(PY, "ml/reporting/results_tables.py")
 
 
 def all_targets() -> None:
@@ -76,6 +83,7 @@ TARGETS = {
     "train-pest": train_pest,
     "eval": evaluate,
     "test": test,
+    "paper-tables": paper_tables,
     "all": all_targets,
 }
 
