@@ -155,7 +155,9 @@ Put secrets such as `JWT_SECRET` in `backend/.env`.
 
 1. **Get data** (all steps verify SHA-256 checksums; details in `docs/datasets/`)
    ```bash
-   pip install -r requirements-ml.txt
+   pip install -r requirements-ml.txt   # GPU torch build: see the header of requirements-ml.txt
+   # exact environment of the reported results (CUDA 12.1):
+   # pip install -r requirements-ml.lock --extra-index-url https://download.pytorch.org/whl/cu121
    export ROBOFLOW_API_KEY=...           # free Roboflow account; only for the pest data
    python tasks.py data                  # or: make data
    ```

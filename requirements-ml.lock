@@ -1,5 +1,5 @@
 # Generated with: pip freeze (backend/venv, Windows, Python 3.11.9)
-# torch/torchvision are the CUDA 12.1 wheels: install with --index-url https://download.pytorch.org/whl/cu121
+# torch/torchvision are the CUDA 12.1 wheels: install the whole lock with --extra-index-url https://download.pytorch.org/whl/cu121
 # (CPU-only machines: use torch==2.3.0 / torchvision==0.18.0 from PyPI).
 annotated-doc==0.0.5
 annotated-types==0.8.0
