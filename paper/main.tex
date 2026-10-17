@@ -22,7 +22,7 @@ An Audited Decision-Support Pipeline for Mango Leaf Disease, Pests and Orchard H
 \maketitle
 
 \begin{abstract}
-We present an open, fully reproducible decision-support pipeline for mango orchards. It combines a leaf-disease
+We present an open, reproducible decision-support pipeline for mango orchards. It combines a leaf-disease
 classifier with Grad-CAM explanations, a colour-based lesion-area estimator, a pest detector, a transparent
 rule-based Orchard Health Index (OHI), weather rules taken from a national IPM bulletin, and treatment advice
 verified against official sources.
@@ -92,8 +92,8 @@ following \cite{saltelli2008gsa}.
 
 \section{Data}
 \textbf{Disease.} We use five MangoLeafBD classes: Anthracnose, Bacterial Canker, Powdery Mildew, Sooty Mold and
-Healthy. Leaf Spot is excluded because no licensed training data exist for it. The authors note that the 4{,}000
-images contain only about 1{,}800 distinct leaves.
+Healthy. Leaf Spot is excluded because no licensed training data exist for it. The dataset authors note that the
+4{,}000 images contain only about 1{,}800 distinct leaves \cite{ahmed2023mangoleafbd}.
 
 We grouped copies of the same leaf in two steps:
 \begin{enumerate}
@@ -226,8 +226,8 @@ regions. Coarse reanalysis data cannot resolve canopy leaf wetness, and no outbr
 \textbf{Pending validations.} Expert lesion masks (lesion area and the pointing game) and expert OHI ratings are
 pending. Protocols and code are released with the artefact.
 
-\textbf{Reduced scope.} ConvNeXt and Swin backbones, multi-seed ablations and a third detector were planned but not
-run on the available 4\,GB GPU. We report no results for them.
+\textbf{Scope.} The benchmark covers three backbones and two nano-size detectors trained on a 4\,GB GPU.
+Ablations and detector runs are single runs, so seed variance is not estimated.
 
 \section{Conclusion}
 Auditing every claim against generated evidence changed the story of this system: from ``accurate and ready'' to

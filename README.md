@@ -210,7 +210,7 @@ trained-model code path with a randomly initialised EfficientNet-B3 checkpoint.
 | Problem | Fix |
 |---|---|
 | Scans say "Disease classification unavailable" | Expected until you train models — see above. |
-| Report opens as a web page, not a PDF | WeasyPrint needs Pango/Cairo. On Windows install the GTK3 runtime (see WeasyPrint docs); the Docker image already includes them. Use the browser's *Print → Save as PDF* meanwhile. |
+| Report opens as a web page, not a PDF | WeasyPrint needs Pango/Cairo. On Windows install the GTK3 runtime (see WeasyPrint docs); the Dockerfile installs them (image build not yet verified, `results/docker/build.txt`). Use the browser's *Print → Save as PDF* meanwhile. |
 | Dashboard shows "Weather service (Open-Meteo) is currently unreachable" | No internet access, or Open-Meteo is down. Scans still work; the weather component is excluded from the OHI. |
 | Frontend shows "Cannot reach the backend server" | Start the backend on port 8000, or set `VITE_PROXY_TARGET`. |
 | Log warns `JWT_SECRET is set to the insecure default` | Set a random `JWT_SECRET` in `backend/.env`. Changing it signs everyone out. |

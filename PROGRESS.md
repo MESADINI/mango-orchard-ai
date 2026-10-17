@@ -12,7 +12,7 @@ Read this first when resuming. Every number in docs/paper must come from a file 
 | 5 | OHI & forecaster | ✅ Done | `docs/phases/PHASE_5.md`, `results/ohi/`, `results/forecaster/` | Expert OHI ratings needed (`docs/annotation/OHI_EXPERT_RATING.md`); Open-Meteo archive unreachable, NASA POWER used |
 | 6 | Integration & product quality | ✅ Done except Docker build: registry, citations, chatbot, e2e tests, API latency | `docs/phases/PHASE_6.md`, `docs/sources.md`, `ml/model_registry.json`, `results/api/latency.md` | Docker build not run: daemon not running (`results/docker/build.txt`) |
 | 7 | Documentation & paper | ✅ Done (PDF not compiled: no TeX installed) | `docs/phases/PHASE_7.md`, `README.md`, `docs/RESULTS.md`, `docs/ARCHITECTURE.md`, `CLAIMS_EVIDENCE.md`, `paper/` | — |
-| 8 | Final audit | Pending | — | — |
+| 8 | Final audit | ✅ Done (rating 5/10; see PHASE_8) | `docs/phases/PHASE_8.md`, `CLAIMS_EVIDENCE.md`, `results/tests/phase8_reproduction.md`, `results/tests/phase8_pytest.txt` | Expert masks, expert OHI ratings, field images; Docker build |
 
 ## Environment facts
 - Windows 11, Python 3.11.9 in `backend/venv`, no `make` (use `python tasks.py <target>`).
@@ -48,3 +48,4 @@ CLAIMS_EVIDENCE.md. The code still supports them (`--archs convnext_tiny,swin_ti
 - 2026-10-17 — Phases 4 (partial) and 5 committed. Phase 3: YOLOv8n test mAP50-95 0.519, YOLO11n 0.520 (deployed, selected by val 0.537); YOLOv8s stopped by low memory at epoch 12 (not run); all classes host-unverified.
 - 2026-10-17 — Phase 6 committed (partial). Phase 7: README rewritten, results/LaTeX generated from results/, ARCHITECTURE, CLAIMS_EVIDENCE, IEEE manuscript; 21/26 references machine-verified.
 - 2026-10-17: Phase 7 committed. API latency measured on an idle CPU (dual scan median 404 ms). Docker build still not run (no daemon). Fixed a pest-inference crash on CUDA builds with no visible device.
+- 2026-10-17: Phase 8. GPU verified (all results produced on the RTX 3050; nothing re-run). Lock install note corrected (--extra-index-url). Fresh clone: 231 passed / 12 skipped, tables byte-identical, registry reports missing weights, frontend builds. Claims audit: paper and README trimmed to evidence.
