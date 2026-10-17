@@ -35,7 +35,7 @@ $$\sum w_i = 1.0$$
 ## 3. Sub-Component Scoring Models
 
 ### A. Disease Severity Penalty ($S_d \in [0, 100]$)
-Given a detected disease $c \in \{\text{Anthracnose}, \text{Bacterial Canker}, \text{Powdery Mildew}, \text{Sooty Mold}, \text{Leaf Spot}, \text{Healthy}\}$:
+Given a detected disease $c \in \{\text{Anthracnose}, \text{Bacterial Canker}, \text{Powdery Mildew}, \text{Sooty Mold}, \text{Healthy}\}$ (Leaf Spot is not a model class — no licensed training data):
 
 $$S_d = \begin{cases} 
 0, & \text{if } c = \text{Healthy} \\
@@ -49,7 +49,6 @@ Where:
   - **Anthracnose** (*Colletotrichum gloeosporioides*): $\alpha = 1.00$ (High tissue necrosis and fruit drop risk)
   - **Bacterial Canker** (*Xanthomonas citri* pv. *mangiferaeindicae*): $\alpha = 0.95$ (Systemic vascular damage)
   - **Powdery Mildew** (*Oidium mangiferae*): $\alpha = 0.85$ (Inflorescence and young flush destruction)
-  - **Leaf Spot** (*Pestalotiopsis mangiferae*): $\alpha = 0.70$ (Photosynthetic inhibition)
   - **Sooty Mold** (*Capnodium mangiferae*): $\alpha = 0.50$ (Superficial fungal coat following honeydew excretion)
 
 ### B. Pest Pressure Penalty ($P_p \in [0, 100]$)

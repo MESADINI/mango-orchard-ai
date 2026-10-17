@@ -1,9 +1,9 @@
 """
 AI Mango Orchard Health & Pest Intelligence — Disease Detection Training
 Architecture: EfficientNet-B3 (PyTorch / timm)
-Target Classes: Anthracnose, Bacterial Canker, Powdery Mildew, Sooty Mold, Leaf Spot, Healthy
+Target Classes: Anthracnose, Bacterial Canker, Powdery Mildew, Sooty Mold, Healthy
 
-Expected dataset layout (produced by ml/datasets/phase1_disease.py):
+Expected dataset layout (produced by ml/datasets/build_disease_dataset.py):
     <data_dir>/{train,val}/<Class Name>/*.jpg
 """
 
@@ -91,7 +91,7 @@ def train_model(
     train_dir = os.path.join(data_dir, "train")
     val_dir = os.path.join(data_dir, "val")
     if not os.path.isdir(train_dir) or not os.path.isdir(val_dir):
-        print(f"Dataset directories {train_dir} / {val_dir} do not exist. Run ml/datasets/phase1_disease.py first.")
+        print(f"Dataset directories {train_dir} / {val_dir} do not exist. Run ml/datasets/build_disease_dataset.py first.")
         return None
 
     train_tf, val_tf = build_transforms(img_size=300)

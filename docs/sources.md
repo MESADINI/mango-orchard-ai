@@ -57,7 +57,9 @@ All treatment recommendations, dosage rates, application schedules, and safety w
   - Step 2: Foliar spray of *Starch solution (Maida starch 2%)*: 20 g boiled in 1 L water. As the starch dries on the foliage, it flakes off, dislodging the black fungal crust without damaging leaf epidermis.
 - **Source**: TNAU Horticultural College and Research Institute, Periyakulam.
 
-### Leaf Spot (*Pestalotiopsis mangiferae*)
+### Leaf Spot (*Pestalotiopsis mangiferae*) — reference only
+> Not a model class (no licensed training images) and not in `recommendations_db.json`; kept for reference.
+
 - **Chemical Control**:
   - *Mancozeb 75% WP*: 2.5 g/L water or *Chlorothalonil 75% WP*: 2 g/L water at 14-day intervals.
 - **Source**: ICAR-CISH Technical Monograph Series on Mango Foliar Diseases.

@@ -1,0 +1,172 @@
+{
+  "classes": [
+    "Fruit Fly",
+    "Mealy Bug",
+    "Scale Insect"
+  ],
+  "env": {
+    "git": {
+      "branch": "enhance/real-data",
+      "commit": "64467eaf0342a474aac5b72592cac9ee2f5ff196",
+      "dirty": true
+    },
+    "hardware": {
+      "cpu_count": 16,
+      "cuda_available": false,
+      "gpu": null,
+      "nvidia_smi": "NVIDIA GeForce RTX 3050 Laptop GPU, 4096 MiB, 617.42",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+      "torch_cuda_build": null
+    },
+    "packages": {
+      "ImageHash": "4.3.2",
+      "Pillow": "10.3.0",
+      "kaggle": "2.2.4",
+      "matplotlib": "3.11.2",
+      "numpy": "1.26.4",
+      "opencv-python-headless": "4.9.0.80",
+      "pandas": "3.0.6",
+      "scikit-learn": "1.5.0",
+      "scipy": "1.17.1",
+      "timm": "1.0.3",
+      "torch": "2.3.0",
+      "torchvision": "0.18.0",
+      "ultralytics": "8.2.18"
+    },
+    "python": "3.11.9",
+    "timestamp_utc": "2026-10-17T07:53:15+00:00"
+  },
+  "excluded_sources": {},
+  "flagged_proxy_classes": [
+    "Fruit Fly",
+    "Mealy Bug",
+    "Scale Insect"
+  ],
+  "gated_classes_excluded_by_rule_3": [
+    "Mango Hopper",
+    "Stem Borer"
+  ],
+  "group_overlap_between_splits": {
+    "train&test": 0,
+    "train&val": 0,
+    "val&test": 0
+  },
+  "images_per_split_class": {
+    "test": {
+      "Fruit Fly": 138,
+      "Mealy Bug": 123,
+      "Scale Insect": 118
+    },
+    "train": {
+      "Fruit Fly": 624,
+      "Mealy Bug": 590,
+      "Scale Insect": 572
+    },
+    "val": {
+      "Fruit Fly": 145,
+      "Mealy Bug": 140,
+      "Scale Insect": 109
+    }
+  },
+  "images_without_boxes": 286,
+  "include_non_mango": true,
+  "instances_per_split_class": {
+    "test": {
+      "Fruit Fly": 1201,
+      "Mealy Bug": 378,
+      "Scale Insect": 225
+    },
+    "train": {
+      "Fruit Fly": 5324,
+      "Mealy Bug": 1814,
+      "Scale Insect": 1146
+    },
+    "val": {
+      "Fruit Fly": 1412,
+      "Mealy Bug": 340,
+      "Scale Insect": 208
+    }
+  },
+  "n_groups": 1400,
+  "n_images": 2559,
+  "seed": 42,
+  "sources": {
+    "fruit_fly": {
+      "exact_duplicates_removed": 917,
+      "host_review": {
+        "date": "2026-10-17",
+        "host": "other:trap",
+        "notes": "Class 'Fruit fly': grayscale photos of flies on white trap/petri surfaces; no host plant visible; species not identifiable from the images (not confirmed as Bactrocera). Class 'Pest' = ants, snails, bees, grasshoppers etc. (unrelated) -> dropped. Grayscale only: colour field images are a domain shift.",
+        "reviewed_by": "Claude (AI assistant), contact sheet results/data/pest_review/fruit_fly.jpg + label counts"
+      },
+      "id_map": {
+        "0": 0
+      },
+      "images_dropped_only_other_classes": 2973,
+      "label_stats": {
+        "dropped_other_class": 5022,
+        "kept": 7937
+      },
+      "n_images_in_export": 4797,
+      "roboflow": "school-vakkx/mango-fruit-fly/v4",
+      "source_class_names": [
+        "Fruit fly",
+        "Pest"
+      ],
+      "status": "FLAGGED proxy data (host 'other:trap', not mango)",
+      "target": "Fruit Fly"
+    },
+    "mealy_bug": {
+      "exact_duplicates_removed": 0,
+      "host_review": {
+        "date": "2026-10-17",
+        "host": "other:grape",
+        "notes": "Workspace 'grape'; classes Grape/Leaf/Mealybug; grape bunches, vine bark, and web/stock photos (watermarks: iStock, shutterstock, dreamstime) of mealybugs on assorted plants. Not mango; not Drosicha mangiferae. 'Grape' and 'Leaf' boxes dropped.",
+        "reviewed_by": "Claude (AI assistant), contact sheet results/data/pest_review/mealy_bug.jpg + label counts"
+      },
+      "id_map": {
+        "2": 1
+      },
+      "images_dropped_only_other_classes": 28,
+      "label_stats": {
+        "dropped_other_class": 69,
+        "kept": 2532
+      },
+      "n_images_in_export": 881,
+      "roboflow": "grape-n5yol/mealybug-b8wfq/v8",
+      "source_class_names": [
+        "Grape",
+        "Leaf",
+        "Mealybug"
+      ],
+      "status": "FLAGGED proxy data (host 'other:grape', not mango)",
+      "target": "Mealy Bug"
+    },
+    "scale_insect": {
+      "exact_duplicates_removed": 0,
+      "host_review": {
+        "date": "2026-10-17",
+        "host": "other:coffee",
+        "notes": "Hemispherical scale (Saissetia coffeae) on coffee leaves; second class 'Coffee Leaf Rust' confirms coffee host -> dropped. Polygon labels converted to boxes.",
+        "reviewed_by": "Claude (AI assistant), contact sheet results/data/pest_review/scale_insect.jpg + label counts"
+      },
+      "id_map": {
+        "1": 2
+      },
+      "images_dropped_only_other_classes": 10,
+      "label_stats": {
+        "dropped_other_class": 336,
+        "kept": 1579
+      },
+      "n_images_in_export": 809,
+      "roboflow": "ralph-matthew-r-aquino/hemispherical-scale-insect/v1",
+      "source_class_names": [
+        "Coffee Leaf Rust",
+        "Hemispherical Scale Insect"
+      ],
+      "status": "FLAGGED proxy data (host 'other:coffee', not mango)",
+      "target": "Scale Insect"
+    }
+  }
+}

@@ -110,14 +110,14 @@ graph TD
 ---
 
 ### Slide 5: Foliar Disease Diagnostics (EfficientNet-B3)
-- **Visuals:** Sample leaf images of the 6 classes with classification confidence cards.
+- **Visuals:** Sample leaf images of the 5 classes with classification confidence cards.
 - **Classes Covered:**
   1. *Anthracnose* (*Colletotrichum gloeosporioides*)
   2. *Bacterial Canker* (*Xanthomonas citri* pv. *mangiferaeindicae*)
   3. *Powdery Mildew* (*Oidium mangiferae*)
   4. *Sooty Mold* (*Capnodium mangiferae*)
-  5. *Leaf Spot* (*Pestalotiopsis mangiferae*)
-  6. *Healthy Foliage*
+  5. *Healthy Foliage*
+  (Leaf Spot was dropped: no openly licensed training images exist.)
 - **Technical Highlights:**
   - Architecture: **EfficientNet-B3** via PyTorch & `timm` (12.2M parameters; optimal trade-off between edge throughput and representation capacity).
   - Input: $300 \times 300$ resolution with ImageNet normalization.

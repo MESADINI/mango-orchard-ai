@@ -20,12 +20,13 @@ from torchvision import transforms
 logger = logging.getLogger(__name__)
 
 # Canonical class order. Model output index i always means DISEASE_CLASSES[i].
+# Leaf Spot was dropped: MangoLeafBD has no Leaf Spot images and no openly licensed, verifiable
+# supplementary source was found (see docs/datasets/mangoleafbd.md).
 DISEASE_CLASSES = [
     "Anthracnose",
     "Bacterial Canker",
     "Powdery Mildew",
     "Sooty Mold",
-    "Leaf Spot",
     "Healthy"
 ]
 

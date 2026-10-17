@@ -35,7 +35,7 @@ def train_yolo(
         if alt_path.exists():
             data_path = alt_path
         else:
-            raise FileNotFoundError(f"Dataset config {data_yaml} not found. Run ml/datasets/prepare_pest_data.py first.")
+            raise FileNotFoundError(f"Dataset config {data_yaml} not found. Run `python ml/datasets/build_pest_dataset.py all --include-non-mango` first.")
 
     if device is None:
         if torch.backends.mps.is_available():

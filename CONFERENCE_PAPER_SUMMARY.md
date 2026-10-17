@@ -114,7 +114,7 @@ Under standard conditions with active telemetry, the nominal weights are set to 
 $$\tilde{w}_d = w_d + \frac{w_n}{2} = 0.45, \quad \tilde{w}_p = w_p + \frac{w_n}{2} = 0.40, \quad \tilde{w}_w = 0.15, \quad \tilde{w}_n = 0.00$$
 
 ### 3.2 Disease Severity Penalty ($S_d$)
-Let $c \in \mathcal{C}_{\text{disease}} = \{\text{Anthracnose}, \text{Bacterial Canker}, \text{Powdery Mildew}, \text{Sooty Mold}, \text{Leaf Spot}, \text{Healthy}\}$ denote the inferred disease class, and let $\text{Conf}_c \in [0, 1]$ represent the classifier output probability. The disease severity penalty is formulated as:
+Let $c \in \mathcal{C}_{\text{disease}} = \{\text{Anthracnose}, \text{Bacterial Canker}, \text{Powdery Mildew}, \text{Sooty Mold}, \text{Healthy}\}$ (Leaf Spot dropped: no licensed training data) denote the inferred disease class, and let $\text{Conf}_c \in [0, 1]$ represent the classifier output probability. The disease severity penalty is formulated as:
 
 $$S_d = \begin{cases}
 0, & \text{if } c = \text{Healthy} \\
@@ -125,7 +125,6 @@ Where $\alpha_c \in [0, 1]$ is a hand-chosen virulence multiplier (expert-assign
 - Anthracnose (*C. gloeosporioides*): $\alpha = 1.00$
 - Bacterial Canker (*X. citri* pv. *mangiferaeindicae*): $\alpha = 0.95$
 - Powdery Mildew (*O. mangiferae*): $\alpha = 0.85$
-- Leaf Spot (*P. mangiferae*): $\alpha = 0.70$
 - Sooty Mold (*C. mangiferae*): $\alpha = 0.50$
 
 The lesion area fraction $A_{\text{lesion}} \in [0, 1]$ is computed in HSV color space by segmenting chlorotic/necrotic pixels relative to total foliar pixels:

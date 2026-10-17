@@ -120,7 +120,7 @@ VALUES
     'https://cish.icar.gov.in'
 ),
 
--- Leaf Spot
+-- Leaf Spot (not a model class: no licensed training data; kept for reference only)
 (
     'Leaf Spot',
     'Chemical',

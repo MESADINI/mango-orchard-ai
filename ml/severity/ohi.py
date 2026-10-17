@@ -16,7 +16,6 @@ VIRULENCE_FACTORS = {
     "Anthracnose": 1.00,       # High necrosis and fruit drop
     "Bacterial Canker": 0.95,  # Vascular systemic damage
     "Powdery Mildew": 0.85,    # Blossom and young flush destruction
-    "Leaf Spot": 0.70,         # Foliar photosynthetic loss
     "Sooty Mold": 0.50         # Superficial saprophytic layer
 }
 

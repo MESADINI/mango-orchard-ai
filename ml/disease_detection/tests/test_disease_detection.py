@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import pytest
 import torch
 from PIL import Image
 
@@ -40,9 +41,18 @@ def test_training_labels_follow_canonical_class_order(tmp_path):
     for name in ["Healthy", "Anthracnose", "Sooty Mold"]:
         (tmp_path / name).mkdir()
         Image.new("RGB", (8, 8), (0, 128, 0)).save(tmp_path / name / "a.jpg")
-    (tmp_path / "Leaf Spot").mkdir()  # empty class folder must be tolerated
+    (tmp_path / "Powdery Mildew").mkdir()  # empty class folder must be tolerated
 
     ds = load_split(str(tmp_path), transform=None)
     assert ds.classes == DISEASE_CLASSES
     labels = {Path(path).parent.name: target for path, target in ds.samples}
     assert labels == {name: DISEASE_CLASSES.index(name) for name in ["Healthy", "Anthracnose", "Sooty Mold"]}
+
+
+def test_leaf_spot_is_not_a_model_class(tmp_path):
+    """Leaf Spot has no training data (absent from MangoLeafBD); a folder for it must be rejected."""
+    assert "Leaf Spot" not in DISEASE_CLASSES
+    (tmp_path / "Leaf Spot").mkdir()
+    Image.new("RGB", (8, 8)).save(tmp_path / "Leaf Spot" / "a.jpg")
+    with pytest.raises(ValueError):
+        load_split(str(tmp_path), transform=None)

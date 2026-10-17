@@ -4,7 +4,7 @@ A decision-support web app for mango growers. Upload a photo of a mango leaf (an
 pest-trap photo) and the system:
 
 1. **Classifies leaf disease** with an EfficientNet-B3 model (Anthracnose, Bacterial Canker, Powdery Mildew,
-   Sooty Mold, Leaf Spot, Healthy) and draws a **Grad-CAM heatmap** showing which parts of the leaf drove the prediction.
+   Sooty Mold, Healthy — Leaf Spot was dropped because no licensed training data exists) and draws a **Grad-CAM heatmap** showing which parts of the leaf drove the prediction.
 2. **Estimates lesion area** (% of the leaf that looks diseased) with HSV colour segmentation.
 3. **Detects pests** with a YOLOv8 model (Fruit Fly, Mealy Bug, Scale Insect). Mango Hopper and Stem Borer
    are always flagged **UNVERIFIED** because fewer than 100 labelled examples exist (Rule 3).
@@ -53,7 +53,7 @@ mango-orchard-ai/
 │   ├── explainability/     # Hook-based Grad-CAM
 │   ├── severity/           # Lesion segmentation + OHI engine
 │   ├── forecasting/        # Open-Meteo client, spread forecaster, cited recommendations DB
-│   └── datasets/           # Dataset download/preparation scripts and sample images
+│   └── datasets/           # Reproducible dataset download/build scripts (see docs/datasets/)
 ├── database/             # Supabase/PostgreSQL schema (optional, for a hosted deployment)
 ├── docs/                 # OHI methodology and source citations
 ├── conftest.py, pytest.ini, testing_support.py   # Test configuration
@@ -117,19 +117,22 @@ Put secrets such as `JWT_SECRET` in `backend/.env`.
 
 ## Training the models
 
-1. **Get data**
-   - Disease: put a Kaggle token at `~/.kaggle/kaggle.json`, then `python ml/datasets/phase1_disease.py`
-     (downloads MangoLeafBD and creates `ml/datasets/processed/disease/{train,val,test}/<Class>/`).
-     MangoLeafBD has no *Leaf Spot* class — add a supplemental source or that class cannot be learned.
-   - Pests: `export ROBOFLOW_API_KEY=...` then `python ml/datasets/phase1_pest.py`, and build a YOLO `data.yaml`.
-   - Without credentials these scripts generate *synthetic cartoon images*; they are only useful for testing
-     the code paths, **not** for training a model you would trust.
+1. **Get data** (all steps verify SHA-256 checksums; details in `docs/datasets/`)
+   ```bash
+   pip install -r requirements-ml.txt
+   export ROBOFLOW_API_KEY=...           # free Roboflow account; only for the pest data
+   python tasks.py data                  # or: make data
+   ```
+   This downloads MangoLeafBD (CC BY-NC 3.0) and builds a de-duplicated, group-aware 70/15/15 split in
+   `ml/datasets/processed/disease/`. It also builds an external test set from a second, independent mango dataset
+   (`processed/external/`) and the merged pest set with `data.yaml` (`processed/pest/`). Statistics are written to
+   `results/data_stats.json`. **The public pest sources show pests on trap, grape and coffee, not on mango**:
+   the pest set is flagged proxy data (see `docs/datasets/pest.md`).
 2. **Train**
    ```bash
-   pip install kaggle roboflow           # only needed for dataset download
    python ml/disease_detection/train.py --epochs 25      # -> ml/disease_detection/weights/efficientnet_b3_best.pth
    python ml/disease_detection/evaluate.py               # precision / recall / F1 / confusion matrix
-   python ml/pest_detection/train.py --data path/to/data.yaml   # -> ml/pest_detection/weights/yolov8_best.pt
+   python ml/pest_detection/train.py --data ml/datasets/processed/pest/data.yaml   # -> ml/pest_detection/weights/yolov8_best.pt
    ```
 3. Restart the backend. `/health` should now report `disease_model_trained: true` / `pest_model_trained: true`.
 
@@ -140,7 +143,7 @@ Checkpoints written by `train.py` embed their class list, so labels always map c
 From the repository root, with the backend virtual environment active:
 
 ```bash
-python -m pytest            # 41 tests: ML pipeline, pest/disease detectors, Grad-CAM, OHI, all API endpoints
+python -m pytest            # 90 tests: ML pipeline, datasets + data integrity, detectors, Grad-CAM, OHI, API
 cd frontend && npm run lint && npm run build
 ```
 

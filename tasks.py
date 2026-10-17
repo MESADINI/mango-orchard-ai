@@ -36,8 +36,11 @@ def env() -> None:
 
 
 def data() -> None:
-    run(PY, "ml/datasets/phase1_disease.py")
-    run(PY, "ml/datasets/phase1_pest.py")
+    run(PY, "ml/datasets/download_mangoleafbd.py")
+    run(PY, "ml/datasets/build_disease_dataset.py")
+    run(PY, "ml/datasets/build_external_testset.py")
+    run(PY, "ml/datasets/build_pest_dataset.py", "all", "--include-non-mango")  # flagged proxy sources
+    run(PY, "ml/datasets/data_stats.py")
 
 
 def train_disease() -> None:
@@ -45,7 +48,7 @@ def train_disease() -> None:
 
 
 def train_pest() -> None:
-    run(PY, "ml/pest_detection/train.py", "--data", "ml/datasets/processed/pest/data.yaml")
+    run(PY, "ml/pest_detection/train.py", "--data", str(REPO / "ml/datasets/processed/pest/data.yaml"))
 
 
 def evaluate() -> None:
