@@ -274,21 +274,31 @@ def test_analyze_uses_farm_coordinates(client, auth):
 def test_chatbot_english_answers_come_from_cited_database(client):
     data = client.post("/api/chatbot/", json={"message": "What is the treatment for Anthracnose?"}).json()
     assert "copper oxychloride" in data["reply"].lower()
-    assert any("TNAU" in s or "ICAR" in s for s in data["sources"])
+    assert any("TNAU" in s for s in data["sources"])
+    assert all(u.startswith("https://agritech.tnau.ac.in/") for u in data["source_urls"])
+    assert data["matched_conditions"] == ["Anthracnose"]
 
     mildew = client.post("/api/chatbot/", json={"message": "powdery mildew on panicles"}).json()
     assert "sulphur" in mildew["reply"].lower()
 
     hopper = client.post("/api/chatbot/", json={"message": "mango hopper control"}).json()
-    assert "Rule 3" in hopper["reply"]
+    assert "unverified" in hopper["reply"] and "Imidacloprid" in hopper["reply"]
 
 
 def test_chatbot_tamil(client):
     data = client.post("/api/chatbot/", json={"message": "ஆந்த்ராக்னோஸ் இலை நோய் தீர்வு என்ன?", "language": "ta"}).json()
     assert data["language"] == "ta"
-    assert "காப்பர் ஆக்சிகுளோரைடு" in data["reply"]
+    assert data["matched_conditions"] == ["Anthracnose"]
+    assert "ஆந்த்ராக்னோஸ்" in data["reply"] and "Copper oxychloride" in data["reply"]
 
 
 def test_chatbot_validates_input(client):
     assert client.post("/api/chatbot/", json={"message": "", "language": "en"}).status_code == 422
     assert client.post("/api/chatbot/", json={"message": "hi", "language": "fr"}).status_code == 422
+
+
+def test_model_registry_endpoint(client):
+    data = client.get("/api/models").json()
+    assert isinstance(data, dict)
+    for entry in data.values():
+        assert entry["status"] in ("ok", "missing", "sha_mismatch") and entry["classes"]

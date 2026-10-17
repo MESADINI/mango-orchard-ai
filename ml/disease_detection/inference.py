@@ -38,7 +38,9 @@ IMG_SIZE = 300
 def select_device(device: Optional[str] = None) -> torch.device:
     if device is not None:
         return torch.device(device)
-    if torch.cuda.is_available():
+    # is_available() can be True while no device is visible (e.g. CUDA_VISIBLE_DEVICES=""); loading a checkpoint
+    # onto "cuda" then fails, so a visible device is required as well
+    if torch.cuda.is_available() and torch.cuda.device_count() > 0:
         return torch.device("cuda")
     if torch.backends.mps.is_available():
         return torch.device("mps")

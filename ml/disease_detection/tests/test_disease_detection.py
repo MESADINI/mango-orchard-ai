@@ -105,3 +105,14 @@ def test_run_training_end_to_end_tiny(tmp_path):
     d = np.load(out / "logits_test.npz")
     assert d["logits"].shape == (5, len(DISEASE_CLASSES)) and list(d["y"]) == [r["y"] for r in rows[15:]]
     assert DiseaseDetector(weights_path=str(out / "best.pth"), device="cpu").is_trained
+
+
+def test_select_device_needs_a_visible_cuda_device(monkeypatch):
+    """Regression: is_available() can be True with no visible device; loading onto "cuda" then crashes."""
+    import torch
+    from ml.disease_detection.inference import select_device
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "device_count", lambda: 0)
+    monkeypatch.setattr(torch.backends.mps, "is_available", lambda: False)
+    assert select_device().type == "cpu"
+    assert select_device("cpu").type == "cpu"

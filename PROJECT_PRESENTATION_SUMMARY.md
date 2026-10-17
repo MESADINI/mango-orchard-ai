@@ -187,13 +187,14 @@ graph TD
 - **Visuals:** Excerpt of ICAR and TNAU research bulletins; sample treatment recommendation card.
 - **Inviolable Architectural Rule 2:**
   > *Every chemical dosage, active ingredient, biological agent, and cultural practice must have an explicit citation to ICAR, TNAU, or DPPQS.*
-- **Sample Verified Protocols:**
-  - **Anthracnose:** Copper Oxychloride 50% WP @ 3.0 g/L or Azoxystrobin 23% SC @ 1.0 mL/L (*TNAU Agritech Portal*).
-  - **Powdery Mildew:** Wettable Sulphur 80% WP @ 2.0 g/L or Hexaconazole 5% EC @ 1.0 mL/L (*ICAR-CISH Bulletin 45*).
-  - **Fruit Fly:** Methyl Eugenol parapheromone traps @ 10–15 traps/hectare + jaggery/malathion bait sprays (*ICAR-CISH*).
-  - **Bacterial Canker:** Streptocycline (100 ppm) + Copper Oxychloride (2.5 g/L) (*DPPQS Standard Guidelines*).
+- **Sample Verified Protocols** (checked against the live sources on 2026-10-17; see `docs/sources.md`):
+  - **Anthracnose:** *Pseudomonas fluorescens* (FP 7) 5 g/L on flowers every 3 weeks from October (*TNAU Agritech, Anthracnose*); copper oxychloride 0.3% for leaf infection (*NHM IPM Schedule for Mango, 2012*).
+  - **Powdery Mildew:** Wettable sulphur 0.2% when panicles are 3–4 inches, second spray 15 days later (*TNAU Agritech; NHM 2012*).
+  - **Fruit Fly:** Destroy fallen fruit, summer ploughing (*TNAU*); methyl eugenol traps 10/ha during fruiting (*NHM 2012*). Malathion is banned on mango (CIB&RC, 2023) and is no longer suggested.
+  - **Bacterial Canker:** Sanitation, windbreaks, copper oxychloride 0.3% in severe infection (*NHM 2012*).
+- **Verification finding:** the earlier sample protocols included chemicals that are banned or restricted for mango (malathion, dimethoate, dichlorvos, dinocap). They were removed; every remaining entry has a deep link and a quote.
 - **Speaker Talking Points:**
-  > "In agriculture, incorrect dosage kills crops and violates export standards. Under Inviolable Rule 2, no recommendation exists in our database without a verified citation to the Indian Council of Agricultural Research, Tamil Nadu Agricultural University, or DPPQS. We provide exact chemical formulations, organic alternatives, and safety pre-harvest intervals."
+  > "In agriculture, incorrect dosage kills crops and violates export standards. Under Inviolable Rule 2, no recommendation exists in our database without a verified citation to the Indian Council of Agricultural Research, Tamil Nadu Agricultural University, or DPPQS. Every entry links to the exact page and was checked against India's banned-pesticide list; the app asks the farmer to confirm the product label allows use on mango."
 
 ---
 

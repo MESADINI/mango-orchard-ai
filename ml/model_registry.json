@@ -1,0 +1,68 @@
+{
+  "generated_utc": "2026-10-17T14:57:40+00:00",
+  "models": [
+    {
+      "name": "disease_classifier",
+      "task": "leaf disease classification",
+      "arch": "efficientnet_b3",
+      "version": "c6becbe02b05",
+      "sha256": "c6becbe02b0548d6c5caa5f63328e4c905aae57dd89dc27b569d4881179d8ff1",
+      "path": "ml/disease_detection/weights/disease_classifier.pth",
+      "classes": [
+        "Anthracnose",
+        "Bacterial Canker",
+        "Powdery Mildew",
+        "Sooty Mold",
+        "Healthy"
+      ],
+      "calibration": {
+        "temperature": 1.0,
+        "low_confidence_threshold": 0.8152007082226095,
+        "low_confidence_rule": "top probability below the value that keeps 95% of validation images -> 'retake photo', disease excluded from the OHI"
+      },
+      "source_run": "results/disease/final/efficientnet_b3/best.pth",
+      "source_sha256": "692d53150bc7fab66ebb30708e602df6d8142a9833626153a41ed7aa0c7d967f",
+      "git_commit": "72abe1a9e914e35ed67e6d4b5ed71319e816cd6f",
+      "selection": "highest mean CV macro-F1",
+      "metrics": {
+        "test": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "low_confidence_fraction": 0.0794979079497908,
+          "n": 239
+        },
+        "external": {
+          "accuracy": 0.11023622047244094,
+          "macro_f1": 0.11856714213174536,
+          "low_confidence_fraction": 0.968503937007874,
+          "n": 381
+        }
+      }
+    },
+    {
+      "name": "pest_detector",
+      "task": "pest detection (boxes)",
+      "arch": "yolo11n",
+      "version": "dfd2d0e2db47",
+      "sha256": "dfd2d0e2db4714d38ff2f75e32c4f5be04027960c462d127286d9501d13c4315",
+      "path": "ml/pest_detection/weights/pest_detector.pt",
+      "classes": [
+        "Fruit Fly",
+        "Mealy Bug",
+        "Scale Insect"
+      ],
+      "host_verified": {
+        "Fruit Fly": false,
+        "Mealy Bug": false,
+        "Scale Insect": false
+      },
+      "source_run": "results\\pest\\yolo11n\\train\\weights\\best.pt",
+      "selection": "highest val mAP50-95",
+      "metrics": {
+        "val_map50_95": 0.5372733849873434,
+        "test_map50_95": 0.5195896328290323
+      },
+      "notes": "Classes learned from non-mango sources (ml/datasets/pest_source_review.json); detections are shown as unverified and the pest component is excluded from the OHI while no class is host-verified."
+    }
+  ]
+}

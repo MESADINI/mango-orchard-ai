@@ -1,104 +1,234 @@
 {
+  "_meta": {
+    "verified_on": "2026-10-17",
+    "method": "Every entry was checked against the live source page or document named in citation_url; citation_quote is copied from it. Chemicals were checked against the CIB&RC 'List of pesticides which are banned, refused registration and restricted in use' (updated 31.07.2026). Whether each product's label claim includes mango was NOT verified: the user must check the product label.",
+    "regulatory_list_url": "https://ppqs.gov.in/sites/default/files/list_of_pesticides_which_are_banned_refused_registration_and_restricted_in_use.pdf",
+    "removed": "See docs/sources.md, section 'Removed or corrected after verification'."
+  },
   "Anthracnose": [
     {
-      "treatment_type": "Chemical",
-      "title": "Foliar Fungicide Spray (Blossom Emergence)",
-      "product_name": "Copper Oxychloride 50% WP (Blitox / Blue Copper)",
-      "active_ingredient": "Copper Oxychloride 50% WP",
-      "dosage_rate": "3.0 g per Litre of water (0.3%)",
-      "application_guidance": "Spray thoroughly at blossom emergence and repeat at 15-day intervals during humid conditions.",
-      "waiting_period_days": 14,
-      "citation_source": "TNAU Agritech Portal (Crop Protection: Diseases of Mango)",
-      "citation_url": "https://agritech.tnau.ac.in"
+      "treatment_type": "Biological",
+      "title": "Pseudomonas fluorescens spray on flowers and fruit bunches",
+      "product_name": "Pseudomonas fluorescens (strain FP 7) formulation",
+      "active_ingredient": "Pseudomonas fluorescens",
+      "dosage_rate": "5 g per litre of water",
+      "application_guidance": "Spray flowers and bunches at 3-week intervals from October; 5 to 7 sprays in total.",
+      "waiting_period_days": null,
+      "citation_source": "TNAU Agritech Portal, Crop Protection: Mango, Anthracnose",
+      "citation_url": "https://agritech.tnau.ac.in/crop_protection/mango_1.html",
+      "citation_quote": "Foliar spray of P. fluorescens (FP 7) @ 5g/like on flower branches at 3 weeks interval from October onwards. 5-7 sprays one to be given on flowers and bunches.",
+      "verified_on": "2026-10-17"
     },
     {
       "treatment_type": "Chemical",
-      "title": "Systemic Fungicide Spray (Post-Flush)",
-      "product_name": "Azoxystrobin 23% SC (Amistar)",
-      "active_ingredient": "Azoxystrobin 23% SC",
-      "dosage_rate": "1.0 mL per Litre of water",
-      "application_guidance": "Apply during leaf flush or early panicle development.",
-      "waiting_period_days": 21,
-      "citation_source": "ICAR-CISH Lucknow Advisory Monograph",
-      "citation_url": "https://cish.icar.gov.in"
+      "title": "Copper oxychloride spray for leaf infection",
+      "product_name": "Copper oxychloride",
+      "active_ingredient": "Copper oxychloride",
+      "dosage_rate": "0.3% spray",
+      "application_guidance": "Collect and burn diseased leaves, twigs and fruits first. Then spray the foliage.",
+      "waiting_period_days": null,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests, Extension Bulletin No. 1 (2012), hosted on the TNAU Agritech Portal",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "The foliar infection can be controlled by spraying of copper oxychloride (0.3%)",
+      "verified_on": "2026-10-17"
+    },
+    {
+      "treatment_type": "Chemical",
+      "title": "Carbendazim spray for blossom infection",
+      "product_name": "Carbendazim (e.g. Bavistin)",
+      "active_ingredient": "Carbendazim",
+      "dosage_rate": "0.1% spray",
+      "application_guidance": "Spray at 15-day intervals during flowering. For pre-harvest sprays, the last spray must fall 15 days before harvest.",
+      "waiting_period_days": 15,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests, Extension Bulletin No. 1 (2012), hosted on the TNAU Agritech Portal",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "Blossom infection can be controlled effectively by spraying of Bavistin (0.1%) at 15 days interval. ... Pre-harvest sprays of hexaconazole (0.01%) or Carbendazim (0.1%) at 15 days interval should be done in such a way that the last spray falls 15 days prior to harvest.",
+      "verified_on": "2026-10-17"
     }
   ],
   "Bacterial Canker": [
     {
+      "treatment_type": "Cultural",
+      "title": "Sanitation and windbreaks",
+      "product_name": "N/A",
+      "active_ingredient": "N/A",
+      "dosage_rate": "N/A",
+      "application_guidance": "Inspect the orchard regularly, remove infected parts, plant windbreaks to reduce wounding of leaves, and raise rootstock seedlings only from stones of healthy fruits.",
+      "waiting_period_days": null,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests, Extension Bulletin No. 1 (2012), hosted on the TNAU Agritech Portal",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "Regular inspection of orchards, sanitation and seedling certification are recommended as preventive measures. ... Use of wind-breaks helps in reducing brushing/ wounding and thus reduces chance of infection.",
+      "verified_on": "2026-10-17"
+    },
+    {
       "treatment_type": "Chemical",
-      "title": "Antibiotic + Copper Combination Spray",
-      "product_name": "Streptocycline + Copper Oxychloride",
-      "active_ingredient": "Streptomycin sulphate 90% + Tetracycline hydrochloride 10% + COC 50% WP",
-      "dosage_rate": "Streptocycline 100 ppm (1 g in 10 L) + COC 2.5 g/L",
-      "application_guidance": "Spray at 15-day intervals starting from first leaf lesions.",
-      "waiting_period_days": 20,
-      "citation_source": "DPPQS Standard Pest Management Guidelines; ICAR-CISH Bulletin",
-      "citation_url": "https://ppqs.gov.in"
+      "title": "Copper oxychloride spray in severe infection",
+      "product_name": "Copper oxychloride",
+      "active_ingredient": "Copper oxychloride",
+      "dosage_rate": "0.3% spray",
+      "application_guidance": "For severe infection. (The source also lists Streptocycline; it is not suggested here because a phase-out of streptomycin and tetracycline in agriculture has been ordered in draft. Check its current status with your agriculture officer.)",
+      "waiting_period_days": null,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests, Extension Bulletin No. 1 (2012), hosted on the TNAU Agritech Portal",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "In severe infection, spraying of Streptocycline (300 ppm) or copper oxychloride (0.3%) is more effective.",
+      "verified_on": "2026-10-17"
     }
   ],
   "Powdery Mildew": [
     {
       "treatment_type": "Chemical",
-      "title": "Inorganic Sulphur Protective Spray",
-      "product_name": "Wettable Sulphur 80% WP (Sulfex)",
-      "active_ingredient": "Sulphur 80% WP",
-      "dosage_rate": "2.0 g to 3.0 g per Litre of water",
-      "application_guidance": "Apply first spray at initiation of flower panicles. Avoid spraying in direct hot sunlight (>35°C).",
-      "waiting_period_days": 10,
-      "citation_source": "TNAU Agritech Portal (Diseases of Mango)",
-      "citation_url": "https://agritech.tnau.ac.in"
+      "title": "Wettable sulphur spray at early panicle stage",
+      "product_name": "Wettable sulphur",
+      "active_ingredient": "Sulphur",
+      "dosage_rate": "0.2% spray (2 g per litre of water)",
+      "application_guidance": "Spray when panicles are 3 to 4 inches long; a second application about 15 days later. Avoid spraying at full bloom.",
+      "waiting_period_days": null,
+      "citation_source": "TNAU Agritech Portal, Crop Protection: Mango, Powdery mildew; National Horticulture Mission IPM Schedule for Mango Pests (2012)",
+      "citation_url": "https://agritech.tnau.ac.in/crop_protection/mango_2.html",
+      "citation_quote": "TNAU: \"The first application may be soon after flowering, second 15 days later ... spray with Wettable sulphur (0.2%)\". NHM: \"Spray wettable sulphur (0.2%) when panicles are 3-4\" in size. ... Spraying at full bloom needs to be avoided.\"",
+      "verified_on": "2026-10-17"
     }
   ],
   "Sooty Mold": [
     {
       "treatment_type": "Cultural",
-      "title": "Starch Flaking Foliar Wash",
-      "product_name": "Boiled Maida / Cassava Starch Solution",
-      "active_ingredient": "Starch 2.0% w/v",
-      "dosage_rate": "20 g starch boiled in 1 Litre of water",
-      "application_guidance": "Spray cooled starch solution. As it dries, it peels off and removes the mold crust mechanically.",
-      "waiting_period_days": 0,
-      "citation_source": "TNAU Horticultural College & Research Institute, Periyakulam",
-      "citation_url": "https://agritech.tnau.ac.in"
+      "title": "Control the honeydew insects, then spray starch",
+      "product_name": "Starch or maida (flour) solution",
+      "active_ingredient": "Starch",
+      "dosage_rate": "Boil 1 kg starch or maida in 5 litres of water, then dilute to 20 litres",
+      "application_guidance": "First control the insects whose honeydew feeds the mould (hoppers, scales, mealybugs). Then spray the starch; it dries into flakes that fall off with the mould. (The NHM bulletin gives a 2% starch spray.)",
+      "waiting_period_days": null,
+      "citation_source": "TNAU Agritech Portal, Crop Protection: Mango, Sooty mould",
+      "citation_url": "https://agritech.tnau.ac.in/crop_protection/mango_7.html",
+      "citation_quote": "Management should be done for insects and sooty moulds simultaneously ... spray starch (1kg starch or maida boiled in 5 litres of water and diluted to 20 litres).",
+      "verified_on": "2026-10-17"
     }
   ],
   "Fruit Fly": [
     {
+      "treatment_type": "Cultural",
+      "title": "Destroy fallen fruit and plough in summer",
+      "product_name": "N/A",
+      "active_ingredient": "N/A",
+      "dosage_rate": "N/A",
+      "application_guidance": "Collect fallen infested fruits and bury them in a pit. Plough in summer to expose the pupae.",
+      "waiting_period_days": null,
+      "citation_source": "TNAU Agritech Portal, Crop Protection: Mango, Fruit fly",
+      "citation_url": "https://agritech.tnau.ac.in/crop_protection/mango/mango_8.html",
+      "citation_quote": "Collect fallen infested fruits and dispose them by dumping in a pit. Provide summer ploughing to expose the pupa.",
+      "verified_on": "2026-10-17"
+    },
+    {
       "treatment_type": "Biological",
-      "title": "Para-Pheromone Lure Trapping",
-      "product_name": "Methyl Eugenol Trap (CISH / TNAU Design)",
-      "active_ingredient": "Methyl Eugenol + Malathion 50% EC",
-      "dosage_rate": "10 to 15 traps per hectare",
-      "application_guidance": "Hang traps in mid-canopy 1.5-2.0m above ground 60 days before fruit harvest.",
-      "waiting_period_days": 0,
-      "citation_source": "ICAR-CISH IPM Package for Bactrocera dorsalis",
-      "citation_url": "https://cish.icar.gov.in"
+      "title": "Methyl eugenol lure traps",
+      "product_name": "Methyl eugenol trap",
+      "active_ingredient": "Methyl eugenol (lure)",
+      "dosage_rate": "10 traps per hectare",
+      "application_guidance": "Hang traps during the fruiting period (April to August in the source), tied 3 to 5 feet above the ground. The source's trap mixture uses malathion, which is banned for use on mango in India (S.O. 4294(E), 3 Oct 2023): use only a trap insecticide whose label allows this use.",
+      "waiting_period_days": null,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests, Extension Bulletin No. 1 (2012), hosted on the TNAU Agritech Portal",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "Hanging of methyl eugenol wooden block traps soaked in ethanol, methyl eugenol and malathion (6:4:1) during fruiting period from April to August @10 traps/ ha tie them tightly at 3-5 feet above ground level.",
+      "verified_on": "2026-10-17"
     }
   ],
   "Mealy Bug": [
     {
       "treatment_type": "Cultural",
-      "title": "Trunk Polythene Barrier Banding",
-      "product_name": "Polythene Banding (400 gauge, 30 cm wide)",
-      "active_ingredient": "Slippery Polyethylene Film + Grease band",
-      "dosage_rate": "1 band per tree trunk 50 cm above ground",
-      "application_guidance": "Wrap band tightly in November-December before crawler emergence from soil.",
-      "waiting_period_days": 0,
-      "citation_source": "ICAR-CISH IPM Bulletin for Drosicha mangiferae",
-      "citation_url": "https://cish.icar.gov.in"
+      "title": "Polythene trunk banding",
+      "product_name": "Polythene sheet, 400 gauge, 20 cm wide, with fruit-tree grease",
+      "active_ingredient": "N/A (physical barrier)",
+      "dosage_rate": "One band per tree, 50 cm above the ground",
+      "application_guidance": "Band the trunk in the middle of December, below the junction of the branches. Tie with jute thread and smear grease on the lower edge of the band so the nymphs cannot climb.",
+      "waiting_period_days": null,
+      "citation_source": "TNAU Agritech Portal, Crop Protection: Mango, Giant mealybug",
+      "citation_url": "https://agritech.tnau.ac.in/crop_protection/mango/mango_15.html",
+      "citation_quote": "Band the trees with 20 cm wide alkalthene of polythene (400 gauge) in the middle of December ... 50 cm above ground level.",
+      "verified_on": "2026-10-17"
+    },
+    {
+      "treatment_type": "Biological",
+      "title": "Release of the Australian ladybird beetle",
+      "product_name": "Cryptolaemus montrouzieri",
+      "active_ingredient": "Cryptolaemus montrouzieri (predator)",
+      "dosage_rate": "10 beetles per tree",
+      "application_guidance": "Release on infested trees.",
+      "waiting_period_days": null,
+      "citation_source": "TNAU Agritech Portal, Crop Protection: Mango, Giant mealybug",
+      "citation_url": "https://agritech.tnau.ac.in/crop_protection/mango/mango_15.html",
+      "citation_quote": "Release of Australian ladybird beetle, Cryptolaemus montrouzieri @ 10/tree.",
+      "verified_on": "2026-10-17"
     }
   ],
   "Scale Insect": [
     {
+      "treatment_type": "Cultural",
+      "title": "Prune infested parts and remove attendant ants",
+      "product_name": "N/A",
+      "active_ingredient": "N/A",
+      "dosage_rate": "N/A",
+      "application_guidance": "Prune heavily infested branches to open the canopy and destroy them immediately. Removing the ants that tend the scales lets natural enemies control them. (The chemicals named in the sources, phosphamidon and dimethoate, are banned or restricted for mango in India and are not suggested.)",
+      "waiting_period_days": null,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests (2012), hosted on the TNAU Agritech Portal; TNAU Agritech Portal, Crop Protection: Mango, Scales",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "Prune heavily infested plant parts to open the tree canopy and destroy them immediately. ... Removal of attendant ants may permit natural enemies to control the insect.",
+      "verified_on": "2026-10-17"
+    }
+  ],
+  "Mango Hopper": [
+    {
+      "treatment_type": "Biological",
+      "title": "Neem (azadirachtin) spray at the start of hopper build-up",
+      "product_name": "Azadirachtin 3000 ppm",
+      "active_ingredient": "Azadirachtin",
+      "dosage_rate": "2 mL per litre of water",
+      "application_guidance": "Spray at the initial stage of the hopper population. Keep the canopy open by pruning overcrowded branches after the rainy season.",
+      "waiting_period_days": null,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests, Extension Bulletin No. 1 (2012), hosted on the TNAU Agritech Portal",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "Spraying of 0.2% Nimbicidin or Azadirachtin 3000 ppm@2m/l at initial stage of hopper population.",
+      "verified_on": "2026-10-17"
+    },
+    {
       "treatment_type": "Chemical",
-      "title": "Systemic Spray for Scale Encrustations",
-      "product_name": "Dimethoate 30% EC (Rogor)",
-      "active_ingredient": "Dimethoate 30% EC",
-      "dosage_rate": "1.7 mL per Litre of water",
-      "application_guidance": "Direct high-pressure spray to underside of leaves and young green stems.",
-      "waiting_period_days": 21,
-      "citation_source": "TNAU Agritech Portal (Crop Protection: Mango Pests)",
-      "citation_url": "https://agritech.tnau.ac.in"
+      "title": "Imidacloprid spray at panicle stages (need-based)",
+      "product_name": "Imidacloprid 200 SL",
+      "active_ingredient": "Imidacloprid",
+      "dosage_rate": "0.25 mL per litre of water",
+      "application_guidance": "Only if there are more than 5-10 hoppers per panicle: first spray early in panicle formation, second at full panicle length, third after fruit set (pea size). Minimise chemical sprays and rotate insecticides.",
+      "waiting_period_days": null,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests, Extension Bulletin No. 1 (2012), hosted on the TNAU Agritech Portal",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "Spray Lambda cyhalothrin 5% EC@ 0.5 ml or imidacloprid 200 SL @ 0.25 ml/l ... First spray should be done at early stage of panicle formation if hopper population, is more than 5-10 panicle, second spray at full length stage of panicle and the third spray after fruit setting (at pea size).",
+      "verified_on": "2026-10-17"
+    }
+  ],
+  "Stem Borer": [
+    {
+      "treatment_type": "Cultural",
+      "title": "Remove infested branches and plug the bore holes",
+      "product_name": "Kerosene- or petrol-soaked cotton, mud plug",
+      "active_ingredient": "N/A",
+      "dosage_rate": "One soaked cotton plug per hole",
+      "application_guidance": "Cut and destroy affected branches with grubs and pupae. Clean each hole, insert cotton wool soaked in kerosene or petrol and plug it with mud. (The source also lists dichlorvos, which is banned in India and is not suggested.)",
+      "waiting_period_days": null,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests, Extension Bulletin No. 1 (2012), hosted on the TNAU Agritech Portal",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "Cut and destroy affected branches with grubs and pupae. Clean hole and insert cotton wool soaked in emulsion of dichlorvos (0.05%) or kerosene or petrol in each hole and plug them with mud.",
+      "verified_on": "2026-10-17"
+    },
+    {
+      "treatment_type": "Biological",
+      "title": "Entomopathogenic fungi",
+      "product_name": "Metarhizium anisopliae or Beauveria bassiana formulation",
+      "active_ingredient": "Metarhizium anisopliae / Beauveria bassiana",
+      "dosage_rate": "As per product label",
+      "application_guidance": "Use as directed on the product label.",
+      "waiting_period_days": null,
+      "citation_source": "National Horticulture Mission, IPM Schedule for Mango Pests, Extension Bulletin No. 1 (2012), hosted on the TNAU Agritech Portal",
+      "citation_url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf",
+      "citation_quote": "Use of green muscardine fungi, Metarhizium anisopliae or Beauveria bassianna.",
+      "verified_on": "2026-10-17"
     }
   ]
 }
