@@ -6,17 +6,19 @@ An AI-powered precision agriculture decision support system for mango orchards. 
 
 ## 1. Phase Build Sequence & Roadmap
 
+> Original build plan, with statuses corrected after the 2026-10-17 audit. The current research plan and its live status are in [`PROGRESS.md`](PROGRESS.md).
+
 | Phase | Description | Status |
 |---|---|---|
 | **Phase 0** | **Scaffolding + Architecture + Risk Report** | **COMPLETED** |
-| **Phase 1** | **Dataset Acquisition & Preprocessing** (MangoLeafBD + Roboflow Pests) | **COMPLETED** |
-| **Phase 2** | **Disease Detection (EfficientNet-B3)** + Hook-based Grad-CAM | **COMPLETED** |
-| **Phase 3** | **Pest Detection (YOLOv8)** + Unreliable Class Flagging | **COMPLETED** |
-| **Phase 4** | **Severity Assessment + OHI Engine + Weather Forecasting** | **COMPLETED** |
-| **Phase 5** | **FastAPI Backend + Supabase PostgreSQL & Auth** | **COMPLETED** |
+| **Phase 1** | **Dataset Acquisition & Preprocessing** (MangoLeafBD + Roboflow Pests) | Scripts written; **real data never downloaded** |
+| **Phase 2** | **Disease Detection (EfficientNet-B3)** + Hook-based Grad-CAM | Code written; **model never trained** |
+| **Phase 3** | **Pest Detection (YOLOv8)** + Unreliable Class Flagging | Code written; **model never trained** |
+| **Phase 4** | **Severity Assessment + OHI Engine + Weather Forecasting** | Implemented; **not validated** |
+| **Phase 5** | **FastAPI Backend + Auth** (SQLite; Supabase schema unused) | Implemented |
 | **Phase 6** | **React Frontend Dashboard + WeasyPrint PDF Reports** | **COMPLETED** |
 | **Phase 7** | **Bilingual Advisory Chatbot (English + Tamil)** | **COMPLETED** |
-| **Phase 8** | **Model Comparison Study & Publication Paper Summary** | **COMPLETED** (See `CONFERENCE_PAPER_SUMMARY.md`) |
+| **Phase 8** | **Model Comparison Study & Publication Paper Summary** | **Not done** — no experiment was run; the paper draft is marked UNVERIFIED |
 
 ---
 
