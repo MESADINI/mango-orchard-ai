@@ -110,7 +110,7 @@ export default function History() {
                   </td>
                   <td className="py-3.5 px-4 text-slate-300">{pestSummary(row)}</td>
                   <td className="py-3.5 px-4 space-x-2 whitespace-nowrap">
-                    <span className="font-semibold" style={{ color: row.badge_color }}>{row.ohi_score.toFixed(1)}</span>
+                    <span className="font-semibold" style={{ color: row.badge_color }}>{row.ohi_score == null ? '—' : row.ohi_score.toFixed(1)}</span>
                     <StatusBadge status={row.health_status} />
                   </td>
                   <td className="py-3.5 px-5 text-right">

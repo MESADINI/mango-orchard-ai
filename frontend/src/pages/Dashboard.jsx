@@ -8,6 +8,7 @@ const RISK_STYLES = {
   High: 'bg-rose-500/20 text-rose-300 border border-rose-500/30',
   Moderate: 'bg-amber-500/20 text-amber-300 border border-amber-500/30',
   Low: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30',
+  Unknown: 'bg-slate-700/40 text-slate-300 border border-slate-600',
 }
 
 function Card({ title, children, footer }) {
@@ -21,6 +22,9 @@ function Card({ title, children, footer }) {
     </div>
   )
 }
+
+/** Rounds a possibly-missing number for display ("–" when the weather service returned null). */
+const fmt = (v, digits = 0) => (v == null ? '–' : Number(v).toFixed(digits))
 
 export default function Dashboard() {
   const { farm, loading: farmLoading } = useFarm()
@@ -151,11 +155,11 @@ export default function Dashboard() {
                     {new Date(`${day.date}T00:00:00`).toLocaleDateString(undefined, { weekday: 'short', month: 'numeric', day: 'numeric' })}
                   </div>
                   <div className="text-sm font-bold text-white">
-                    {Math.round(day.temperature_max)}° / <span className="text-slate-400 font-normal">{Math.round(day.temperature_min)}°</span>
+                    {fmt(day.temperature_max)}° / <span className="text-slate-400 font-normal">{fmt(day.temperature_min)}°</span>
                   </div>
-                  <div className="text-[10px] text-slate-400">💧 {Math.round(day.relative_humidity_mean)}% · {day.precipitation_sum} mm</div>
-                  <div className="text-[10px] text-slate-400">
-                    Anthr. {Math.round(day.anthracnose_spread_risk)}% · Mildew {Math.round(day.powdery_mildew_spread_risk)}%
+                  <div className="text-[10px] text-slate-400">💧 {fmt(day.relative_humidity_mean)}% · {fmt(day.precipitation_sum, 1)} mm</div>
+                  <div className="text-[10px] text-slate-400 leading-tight">
+                    Anthr. {day.anthracnose_risk} · Mildew {day.powdery_mildew_risk} · Canker {day.bacterial_canker_risk}
                   </div>
                   <div className={`text-[10px] font-bold py-0.5 px-1.5 rounded uppercase tracking-wider ${RISK_STYLES[day.disease_spread_risk]}`}>
                     {day.disease_spread_risk} Risk

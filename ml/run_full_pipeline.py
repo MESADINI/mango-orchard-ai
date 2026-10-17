@@ -66,7 +66,8 @@ def run_pipeline_demo(leaf: Path, pest: Path, lat: float, lon: float):
           f"{weather['current_relative_humidity_pct']}% RH, {weather['current_precipitation_mm']} mm rain")
     if weather["7_day_forecast"]:
         day = weather["7_day_forecast"][0]
-        print(f"   - Today: Anthracnose risk {day['anthracnose_spread_risk']}%, alert {day['alert_level']}")
+        print(f"   - Today: anthracnose {day['anthracnose_risk']}, powdery mildew {day['powdery_mildew_risk']}, "
+              f"bacterial canker {day['bacterial_canker_risk']} (weather vs published favourable conditions)")
 
     partial = f" (PARTIAL: missing {', '.join(ohi_info['missing_components'])})" if ohi_info["is_partial"] else ""
     print(f"\n⭐ ORCHARD HEALTH INDEX:  {ohi_info['ohi_score']} / 100 — {ohi_info['health_status']}{partial}")

@@ -94,7 +94,9 @@ def test_analyze_dual_scan_is_honest_without_weights(client, auth):
     assert res.status_code == 200, res.text
     data = res.json()
 
-    assert 0.0 <= data["ohi_score"] <= 100.0
+    # neither disease nor pest could be assessed: no index rather than a weather-only number
+    assert data["ohi_score"] is None and data["health_status"].startswith("Unknown")
+    assert data["penalty_breakdown"]["disease_severity_penalty"] is None
     assert data["nutrient_input_was_defaulted"] is True
     assert data["model_status"] == {"disease_model_trained": False, "pest_model_trained": False}
     assert data["disease_results"] == []  # no fabricated diagnosis
@@ -176,9 +178,40 @@ def test_report_reflects_real_scan_data(client, auth):
     assert res.headers["content-type"].split(";")[0] in ("application/pdf", "text/html")
     if res.headers["content-type"].startswith("text/html"):
         body = res.text
-        assert f"{scan['ohi_score']:.1f} / 100" in body
+        assert scan["ohi_score"] is None and "not assessed" in body   # untrained models in the test setup
         assert scan["scan_id"] in body
         assert "82.5" not in body  # regression: the score used to be hard-coded
+
+
+def test_report_renders_scores_and_unassessed_components():
+    from app.api.report import render_report_html
+    scan = {"scan_id": "abc", "created_at": "2026-10-17T00:00:00Z", "scan_type": "dual", "ohi_score": 71.25,
+            "health_status": "Mild Stress / Warning", "badge_color": "#F59E0B", "disease_results": [],
+            "pest_results": [], "recommendations": [], "caveats": [], "ohi_is_partial": True,
+            "ohi_missing_components": ["weather"], "latitude": 12.5, "longitude": 78.2,
+            "penalty_breakdown": {"disease_severity_penalty": 40.0, "pest_pressure_penalty": 10.0,
+                                  "weather_vulnerability_index": None, "nutrient_penalty": None,
+                                  "weighted_total_penalty": 28.75},
+            "weights_used": {"disease": 0.5333, "pest": 0.4667, "weather": 0.0, "nutrient": 0.0},
+            "weather_vulnerability": {"live_data": False, "current_temperature_c": None}}
+    body = render_report_html(scan)
+    assert "71.2 / 100" in body or "71.3 / 100" in body
+    assert "not assessed" in body and "Live weather data unavailable" in body
+
+
+def test_report_renders_recommendations_with_and_without_pre_harvest_interval():
+    """Regression: a missing '+' made the treatment cell call a string, crashing every report with treatments."""
+    from app.api.report import render_report_html
+    rec = {"condition": "Anthracnose", "treatment_type": "Chemical", "product_name": "Carbendazim",
+           "dosage_rate": "0.1%", "application_guidance": "Spray at flowering.", "citation_source": "NHM (2012)"}
+    scan = {"scan_id": "r1", "created_at": "2026-10-17T00:00:00Z", "scan_type": "disease", "ohi_score": None,
+            "health_status": "Unknown", "badge_color": "#6B7280", "disease_results": [], "pest_results": [],
+            "recommendations": [{**rec, "waiting_period_days": 15}, {**rec, "waiting_period_days": None}],
+            "caveats": [], "ohi_is_partial": True, "ohi_missing_components": [], "latitude": 12.5,
+            "longitude": 78.2, "penalty_breakdown": {}, "weights_used": {}, "weather_vulnerability": {}}
+    body = render_report_html(scan)
+    assert "Last spray at least 15 days before harvest" in body
+    assert "Check the product label for the pre-harvest interval" in body
 
 
 def test_report_unknown_scan_is_404(client, auth):
@@ -193,8 +226,11 @@ def test_weather_forecast(client, monkeypatch):
     data = res.json()
     assert data["current_temperature"] == 27.0
     assert len(data["forecast_days"]) == 7
-    assert data["forecast_days"][0]["disease_spread_risk"] in ("Low", "Moderate", "High")
-    assert data["pathogen_alerts"]
+    first = data["forecast_days"][0]
+    assert first["hours_rh95_t25_30"] == 14 and first["anthracnose_risk"] == "High"
+    assert first["disease_spread_risk"] == "High" and data["pathogen_alerts"]
+    assert data["forecast_days"][1]["anthracnose_risk"] == "Unknown"      # no hourly data for that day
+    assert data["forecast_days"][6]["temperature_max"] is None             # null stays null
 
 
 def test_weather_offline_returns_503_not_fake_data(client, monkeypatch):

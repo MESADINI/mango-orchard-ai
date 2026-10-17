@@ -10,9 +10,10 @@ Integrates:
 7. Deterministic Orchard Health Index Engine (Rule 1 & Rule 4)
 8. Source-Cited ICAR/TNAU/DPPQS Treatment Protocols (Rule 2)
 
-Any component that cannot run (missing model weights, weather service offline)
-is reported explicitly in `model_status` and in the OHI caveats; the pipeline
-never substitutes fabricated results.
+Any component that cannot run (missing model weights, an uncertain prediction,
+weather service offline) is reported explicitly in `model_status`, in the OHI
+`missing_components` and in the caveats. It is excluded from the OHI, never
+replaced by a default such as "Healthy" or neutral weather.
 """
 
 import logging
@@ -30,7 +31,7 @@ REPO_DIR = Path(__file__).resolve().parent.parent
 if str(REPO_DIR) not in sys.path:
     sys.path.insert(0, str(REPO_DIR))
 
-from ml.disease_detection.inference import DiseaseDetector, UNAVAILABLE_LABEL
+from ml.disease_detection.inference import DiseaseDetector
 from ml.explainability.gradcam import HookBasedGradCAM
 from ml.forecasting.forecaster import forecast_disease_spread
 from ml.forecasting.recommendations import recommendation_engine
@@ -45,11 +46,8 @@ logger = logging.getLogger(__name__)
 DEFAULT_LATITUDE = 12.5266
 DEFAULT_LONGITUDE = 78.2147
 
-# Neutral weather assumed only when live data is unavailable (disclosed in caveats)
-FALLBACK_WEATHER = {"temperature_2m": 28.0, "relative_humidity_2m": 70.0, "precipitation": 0.0}
-
 DEFAULT_DISEASE_WEIGHTS = REPO_DIR / "ml" / "disease_detection" / "weights" / "disease_classifier.pth"
-DEFAULT_PEST_WEIGHTS = REPO_DIR / "ml" / "pest_detection" / "weights" / "yolov8_best.pt"
+DEFAULT_PEST_WEIGHTS = REPO_DIR / "ml" / "pest_detection" / "weights" / "pest_detector.pt"
 DEFAULT_ARTIFACTS_DIR = REPO_DIR / "ml" / "artifacts"
 
 SCAN_TYPES = ("dual", "disease", "pest")
@@ -66,11 +64,11 @@ def _to_pil(image: ImageInput) -> Image.Image:
     return image.convert("RGB")
 
 
-def _float_or(value: Any, default: float) -> float:
+def _float_or_none(value: Any) -> Optional[float]:
     try:
-        return float(value) if value is not None else default
+        return float(value) if value is not None else None
     except (TypeError, ValueError):
-        return default
+        return None
 
 
 class MangoOrchardPipeline:
@@ -80,8 +78,10 @@ class MangoOrchardPipeline:
         pest_weights: Optional[str] = None,
         weather_fetcher: Callable[[float, float], Optional[Dict[str, Any]]] = fetch_open_meteo_forecast,
         artifacts_dir: Optional[Union[str, Path]] = None,
+        device: Optional[str] = None,
     ):
-        self.disease_detector = DiseaseDetector(weights_path=disease_weights or str(DEFAULT_DISEASE_WEIGHTS))
+        self.disease_detector = DiseaseDetector(weights_path=disease_weights or str(DEFAULT_DISEASE_WEIGHTS),
+                                                device=device)
         self.pest_detector = PestDetector(weights_path=pest_weights or str(DEFAULT_PEST_WEIGHTS))
         self.ohi_engine = OrchardHealthIndexEngine()
         self.weather_fetcher = weather_fetcher
@@ -124,12 +124,12 @@ class MangoOrchardPipeline:
             logger.exception("Weather fetch failed")
 
         current = (data or {}).get("current") or {}
-        live = bool(current)
-        temp = _float_or(current.get("temperature_2m"), FALLBACK_WEATHER["temperature_2m"])
-        rh = _float_or(current.get("relative_humidity_2m"), FALLBACK_WEATHER["relative_humidity_2m"])
-        precip = _float_or(current.get("precipitation"), FALLBACK_WEATHER["precipitation"])
+        temp = _float_or_none(current.get("temperature_2m"))
+        rh = _float_or_none(current.get("relative_humidity_2m"))
+        precip = _float_or_none(current.get("precipitation"))
+        live = None not in (temp, rh, precip)
         daily = (data or {}).get("daily")
-        forecasts = forecast_disease_spread(daily) if daily else []
+        forecasts = forecast_disease_spread(daily, (data or {}).get("hourly")) if daily else []
 
         return {
             "live_data": live,
@@ -178,6 +178,7 @@ class MangoOrchardPipeline:
             # --- Disease detection, Grad-CAM, lesion severity ---
             disease_name = None
             disease_conf = 0.0
+            low_confidence = False
             probabilities: Dict[str, float] = {}
             severity_result: Dict[str, Any] = {"severity_percentage": 0.0, "lesion_pixels": 0, "total_leaf_pixels": 0}
             gradcam_overlay_path = None
@@ -188,15 +189,23 @@ class MangoOrchardPipeline:
                 disease_name = disease_pred["disease_name"]
                 disease_conf = disease_pred["confidence"]
                 probabilities = disease_pred.get("all_probabilities", {})
+                low_confidence = bool(disease_pred.get("low_confidence", False))
                 severity_result = compute_lesion_severity(np.array(pil_leaf))
 
                 if self.disease_detector.is_trained:
                     if generate_gradcam:
                         gradcam_overlay_path = self._generate_gradcam(pil_leaf, out_dir / f"{prefix}_gradcam.jpg")
+                    if low_confidence:
+                        caveats.append(
+                            f"The disease model is unsure about this photo (top confidence {disease_conf:.2f}). "
+                            "It may not be a clear photo of a mango leaf, or the disease may be one the model does "
+                            "not know. Please retake the photo: one leaf, filling the frame, in daylight. The disease "
+                            "component is excluded from the OHI and no treatment is suggested."
+                        )
                 else:
                     caveats.append(
-                        "Disease classification unavailable: no trained EfficientNet-B3 weights are installed. "
-                        "The disease penalty is excluded from the OHI."
+                        "Disease classification unavailable: no trained disease model is installed. "
+                        "The disease component is excluded from the OHI."
                     )
 
             # --- Pest detection ---
@@ -214,45 +223,48 @@ class MangoOrchardPipeline:
                 else:
                     caveats.append(
                         "Pest detection unavailable: no trained YOLOv8 weights are installed. "
-                        "The pest penalty is excluded from the OHI."
+                        "The pest component is excluded from the OHI."
                     )
 
-        confirmed_pests = [d for d in pest_detections if not d.get("is_unreliable", False)]
+        confirmed_pests = [d for d in pest_detections
+                           if not d.get("is_unreliable", False) and d.get("host_verified", True) is not False]
         unreliable_pests = [d for d in pest_detections if d.get("is_unreliable", False)]
+        host_unverified_pests = [d for d in pest_detections
+                                 if not d.get("is_unreliable", False) and d.get("host_verified", True) is False]
+        pest_ok = run_pest and self.pest_detector.is_trained and self.pest_detector.has_host_verified_classes
+        if run_pest and self.pest_detector.is_trained and not pest_ok:
+            caveats.append(
+                "The pest detector was trained only on non-mango images (traps, grape, coffee). Its detections are "
+                "shown as unverified, and the pest component is excluded from the OHI."
+            )
 
         # --- Weather & microclimate ---
         weather = self._fetch_weather(latitude, longitude)
         if not weather["live_data"]:
             caveats.append(
-                "Live weather data unavailable (Open-Meteo unreachable); neutral defaults "
-                f"({FALLBACK_WEATHER['temperature_2m']}°C, {FALLBACK_WEATHER['relative_humidity_2m']}% RH, "
-                "0 mm rain) were used for the weather component."
+                "Live weather data unavailable (Open-Meteo unreachable); the weather component is excluded "
+                "from the OHI."
             )
 
-        # --- Deterministic OHI ---
-        ohi_disease_name = disease_name if disease_name and disease_name != UNAVAILABLE_LABEL else "Healthy"
+        # --- Deterministic OHI: components that were not assessed are excluded, never assumed healthy ---
+        disease_ok = run_disease and self.disease_detector.is_trained and not low_confidence
+        missing = [c for c, ok in (("disease", disease_ok),
+                                   ("pest", pest_ok),
+                                   ("weather", weather["live_data"])) if not ok]
         ohi_result = self.ohi_engine.compute_ohi(
-            disease_name=ohi_disease_name,
-            disease_confidence=disease_conf if disease_name != UNAVAILABLE_LABEL else 0.0,
+            disease_name=disease_name if disease_ok else None,
+            disease_confidence=disease_conf,
             disease_severity_pct=severity_result.get("severity_percentage", 0.0),
             pest_detections=pest_detections,
             relative_humidity=weather["current_relative_humidity_pct"],
             temperature=weather["current_temperature_c"],
             precipitation_mm=weather["current_precipitation_mm"],
+            missing=missing,
         )
         ohi_result["caveats"] = list(ohi_result.get("caveats", [])) + caveats
-        missing_components = []
-        if not run_disease or not self.disease_detector.is_trained:
-            missing_components.append("disease")
-        if not run_pest or not self.pest_detector.is_trained:
-            missing_components.append("pest")
-        if not weather["live_data"]:
-            missing_components.append("weather")
-        ohi_result["missing_components"] = missing_components
-        ohi_result["is_partial"] = bool(missing_components)
 
         # --- Verified ICAR/TNAU recommendations (confirmed detections only) ---
-        rec_disease = disease_name if disease_name not in (None, UNAVAILABLE_LABEL) else None
+        rec_disease = disease_name if disease_ok else None
         recommendations = recommendation_engine.get_recommendations_for_scan(
             disease_name=rec_disease,
             pest_names=sorted({d["pest_name"] for d in confirmed_pests}),
@@ -268,6 +280,7 @@ class MangoOrchardPipeline:
                 "model_available": self.disease_detector.is_trained,
                 "disease_name": disease_name,
                 "confidence": disease_conf,
+                "low_confidence": low_confidence,
                 "probabilities": probabilities,
                 "lesion_severity_percentage": severity_result.get("severity_percentage", 0.0),
                 "leaf_pixels": severity_result.get("total_leaf_pixels", 0),
@@ -280,6 +293,8 @@ class MangoOrchardPipeline:
                 "total_detections": len(pest_detections),
                 "confirmed_count": len(confirmed_pests),
                 "unreliable_count": len(unreliable_pests),
+                "host_unverified_count": len(host_unverified_pests),
+                "model_host_verified": self.pest_detector.has_host_verified_classes,
                 "detections": pest_detections,
                 "pest_overlay_path": pest_overlay_path,
                 "has_unreliable_classes": len(unreliable_pests) > 0,

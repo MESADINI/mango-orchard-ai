@@ -1,0 +1,176 @@
+{
+ "data": {
+  "source": "NASA POWER (MERRA-2), hourly, LST",
+  "source_attempts": [
+   {
+    "source": "nasa-power",
+    "ok": true
+   }
+  ],
+  "request_url": [
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20150101&end=20150331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20150401&end=20150630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20150701&end=20150930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20151001&end=20151231&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20160101&end=20160331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20160401&end=20160630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20160701&end=20160930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20161001&end=20161231&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20170101&end=20170331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20170401&end=20170630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20170701&end=20170930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20171001&end=20171231&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20180101&end=20180331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20180401&end=20180630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20180701&end=20180930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20181001&end=20181231&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20190101&end=20190331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20190401&end=20190630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20190701&end=20190930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20191001&end=20191231&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20200101&end=20200331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20200401&end=20200630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20200701&end=20200930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20201001&end=20201231&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20210101&end=20210331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20210401&end=20210630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20210701&end=20210930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20211001&end=20211231&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20220101&end=20220331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20220401&end=20220630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20220701&end=20220930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20221001&end=20221231&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20230101&end=20230331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20230401&end=20230630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20230701&end=20230930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20231001&end=20231231&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20240101&end=20240331&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20240401&end=20240630&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20240701&end=20240930&format=JSON&time-standard=LST",
+   "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M%2CRH2M%2CPRECTOTCORR&community=AG&longitude=78.2147&latitude=12.5266&start=20241001&end=20241231&format=JSON&time-standard=LST"
+  ],
+  "sha256": {
+   "20150101-20150331": "040e641453b4406469a57e4e126f638df877497abbd21d34acb95b66fd98de06",
+   "20150401-20150630": "b9d3828abb9b360dfa42859734d697c247e394127064781fefe6aa03a3081101",
+   "20150701-20150930": "586ed9ad856c60e0ade2ba19932d3293234762f7c9239f6e609426760c7ec206",
+   "20151001-20151231": "14d1c58ce85fbd3b471fc74d731b3ab39e5ffecd5126dbf823b9678c492eb7b8",
+   "20160101-20160331": "29b2967b5b429a4d9e14ad13d6095d08c5bf2827833513092cad8cb95169c90e",
+   "20160401-20160630": "f0545f952ba6dbb75e9017ad590bde66bcf5b273d3b6f9764bb4015d4c1e96d9",
+   "20160701-20160930": "34aa5f42d1aaa40ecb2022c29a7ffe7c932743d7f20ce4f705bd83913105ce0c",
+   "20161001-20161231": "c17c72cf6bc2733a5af4dcc4261d58c8550210f05cf5e48ae421038ceac236e1",
+   "20170101-20170331": "9ba07d2ad3c514e14a48d790d90731addd4d3f50532a9937294f69bb7f2be495",
+   "20170401-20170630": "ee4c3335bf7d9bdf12d7183ac3f7efff8af31f9180e79a2a94fc99ff4abe0839",
+   "20170701-20170930": "71ca97a6d9d6809b072d33a69c99f4d495d0a84e3dccba44af7fa072f1b2f931",
+   "20171001-20171231": "353214f6851d698263933767c7fbcfbf56816830c00ed0e969828efd5e9fb6a3",
+   "20180101-20180331": "996fd1baa9dbe1899d3cf93e0aaa297c58bf2cdb842528bb3515aa445cb845da",
+   "20180401-20180630": "6b2787705c075929188f02e88c2a91f09d4446e620723df72ae1e7d76542f047",
+   "20180701-20180930": "735687a72adefcc08fbd32ebd276df18bbafd1cb19154972c3a8f199ab10db86",
+   "20181001-20181231": "01818f9eb865e3a792b5dcf5f9831a88ffb7cf6fc2e52439dcdfe49d95b695c7",
+   "20190101-20190331": "5260138eba1b2b423211853c170b23532fa28d0eb56c78235d845b05aa9ac49a",
+   "20190401-20190630": "0fc44a19f41b47f1c5d87d18d203f2cd73d9daf4e8ce404dc2144dd7abdc8d5f",
+   "20190701-20190930": "d21091e6e59fe1a17ba555a8da6886ab9a13a8a19fee83d7291e784bdf6b9290",
+   "20191001-20191231": "d0a3b1dc01ec6b81dca40fdedc513f2961befc1622217dc2bb7ffdebd885de94",
+   "20200101-20200331": "a85d0fb899e4a90d55ef5d9ad23f6b0e82539f7b075db1bcd453c3857d51c91c",
+   "20200401-20200630": "1ce19b4b9e0bd1e7ddfbb21c2fcd7631e90ba2c6a2cdfddb684a5cf8f24067a0",
+   "20200701-20200930": "ac7fcdb435ad9af341962bf3ea9293fb17cface52544fd8ba24cfae1ddc10564",
+   "20201001-20201231": "b8adcb820d116ef802074d49e759e18bd789be638fad2b936421401e02c5ce34",
+   "20210101-20210331": "e54d988824905a403ecb3e9f987363dcc7135c89e4262e968f03b5d3ff909b2e",
+   "20210401-20210630": "7430715fb416d1ef74fcc820b517d1d06b5ef2707b7fcc9d8bcd4ef7f48d8f8c",
+   "20210701-20210930": "b70d5e34f224ffdf68be9cf1e8e2bcd0d2bbd7d744e6b7730366ac2cf9a93061",
+   "20211001-20211231": "ae348982509e4149472685caf7e5caa71595ea2a131b62599bf906a23f804297",
+   "20220101-20220331": "6fd15c28a45b2148add128563b954bd4be34650cebe6156cdec488c3595d6454",
+   "20220401-20220630": "7f14b7740c078c6c1c2dee51c2cd98779d2318c68041e4ccfb655c8f1b6256c4",
+   "20220701-20220930": "b50fd52f28faf8bdd130e99aea186d8b045d5e276f0362da9cf653032ed2aeae",
+   "20221001-20221231": "711de41ffbc4f468dacab42619de9c7ec96a4f6997637b4218e1e72f8defddcd",
+   "20230101-20230331": "eac3d8975b0f5b4d46436255849bfabe4346db92ca11f77a7de9f8f1c49ee2d6",
+   "20230401-20230630": "f130fef78374d3d45cadaaf2ea3b6bdf78aeb41e478ed64e1704949b635770c4",
+   "20230701-20230930": "c05663ed74e164efdb0fd11aecb741f52b7f4a52c945fb3547d27efbe8dfe540",
+   "20231001-20231231": "c9e2f026b817aa7ec21ce8582b406e30beeb056c31c8be1b2df7102020f49622",
+   "20240101-20240331": "e1fce0cc8665ae2a2b417627c82f01b953ec08e448d9bab726e8cfa91bb461a9",
+   "20240401-20240630": "86da735d4865b70b166acbea3eea0ddb0641d21fde785b6d0c94f63bdcabee7e",
+   "20240701-20240930": "688759c20742b5ba8ad6dbeec606f00260bd0b75e35fc746f94c42c9f7969c25",
+   "20241001-20241231": "d31ca0e9177ffa38555c6644f3fc949a752e38bf74d03b19f1a7c94a88fb744e"
+  },
+  "period": [
+   "2015-01-01",
+   "2024-12-31"
+  ],
+  "days_total": 3653,
+  "days_complete": 3653,
+  "years": 10
+ },
+ "agreement_previous_rules_vs_documented": {
+  "anthracnose": {
+   "n_days": 3653,
+   "tp": 0,
+   "fp": 926,
+   "fn": 0,
+   "tn": 2727,
+   "reference_positive_days": 0,
+   "predicted_positive_days": 926,
+   "precision": 0.0,
+   "recall": null,
+   "specificity": 0.7465097180399671,
+   "cohen_kappa": 0.0
+  },
+  "powdery_mildew": {
+   "n_days": 3653,
+   "tp": 0,
+   "fp": 1236,
+   "fn": 0,
+   "tn": 2417,
+   "reference_positive_days": 0,
+   "predicted_positive_days": 1236,
+   "precision": 0.0,
+   "recall": null,
+   "specificity": 0.6616479605803449,
+   "cohen_kappa": 0.0
+  },
+  "any_high_alert_vs_any_documented": {
+   "n_days": 3653,
+   "tp": 0,
+   "fp": 2162,
+   "fn": 0,
+   "tn": 1491,
+   "reference_positive_days": 0,
+   "predicted_positive_days": 2162,
+   "precision": 0.0,
+   "recall": null,
+   "specificity": 0.40815767862031205,
+   "cohen_kappa": 0.0
+  }
+ },
+ "documented_conditions_days_per_year": {
+  "anthracnose": 0.0,
+  "powdery_mildew": 0.0,
+  "bacterial_canker": 0.0
+ },
+ "weather_summary": {
+  "hours_rh95_t25_30_max_in_a_day": 0,
+  "days_with_any_hour_rh95_t25_30_per_year": 0.0,
+  "temperature_min_lowest": 10.27,
+  "days_tmin_10_13_per_year": 4.4,
+  "days_mean_rh_82_91_per_year": 70.3,
+  "hourly_rh_max": 100.0,
+  "hourly_rh_p99": 100.0,
+  "hours_rh_ge_95_per_year": 1364.4,
+  "hours_rh_ge_90_per_year": 2465.8,
+  "hours_rh_ge_90_t25_30_per_year": 2.6
+ },
+ "interpretation_sensitivity_days_per_year": {
+  "anthracnose": {
+   "main: >=12 h RH>=95 at 25-30 C": 0.0,
+   ">=6 h RH>=95 at 25-30 C": 0.0,
+   ">=1 h RH>=95 at 25-30 C": 0.0
+  },
+  "powdery_mildew": {
+   "main: Tmin 10-13, Tmax 27-31, mean RH 82-91": 0.0,
+   "Tmin 10-13 and Tmax 27-31 (RH ignored)": 3.1,
+   "thresholds widened by 2 C / 5% RH": 4.6
+  },
+  "bacterial_canker": {
+   "main: mean RH>=90 and mean T 25-30": 0.0,
+   "mean RH>=85 and mean T 25-30": 0.3
+  }
+ }
+}

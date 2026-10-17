@@ -1,0 +1,449 @@
+{
+  "env": {
+    "git": {
+      "branch": "enhance/real-data",
+      "commit": "16f57e93f2e080a90eaca050df960debb23d7323",
+      "dirty": true
+    },
+    "hardware": {
+      "cpu_count": 16,
+      "cuda_available": true,
+      "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+      "nvidia_smi": "NVIDIA GeForce RTX 3050 Laptop GPU, 4096 MiB, 617.42",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+      "torch_cuda_build": "12.1"
+    },
+    "packages": {
+      "ImageHash": "4.3.2",
+      "Pillow": "10.3.0",
+      "kaggle": "2.2.4",
+      "matplotlib": "3.11.2",
+      "numpy": "1.26.4",
+      "opencv-python-headless": "4.9.0.80",
+      "pandas": "3.0.6",
+      "scikit-learn": "1.5.0",
+      "scipy": "1.17.1",
+      "timm": "1.0.3",
+      "torch": "2.3.0+cu121",
+      "torchvision": "0.18.0+cu121",
+      "ultralytics": "8.3.40"
+    },
+    "python": "3.11.9",
+    "timestamp_utc": "2026-10-17T13:46:09+00:00"
+  },
+  "meta": {
+    "logits_file": "results\\disease\\final\\efficientnet_b3\\logits_test.npz",
+    "low_confidence_threshold": 0.8152007082226095,
+    "n": 239,
+    "n_pest_images": 379,
+    "n_weather_hours": 87672,
+    "temperature": 1.0,
+    "weather_cache_sha256": {
+      "20150101-20150331": "040e641453b4406469a57e4e126f638df877497abbd21d34acb95b66fd98de06",
+      "20150401-20150630": "b9d3828abb9b360dfa42859734d697c247e394127064781fefe6aa03a3081101",
+      "20150701-20150930": "586ed9ad856c60e0ade2ba19932d3293234762f7c9239f6e609426760c7ec206",
+      "20151001-20151231": "14d1c58ce85fbd3b471fc74d731b3ab39e5ffecd5126dbf823b9678c492eb7b8",
+      "20160101-20160331": "29b2967b5b429a4d9e14ad13d6095d08c5bf2827833513092cad8cb95169c90e",
+      "20160401-20160630": "f0545f952ba6dbb75e9017ad590bde66bcf5b273d3b6f9764bb4015d4c1e96d9",
+      "20160701-20160930": "34aa5f42d1aaa40ecb2022c29a7ffe7c932743d7f20ce4f705bd83913105ce0c",
+      "20161001-20161231": "c17c72cf6bc2733a5af4dcc4261d58c8550210f05cf5e48ae421038ceac236e1",
+      "20170101-20170331": "9ba07d2ad3c514e14a48d790d90731addd4d3f50532a9937294f69bb7f2be495",
+      "20170401-20170630": "ee4c3335bf7d9bdf12d7183ac3f7efff8af31f9180e79a2a94fc99ff4abe0839",
+      "20170701-20170930": "71ca97a6d9d6809b072d33a69c99f4d495d0a84e3dccba44af7fa072f1b2f931",
+      "20171001-20171231": "353214f6851d698263933767c7fbcfbf56816830c00ed0e969828efd5e9fb6a3",
+      "20180101-20180331": "996fd1baa9dbe1899d3cf93e0aaa297c58bf2cdb842528bb3515aa445cb845da",
+      "20180401-20180630": "6b2787705c075929188f02e88c2a91f09d4446e620723df72ae1e7d76542f047",
+      "20180701-20180930": "735687a72adefcc08fbd32ebd276df18bbafd1cb19154972c3a8f199ab10db86",
+      "20181001-20181231": "01818f9eb865e3a792b5dcf5f9831a88ffb7cf6fc2e52439dcdfe49d95b695c7",
+      "20190101-20190331": "5260138eba1b2b423211853c170b23532fa28d0eb56c78235d845b05aa9ac49a",
+      "20190401-20190630": "0fc44a19f41b47f1c5d87d18d203f2cd73d9daf4e8ce404dc2144dd7abdc8d5f",
+      "20190701-20190930": "d21091e6e59fe1a17ba555a8da6886ab9a13a8a19fee83d7291e784bdf6b9290",
+      "20191001-20191231": "d0a3b1dc01ec6b81dca40fdedc513f2961befc1622217dc2bb7ffdebd885de94",
+      "20200101-20200331": "a85d0fb899e4a90d55ef5d9ad23f6b0e82539f7b075db1bcd453c3857d51c91c",
+      "20200401-20200630": "1ce19b4b9e0bd1e7ddfbb21c2fcd7631e90ba2c6a2cdfddb684a5cf8f24067a0",
+      "20200701-20200930": "ac7fcdb435ad9af341962bf3ea9293fb17cface52544fd8ba24cfae1ddc10564",
+      "20201001-20201231": "b8adcb820d116ef802074d49e759e18bd789be638fad2b936421401e02c5ce34",
+      "20210101-20210331": "e54d988824905a403ecb3e9f987363dcc7135c89e4262e968f03b5d3ff909b2e",
+      "20210401-20210630": "7430715fb416d1ef74fcc820b517d1d06b5ef2707b7fcc9d8bcd4ef7f48d8f8c",
+      "20210701-20210930": "b70d5e34f224ffdf68be9cf1e8e2bcd0d2bbd7d744e6b7730366ac2cf9a93061",
+      "20211001-20211231": "ae348982509e4149472685caf7e5caa71595ea2a131b62599bf906a23f804297",
+      "20220101-20220331": "6fd15c28a45b2148add128563b954bd4be34650cebe6156cdec488c3595d6454",
+      "20220401-20220630": "7f14b7740c078c6c1c2dee51c2cd98779d2318c68041e4ccfb655c8f1b6256c4",
+      "20220701-20220930": "b50fd52f28faf8bdd130e99aea186d8b045d5e276f0362da9cf653032ed2aeae",
+      "20221001-20221231": "711de41ffbc4f468dacab42619de9c7ec96a4f6997637b4218e1e72f8defddcd",
+      "20230101-20230331": "eac3d8975b0f5b4d46436255849bfabe4346db92ca11f77a7de9f8f1c49ee2d6",
+      "20230401-20230630": "f130fef78374d3d45cadaaf2ea3b6bdf78aeb41e478ed64e1704949b635770c4",
+      "20230701-20230930": "c05663ed74e164efdb0fd11aecb741f52b7f4a52c945fb3547d27efbe8dfe540",
+      "20231001-20231231": "c9e2f026b817aa7ec21ce8582b406e30beeb056c31c8be1b2df7102020f49622",
+      "20240101-20240331": "e1fce0cc8665ae2a2b417627c82f01b953ec08e448d9bab726e8cfa91bb461a9",
+      "20240401-20240630": "86da735d4865b70b166acbea3eea0ddb0641d21fde785b6d0c94f63bdcabee7e",
+      "20240701-20240930": "688759c20742b5ba8ad6dbeec606f00260bd0b75e35fc746f94c42c9f7969c25",
+      "20241001-20241231": "d31ca0e9177ffa38555c6644f3fc949a752e38bf74d03b19f1a7c94a88fb744e"
+    },
+    "weather_period": [
+      "2015-01-01T00:00",
+      "2024-12-31T23:00"
+    ],
+    "weather_source": "NASA POWER (MERRA-2), hourly, LST"
+  },
+  "n_mc": 2000,
+  "results": {
+    "ablation": {
+      "without disease": {
+        "max_abs_delta": 39.14,
+        "mean_abs_delta": 13.666066945606692,
+        "n": 239,
+        "p95_abs_delta": 37.041000000000004,
+        "spearman_rho": 0.7590054820350438,
+        "tier_change_fraction": 0.4811715481171548
+      },
+      "without pest": {
+        "max_abs_delta": 38.150000000000006,
+        "mean_abs_delta": 14.248090909090909,
+        "n": 220,
+        "p95_abs_delta": 34.1225,
+        "spearman_rho": 0.5987654129799344,
+        "tier_change_fraction": 0.5636363636363636
+      },
+      "without weather": {
+        "max_abs_delta": 27.89,
+        "mean_abs_delta": 4.32702928870293,
+        "n": 239,
+        "p95_abs_delta": 10.638999999999998,
+        "spearman_rho": 0.9869501332117215,
+        "tier_change_fraction": 0.18828451882845187
+      }
+    },
+    "monte_carlo": {
+      "moderate (c=100)": {
+        "mean_abs_delta": {
+          "median": 1.5544351464435149,
+          "p05": 0.3812761506276152,
+          "p95": 3.585805439330543
+        },
+        "n_draws": 2000,
+        "spearman_rho": {
+          "median": 0.9960599160022778,
+          "p05": 0.98013940075669,
+          "p95": 0.999714769620917
+        },
+        "tier_change_fraction": {
+          "median": 0.07531380753138076,
+          "p05": 0.012552301255230125,
+          "p95": 0.200836820083682
+        },
+        "weight_quantiles": {
+          "disease": [
+            0.36874015474244604,
+            0.44589106872144824,
+            0.5266607147080363
+          ],
+          "pest": [
+            0.31217689296847856,
+            0.3862210484358058,
+            0.468396121167477
+          ],
+          "weather": [
+            0.10977770045868258,
+            0.16501455549287286,
+            0.23007475390336235
+          ]
+        }
+      },
+      "uniform Dirichlet(1,1,1)": {
+        "mean_abs_delta": {
+          "median": 9.982384937238493,
+          "p05": 3.0406192468619246,
+          "p95": 16.50153347280334
+        },
+        "n_draws": 2000,
+        "spearman_rho": {
+          "median": 0.8309814662196155,
+          "p05": 0.36659087808010665,
+          "p95": 0.9881792810704878
+        },
+        "tier_change_fraction": {
+          "median": 0.4225941422594142,
+          "p05": 0.14644351464435146,
+          "p95": 0.5732217573221757
+        },
+        "weight_quantiles": {
+          "disease": [
+            0.026205361439431505,
+            0.2713771028619164,
+            0.7784801798826154
+          ],
+          "pest": [
+            0.024776715774904312,
+            0.28321613158115044,
+            0.7517406973729835
+          ],
+          "weather": [
+            0.024559986581677167,
+            0.30510347142491434,
+            0.791227003139144
+          ]
+        }
+      },
+      "wide (c=20)": {
+        "mean_abs_delta": {
+          "median": 3.4906066945606695,
+          "p05": 0.9279853556485361,
+          "p95": 7.858485355648535
+        },
+        "n_draws": 2000,
+        "spearman_rho": {
+          "median": 0.9829505686531083,
+          "p05": 0.896594778618596,
+          "p95": 0.9986423898488535
+        },
+        "tier_change_fraction": {
+          "median": 0.17154811715481172,
+          "p05": 0.03765690376569038,
+          "p95": 0.33493723849372364
+        },
+        "weight_quantiles": {
+          "disease": [
+            0.2701669978661021,
+            0.44254379409517675,
+            0.6249204545717891
+          ],
+          "pest": [
+            0.2161895534504367,
+            0.38614481105314247,
+            0.5734545267877506
+          ],
+          "weather": [
+            0.05310851666376363,
+            0.15471009763713572,
+            0.31471905981503595
+          ]
+        }
+      }
+    },
+    "nominal": {
+      "max": 96.58,
+      "mean": 61.11748953974896,
+      "min": 14.21,
+      "sd": 18.69133342386317,
+      "tier_counts": {
+        "High Infestation Risk": 86,
+        "Mild Stress / Warning": 67,
+        "Optimal Health": 21,
+        "Severe Outbreak / Critical": 65
+      }
+    },
+    "one_at_a_time": {
+      "pest_impact:Fruit Flyx0.8": {
+        "max_abs_delta": 10.079999999999998,
+        "mean_abs_delta": 0.8876569037656905,
+        "n": 239,
+        "p95_abs_delta": 5.599999999999995,
+        "spearman_rho": 0.9943538432566813,
+        "tier_change_fraction": 0.029288702928870293
+      },
+      "pest_impact:Fruit Flyx1.2": {
+        "max_abs_delta": 10.080000000000002,
+        "mean_abs_delta": 0.7171548117154812,
+        "n": 239,
+        "p95_abs_delta": 4.200000000000003,
+        "spearman_rho": 0.9954291038630116,
+        "tier_change_fraction": 0.03347280334728033
+      },
+      "pest_impact:Mealy Bugx0.8": {
+        "max_abs_delta": 6.530000000000001,
+        "mean_abs_delta": 0.3565690376569038,
+        "n": 239,
+        "p95_abs_delta": 1.8700000000000045,
+        "spearman_rho": 0.9977429007741602,
+        "tier_change_fraction": 0.02510460251046025
+      },
+      "pest_impact:Mealy Bugx1.2": {
+        "max_abs_delta": 6.230000000000004,
+        "mean_abs_delta": 0.3367782426778244,
+        "n": 239,
+        "p95_abs_delta": 1.8700000000000045,
+        "spearman_rho": 0.998342389065022,
+        "tier_change_fraction": 0.02510460251046025
+      },
+      "pest_impact:Scale Insectx0.8": {
+        "max_abs_delta": 3.1099999999999994,
+        "mean_abs_delta": 0.5070292887029287,
+        "n": 239,
+        "p95_abs_delta": 2.3309999999999986,
+        "spearman_rho": 0.9987913495794459,
+        "tier_change_fraction": 0.07531380753138076
+      },
+      "pest_impact:Scale Insectx1.2": {
+        "max_abs_delta": 3.1099999999999994,
+        "mean_abs_delta": 0.5072384937238494,
+        "n": 239,
+        "p95_abs_delta": 2.3299999999999983,
+        "spearman_rho": 0.9989388046974292,
+        "tier_change_fraction": 0.02092050209205021
+      },
+      "virulence:Anthracnosex0.8": {
+        "max_abs_delta": 3.519999999999996,
+        "mean_abs_delta": 0.8031799163179916,
+        "n": 239,
+        "p95_abs_delta": 3.4399999999999977,
+        "spearman_rho": 0.996821688902557,
+        "tier_change_fraction": 0.05439330543933055
+      },
+      "virulence:Anthracnosex1.2": {
+        "max_abs_delta": 3.509999999999998,
+        "mean_abs_delta": 0.7990794979079497,
+        "n": 239,
+        "p95_abs_delta": 3.43,
+        "spearman_rho": 0.9972882279650399,
+        "tier_change_fraction": 0.02510460251046025
+      },
+      "virulence:Bacterial Cankerx0.8": {
+        "max_abs_delta": 3.289999999999999,
+        "mean_abs_delta": 0.4082008368200835,
+        "n": 239,
+        "p95_abs_delta": 3.1909999999999976,
+        "spearman_rho": 0.9981582361085902,
+        "tier_change_fraction": 0.02510460251046025
+      },
+      "virulence:Bacterial Cankerx1.2": {
+        "max_abs_delta": 3.2799999999999976,
+        "mean_abs_delta": 0.4082008368200838,
+        "n": 239,
+        "p95_abs_delta": 3.1909999999999976,
+        "spearman_rho": 0.9980714334378092,
+        "tier_change_fraction": 0.012552301255230125
+      },
+      "virulence:Powdery Mildewx0.8": {
+        "max_abs_delta": 2.979999999999997,
+        "mean_abs_delta": 0.34351464435146445,
+        "n": 239,
+        "p95_abs_delta": 2.8799999999999963,
+        "spearman_rho": 0.9983850218634066,
+        "tier_change_fraction": 0.012552301255230125
+      },
+      "virulence:Powdery Mildewx1.2": {
+        "max_abs_delta": 2.980000000000004,
+        "mean_abs_delta": 0.3436401673640167,
+        "n": 239,
+        "p95_abs_delta": 2.8810000000000024,
+        "spearman_rho": 0.9982215246717818,
+        "tier_change_fraction": 0.02092050209205021
+      },
+      "virulence:Sooty Moldx0.8": {
+        "max_abs_delta": 1.710000000000008,
+        "mean_abs_delta": 0.18987447698744778,
+        "n": 239,
+        "p95_abs_delta": 1.6400000000000006,
+        "spearman_rho": 0.9994119366319433,
+        "tier_change_fraction": 0.0041841004184100415
+      },
+      "virulence:Sooty Moldx1.2": {
+        "max_abs_delta": 1.7199999999999989,
+        "mean_abs_delta": 0.1899163179916318,
+        "n": 239,
+        "p95_abs_delta": 1.6309999999999991,
+        "spearman_rho": 0.9995165398320102,
+        "tier_change_fraction": 0.0
+      },
+      "weight:diseasex0.8": {
+        "max_abs_delta": 4.770000000000003,
+        "mean_abs_delta": 1.6667364016736397,
+        "n": 239,
+        "p95_abs_delta": 4.519999999999997,
+        "spearman_rho": 0.9936073464776273,
+        "tier_change_fraction": 0.12133891213389121
+      },
+      "weight:diseasex0.9": {
+        "max_abs_delta": 2.280000000000001,
+        "mean_abs_delta": 0.7946025104602514,
+        "n": 239,
+        "p95_abs_delta": 2.1499999999999995,
+        "spearman_rho": 0.998399968357322,
+        "tier_change_fraction": 0.06276150627615062
+      },
+      "weight:diseasex1.1": {
+        "max_abs_delta": 2.0799999999999983,
+        "mean_abs_delta": 0.7265271966527196,
+        "n": 239,
+        "p95_abs_delta": 1.9699999999999989,
+        "spearman_rho": 0.9984439192334278,
+        "tier_change_fraction": 0.02092050209205021
+      },
+      "weight:diseasex1.2": {
+        "max_abs_delta": 3.990000000000002,
+        "mean_abs_delta": 1.3942677824267784,
+        "n": 239,
+        "p95_abs_delta": 3.779999999999995,
+        "spearman_rho": 0.9953445014035409,
+        "tier_change_fraction": 0.06276150627615062
+      },
+      "weight:pestx0.8": {
+        "max_abs_delta": 5.060000000000002,
+        "mean_abs_delta": 1.9025104602510456,
+        "n": 239,
+        "p95_abs_delta": 4.529999999999995,
+        "spearman_rho": 0.9935647113079445,
+        "tier_change_fraction": 0.04184100418410042
+      },
+      "weight:pestx0.9": {
+        "max_abs_delta": 2.4299999999999997,
+        "mean_abs_delta": 0.9099581589958158,
+        "n": 239,
+        "p95_abs_delta": 2.1610000000000027,
+        "spearman_rho": 0.9982514151655666,
+        "tier_change_fraction": 0.02092050209205021
+      },
+      "weight:pestx1.1": {
+        "max_abs_delta": 2.239999999999995,
+        "mean_abs_delta": 0.8376987447698742,
+        "n": 239,
+        "p95_abs_delta": 1.991999999999995,
+        "spearman_rho": 0.9988443101892082,
+        "tier_change_fraction": 0.0502092050209205
+      },
+      "weight:pestx1.2": {
+        "max_abs_delta": 4.329999999999998,
+        "mean_abs_delta": 1.6115481171548116,
+        "n": 239,
+        "p95_abs_delta": 3.8519999999999945,
+        "spearman_rho": 0.9954589924878978,
+        "tier_change_fraction": 0.12133891213389121
+      },
+      "weight:weatherx0.8": {
+        "max_abs_delta": 4.150000000000002,
+        "mean_abs_delta": 0.7224686192468621,
+        "n": 239,
+        "p95_abs_delta": 1.734999999999997,
+        "spearman_rho": 0.9994380880509425,
+        "tier_change_fraction": 0.06276150627615062
+      },
+      "weight:weatherx0.9": {
+        "max_abs_delta": 2.0100000000000016,
+        "mean_abs_delta": 0.3541422594142262,
+        "n": 239,
+        "p95_abs_delta": 0.8530000000000013,
+        "spearman_rho": 0.9997835418412266,
+        "tier_change_fraction": 0.029288702928870293
+      },
+      "weight:weatherx1.1": {
+        "max_abs_delta": 1.8999999999999986,
+        "mean_abs_delta": 0.3403347280334729,
+        "n": 239,
+        "p95_abs_delta": 0.8220000000000005,
+        "spearman_rho": 0.999759808570569,
+        "tier_change_fraction": 0.012552301255230125
+      },
+      "weight:weatherx1.2": {
+        "max_abs_delta": 3.6799999999999997,
+        "mean_abs_delta": 0.6679079497907945,
+        "n": 239,
+        "p95_abs_delta": 1.6139999999999999,
+        "spearman_rho": 0.9993086524161852,
+        "tier_change_fraction": 0.016736401673640166
+      }
+    }
+  },
+  "seed": 42
+}

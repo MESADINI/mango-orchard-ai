@@ -18,6 +18,13 @@ def fake_weather(latitude, longitude):
             "relative_humidity_2m_mean": [88.0, 82.0, 60.0, 55.0, 65.0, 90.0, 70.0],
             "precipitation_sum": [5.0, 2.0, 0.0, 0.0, 0.0, 12.0, None],
         },
+        # hourly data for the first day only: 14 h at RH 96% and 26 C (an anthracnose-favourable spell)
+        "hourly": {
+            "time": [f"2026-10-15T{h:02d}:00" for h in range(24)],
+            "temperature_2m": [26.0] * 14 + [29.0] * 10,
+            "relative_humidity_2m": [96.0] * 14 + [70.0] * 10,
+            "precipitation": [0.5] * 6 + [0.0] * 18,
+        },
     }
 
 

@@ -1,93 +1,177 @@
 # Orchard Health Index (OHI) Methodology
 
-## 1. Overview & Core Philosophy
-The **Orchard Health Index (OHI)** is a deterministic, rule-based mathematical scoring system designed to quantify the overall physiological health, stress level, and pest/pathogen vulnerability of a mango orchard or individual tree on a scale from **0 to 100**.
+This document describes exactly what `ml/severity/ohi.py` computes. If the two disagree, the code is the
+reference and this file is wrong. The test `ml/severity/tests/test_ohi.py` checks the worked numbers below.
 
-Unlike opaque deep-learning end-to-end regression models, OHI is:
-1. **Deterministic & Auditable**: Every single point reduction from 100 can be traced directly to an empirical vision detection, severity metric, or weather risk factor.
-2. **Configurable**: Weights are tunable per agro-climatic zone and mango cultivar (e.g., Alphonso, Banganapalli, Dasheri, Totapuri).
-3. **Transparent**: Missing or placeholder parameters (such as soil nutrient readings) are explicitly disclosed.
+## 1. What the OHI is and is not
+- The OHI is a **deterministic, rule-based** score from 0 to 100, where 100 means no penalty.
+- It combines up to four component penalties with fixed weights.
+- Every constant in it is **expert-assigned, not fitted to data**: the weights, the virulence factors α, the pest
+  impact factors β, the weather curve and the tier bounds.
+- It has **not been validated against expert judgement or yield**. A rating protocol is ready
+  (`docs/annotation/OHI_EXPERT_RATING.md`), but no ratings exist yet.
+- How strongly the constants drive the score is measured by the sensitivity analysis in §6, not assumed.
 
----
+## 2. Formula
+With the set of available components A ⊆ {disease, pest, weather, nutrient}:
 
-## 2. Mathematical Formulation
+$$\text{OHI} = \operatorname{clip}_{[0,100]}\Big(100 - \sum_{i \in A} \tilde w_i \, X_i\Big), \qquad
+\tilde w_i = \frac{w_i}{\sum_{j \in A} w_j}$$
 
-The composite Orchard Health Index is defined as:
+Here $X_i \in [0, 100]$ is the penalty of component i.
 
-$$\text{OHI} = \max\left(0, \min\left(100, 100 - \Delta_{\text{total}}\right)\right)$$
+### Nominal weights
 
-Where the total penalty $\Delta_{\text{total}}$ is a linear combination of four domain-specific penalty factors:
+| Component | Penalty | $w_i$ |
+|---|---|---|
+| Disease severity | $S_d$ | 0.40 |
+| Pest pressure | $P_p$ | 0.35 |
+| Weather vulnerability | $W_v$ | 0.15 |
+| Nutrient deficiency | $N_d$ | 0.10 |
 
-$$\Delta_{\text{total}} = w_d \cdot S_d + w_p \cdot P_p + w_w \cdot W_v + w_n \cdot N_d$$
+### Missing components are excluded, never scored as healthy
+A component is missing when:
+- the scan type skipped it;
+- no trained model is installed;
+- the disease prediction is below the calibrated low-confidence threshold (the app then asks the user to retake
+  the photo);
+- the pest detector has no class trained on mango images (§3B);
+- live weather is unavailable;
+- no nutrient sensor exists. This is always the case today.
 
-### Default Weight Distribution
-| Component | Symbol | Default Weight ($w$) | Normalized Weight ($N_d$ defaulted) |
-|---|---|---|---|
-| **Disease Severity Penalty** | $S_d$ | $0.40$ | $0.45$ |
-| **Pest Pressure Penalty** | $P_p$ | $0.35$ | $0.40$ |
-| **Weather Vulnerability Index** | $W_v$ | $0.15$ | $0.15$ |
-| **Nutrient Deficiency Penalty** | $N_d$ | $0.10$ | $0.00$ *(Disclosed Placeholder)* |
+The remaining weights are rescaled proportionally. With today's inputs (nutrient always missing), the effective
+weights are:
+- disease 0.40/0.90 = 0.444;
+- pest 0.35/0.90 = 0.389;
+- weather 0.15/0.90 = 0.167.
 
-$$\sum w_i = 1.0$$
+The response lists the missing components (`missing_components`, `is_partial`) and the weights actually used
+(`weights_used`).
 
----
+If neither image component (disease or pest) is available, **no OHI is reported**: `ohi_score` is null and the
+status is "Unknown — insufficient data". A weather-only number would look like a health assessment without being
+one.
 
-## 3. Sub-Component Scoring Models
+## 3. Component penalties
 
-### A. Disease Severity Penalty ($S_d \in [0, 100]$)
-Given a detected disease $c \in \{\text{Anthracnose}, \text{Bacterial Canker}, \text{Powdery Mildew}, \text{Sooty Mold}, \text{Healthy}\}$ (Leaf Spot is not a model class — no licensed training data):
+### A. Disease, $S_d$
+The disease class c is one of the five model classes. Leaf Spot is not a class, because no licensed training data
+exists for it.
 
-$$S_d = \begin{cases} 
-0, & \text{if } c = \text{Healthy} \\
-\min\left(100, \left(\alpha_c \cdot 40\right) + \left(A_{\text{lesion}} \cdot 60\right)\right) \cdot \text{Conf}_c, & \text{otherwise}
-\end{cases}$$
+$$S_d = \begin{cases} 0 & c = \text{Healthy} \\
+\min\big(100,\; (40\,\alpha_c + 0.6\, s) \cdot p_c\big) & \text{otherwise} \end{cases}$$
 
-Where:
-- $\text{Conf}_c \in [0, 1]$ is the EfficientNet-B3 model classification confidence.
-- $A_{\text{lesion}} \in [0, 1]$ is the segmented diseased surface area fraction computed by the computer vision severity module.
-- $\alpha_c$ is the pathogen virulence multiplier:
-  - **Anthracnose** (*Colletotrichum gloeosporioides*): $\alpha = 1.00$ (High tissue necrosis and fruit drop risk)
-  - **Bacterial Canker** (*Xanthomonas citri* pv. *mangiferaeindicae*): $\alpha = 0.95$ (Systemic vascular damage)
-  - **Powdery Mildew** (*Oidium mangiferae*): $\alpha = 0.85$ (Inflorescence and young flush destruction)
-  - **Sooty Mold** (*Capnodium mangiferae*): $\alpha = 0.50$ (Superficial fungal coat following honeydew excretion)
+- $s \in [0, 100]$ is the lesion area as a % of the leaf, from the HSV segmenter (`ml/severity/severity.py`).
+- $p_c \in [0, 1]$ is the classifier's top probability under the deployed temperature.
+- The virulence factors are:
+  - Anthracnose α = 1.00;
+  - Bacterial Canker α = 0.95;
+  - Powdery Mildew α = 0.85;
+  - Sooty Mold α = 0.50.
+- An unknown class name raises `ValueError`. It never falls back to a default.
 
-### B. Pest Pressure Penalty ($P_p \in [0, 100]$)
-Derived from YOLOv8 bounding box counts across canopy samples:
+**Healthy with lesions.** If c = Healthy but s ≥ 5%, the scan is flagged as `healthy_lesion_inconsistency`:
+- no disease penalty is applied;
+- the caveat asks for a retake or an expert check.
 
-$$P_p = \min\left(100, \sum_{i=1}^{K} \beta_{k_i} \cdot \gamma_{k_i} \cdot \text{Conf}_{k_i}\right)$$
+The 5% value is a rule of thumb, because the segmenter also marks shadows and dirt.
 
-Where:
-- $\beta_k$ is the pest severity impact factor:
-  - **Fruit Fly** (*Bactrocera dorsalis*): $\beta = 18.0$ per detected individual
-  - **Mealy Bug** (*Drosicha mangiferae*): $\beta = 12.0$ per cluster detection
-  - **Scale Insect** (*Coccus viridis*): $\beta = 10.0$ per colony detection
-  - **Mango Hopper** (*Amritodus atkinsoni*): $\beta = 15.0$ *(Flagged UNRELIABLE until $\ge 100$ annotated samples)*
-  - **Stem Borer** (*Batocera rufomaculata*): $\beta = 35.0$ *(Flagged UNRELIABLE until $\ge 100$ annotated samples)*
-- $\gamma_k$ is a canopy density attenuation factor.
+### B. Pest, $P_p$
 
-### C. Weather Vulnerability Coefficient ($W_v \in [0, 100]$)
-Fetched from the Open-Meteo API for the orchard coordinates:
-- Relative Humidity ($\text{RH} > 80\%$): Elevates fungal germination risk.
-- Temperature Window ($22^\circ\text{C} \le T \le 32^\circ\text{C}$): Optimal pathogen propagation range.
-- Precipitation ($P > 2.0\text{ mm}$): Wash-off and spore splash transmission.
+$$P_p = \min\Big(100,\; \sum_{\text{detections } i} \beta_{k_i} \, q_i\Big)$$
 
-$$W_v = \left(0.45 \cdot f_{\text{RH}}(\text{RH})\right) + \left(0.35 \cdot f_T(T)\right) + \left(0.20 \cdot f_P(\text{Rain})\right)$$
+- $q_i$ is the detection confidence.
+- The impact factors are:
+  - Fruit Fly β = 18;
+  - Mealy Bug β = 12;
+  - Scale Insect β = 10;
+  - Mango Hopper β = 15;
+  - Stem Borer β = 35.
+- There is no canopy-density or other attenuation term.
+- An unknown class raises `ValueError`.
 
-### D. Disclosed Nutrient Deficiency Placeholder ($N_d$)
-> **Policy Compliance**:
-> Currently, multi-spectral soil or leaf nitrogen sensors are not integrated.
-> - Default value: $N_d = 0$.
-> - API Flag: `"nutrient_input_was_defaulted": true`.
-> - UI Behavior: Displays amber notification badge: *"Nutrient deficiency analysis disabled (sensor input defaulted to 0)."*
-> - Weight reallocation: The $0.10$ weight is proportionally reallocated to Disease Severity ($+0.05$) and Pest Pressure ($+0.05$).
+Some detections are shown to the user but **excluded from the sum**:
+- **Mango Hopper and Stem Borer** (`is_unreliable`): they have fewer than 100 annotated training samples.
+- **Classes trained on non-mango images** (`host_verified: false`). The deployed detector's training images come
+  from grayscale trap or petri-dish photos (fruit flies), grape and stock photos (mealybugs) and coffee leaves (scale
+  insects); see `ml/datasets/pest_source_review.json`. All three classes are therefore host-unverified.
 
----
+Because no class of the deployed detector is host-verified, the pipeline also treats the **pest component as
+missing**. Finding no pest with this model is not evidence of a pest-free mango tree. `excluded_unverified_pest_detections`
+counts the excluded boxes.
 
-## 4. Health Classification Tiers
+### C. Weather, $W_v$
+The inputs are the current hour's values from Open-Meteo: relative humidity RH (%), temperature T (°C) and
+precipitation R (mm).
 
-| Score Range | Tier Label | Color Code | Action Required |
-|---|---|---|---|
-| **85 – 100** | **Optimal Health** | `#10B981` (Emerald) | Routine surveillance, cultural weed management. |
-| **70 – 84** | **Mild Stress / Warning** | `#F59E0B` (Amber) | Prophylactic biocontrol, weather monitoring. |
-| **50 – 69** | **High Infestation Risk** | `#F97316` (Orange) | Targeted organic/chemical fungicide or trap placement. |
-| **0 – 49** | **Severe Outbreak / Critical** | `#EF4444` (Red) | Emergency systemic intervention per ICAR guidelines. |
+$$f_{RH} = \operatorname{clip}_{[0,100]}\big(2\,(RH - 50)\big), \quad
+f_T = \begin{cases} 100 - 10\,|T - 27| & 22 \le T \le 32 \\ 20 & \text{otherwise} \end{cases}, \quad
+f_R = \operatorname{clip}_{[0,100]}(15\, R)$$
+
+$$W_v = \operatorname{clip}_{[0,100]}\big(0.45\, f_{RH} + 0.35\, f_T + 0.20\, f_R\big)$$
+
+- There is no 2 mm rain threshold. Rain risk rises linearly and saturates at 6.67 mm.
+- The curve is a heuristic, not a disease model.
+- The 7-day disease forecast uses separate, cited rules (`ml/forecasting/forecaster.py`); see §7.
+
+### D. Nutrient, $N_d$
+- No soil or leaf sensor is integrated, so $N_d$ is always missing.
+- It is excluded and the other weights are renormalised. It is not set to 0.
+- The response sets `nutrient_input_was_defaulted: true`.
+
+## 4. Tiers
+The tier bounds are expert-assigned.
+
+| OHI | Tier | Colour |
+|---|---|---|
+| ≥ 85 | Optimal Health | `#10B981` |
+| 70 – < 85 | Mild Stress / Warning | `#F59E0B` |
+| 50 – < 70 | High Infestation Risk | `#F97316` |
+| < 50 | Severe Outbreak / Critical | `#EF4444` |
+| no OHI | Unknown — insufficient data | `#6B7280` |
+
+## 5. Worked example
+**Inputs:**
+- disease: Anthracnose, p = 0.90, s = 20%;
+- pest: one verified Fruit Fly box at q = 0.80;
+- weather: RH 85%, T 26 °C, R 0 mm;
+- nutrient: missing.
+
+**Penalties:**
+- $S_d = (40 + 12) \cdot 0.90 = 46.8$.
+- $P_p = 18 \cdot 0.80 = 14.4$.
+- $W_v = 0.45 \cdot 70 + 0.35 \cdot 90 + 0 = 63.0$.
+
+**Score:** OHI = 100 − (0.4444·46.8 + 0.3889·14.4 + 0.1667·63.0) = 100 − 36.90 = **63.10**, which is in the
+"High Infestation Risk" tier.
+
+## 6. Sensitivity analysis
+`ml/severity/ohi_sensitivity.py` writes `results/ohi/sensitivity.{json,md}`. It covers:
+- one-at-a-time ±10/20% changes to each weight, and ±20% to each α and β;
+- Monte Carlo Dirichlet weights;
+- component ablations.
+
+These run on 239 MangoLeafBD test scenarios, scored with the deployed classifier's predictions.
+
+**Results** (copied from `results/ohi/sensitivity.md`; seed 42, 2,000 Monte Carlo draws):
+- **Ranking is robust.** Scaling any one weight by 0.8–1.2 keeps Spearman ρ ≥ 0.993 against the nominal scores.
+  A ±20% change to any α or β keeps ρ ≥ 0.994.
+- **Tier labels are not robust to the weights.**
+  - One-at-a-time changes move up to 12.1% of scenarios into another tier.
+  - Under Dirichlet weights centred on the nominal ones (c = 100), a median of 7.5% of tiers change; at c = 20
+    the median is 17.2%.
+  - With no prior on the weights (uniform Dirichlet), a median of 42.3% of tiers change.
+  - The tier boundaries therefore rest on the expert-chosen weights, which is why expert validation is needed.
+- **Ablation.** Removing disease or pest changes tiers for 48.1% and 56.4% of scenarios. Removing weather changes
+  18.8% (Spearman ρ 0.987). The weather term mainly shifts scores rather than reordering them.
+- **Scenario caveat.** The pest and weather inputs are paired synthetically with the leaf images, and the pest
+  term is scored as if it were verified. In the deployed app the pest component is currently excluded (§3B).
+
+## 7. Relation to the weather forecast
+The OHI weather term (§3C) scores **one hour of current weather**. The 7-day outlook in the app is a separate rule
+set:
+- thresholds from the NHM mango IPM bulletin (2012);
+- outputs are levels (High / Moderate / Low / Unknown);
+- it does not enter the OHI.
+
+`ml/forecasting/backtest.py` reports what that rule set can and cannot claim.

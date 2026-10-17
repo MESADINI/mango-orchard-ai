@@ -41,7 +41,7 @@ export default function ScanResult({ result }) {
           ].map(([label, value]) => (
             <div key={label} className="bg-slate-800/60 rounded-lg py-2 border border-slate-700/60">
               <div className="text-slate-400">{label}</div>
-              <div className="text-white font-semibold">{value.toFixed(1)}</div>
+              <div className="text-white font-semibold">{value == null ? 'n/a' : value.toFixed(1)}</div>
             </div>
           ))}
         </div>
@@ -51,6 +51,12 @@ export default function ScanResult({ result }) {
       <div className="glass-panel p-6 rounded-2xl border-slate-700/80 space-y-4">
         <h3 className="text-sm font-bold text-white uppercase tracking-wider">Vision Detection Breakdown</h3>
 
+        {disease?.low_confidence && (
+          <div role="alert" className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200">
+            <strong>Unsure — please retake the photo.</strong> Photograph a single leaf filling the frame, in daylight,
+            without heavy shadow. The result below is not used for the health index or treatment advice.
+          </div>
+        )}
         {disease ? (
           <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-3">
             <div className="flex items-center justify-between">
@@ -97,6 +103,11 @@ export default function ScanResult({ result }) {
                       ⚠️ UNVERIFIED CLASS (&lt;100 samples)
                     </span>
                   )}
+                  {!p.is_unreliable && !p.host_verified && (
+                    <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30" title={p.warning || ''}>
+                      ⚠️ UNVERIFIED: model not trained on mango
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
@@ -132,7 +143,11 @@ export default function ScanResult({ result }) {
                   <a href={rec.citation_url} target="_blank" rel="noreferrer" className="italic hover:text-slate-300">
                     Citation: {rec.citation_source}
                   </a>
-                  <span>Waiting period: {rec.waiting_period_days} days</span>
+                  <span>
+                    {rec.waiting_period_days != null
+                      ? `Last spray ≥ ${rec.waiting_period_days} days before harvest`
+                      : 'Check the product label (pre-harvest interval, mango on label)'}
+                  </span>
                 </div>
               </div>
             ))}

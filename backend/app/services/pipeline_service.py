@@ -127,6 +127,7 @@ class PipelineService:
                 "is_healthy": d_diag["disease_name"] == "Healthy",
                 "gradcam_overlay_url": media_url(d_diag["gradcam_overlay_path"]),
                 "probabilities": {k: round(v, 4) for k, v in d_diag["probabilities"].items()},
+                "low_confidence": d_diag.get("low_confidence", False),
             })
 
         pest_results = [
@@ -135,6 +136,7 @@ class PipelineService:
                 "confidence": round(det["confidence"], 4),
                 "bbox": [round(v, 2) for v in det["bbox"]],
                 "is_unreliable": det["is_unreliable"],
+                "host_verified": det.get("host_verified", False),
                 "warning": det.get("warning"),
             }
             for det in p_intel["detections"]
@@ -149,9 +151,11 @@ class PipelineService:
                 "active_ingredient": r.get("active_ingredient", "N/A"),
                 "dosage_rate": r.get("dosage_rate", "Follow label directions"),
                 "application_guidance": r.get("application_guidance", "Apply as directed"),
-                "waiting_period_days": r.get("waiting_period_days", 0),
+                "waiting_period_days": r.get("waiting_period_days"),
                 "citation_source": r.get("citation_source", ""),
                 "citation_url": r.get("citation_url", ""),
+                "citation_quote": r.get("citation_quote", ""),
+                "verified_on": r.get("verified_on", ""),
             }
             for r in raw["treatment_protocols"]["protocols"]
         ]
@@ -180,6 +184,8 @@ class PipelineService:
             "nutrient_input_was_defaulted": ohi["nutrient_input_was_defaulted"],
             "caveats": ohi["caveats"],
             "penalty_breakdown": ohi["penalty_breakdown"],
+            "healthy_lesion_inconsistency": ohi["healthy_lesion_inconsistency"],
+            "excluded_unverified_pest_detections": ohi["excluded_unverified_pest_detections"],
             "weights_used": ohi["weights_used"],
             "weather_vulnerability": raw["weather_vulnerability"],
             "image_url": media_url(str(leaf_path)) if leaf_path else None,

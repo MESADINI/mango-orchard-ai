@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     MEDIA_DIR: Path = BACKEND_DIR / "media"
     DATABASE_PATH: Path = BACKEND_DIR / "data" / "mango_orchard.db"
     DISEASE_WEIGHTS_PATH: Path = BACKEND_DIR.parent / "ml" / "disease_detection" / "weights" / "disease_classifier.pth"
-    PEST_WEIGHTS_PATH: Path = BACKEND_DIR.parent / "ml" / "pest_detection" / "weights" / "yolov8_best.pt"
+    PEST_WEIGHTS_PATH: Path = BACKEND_DIR.parent / "ml" / "pest_detection" / "weights" / "pest_detector.pt"
 
     # Default orchard location (Krishnagiri mango cluster, Tamil Nadu)
     DEFAULT_LATITUDE: float = 12.5266

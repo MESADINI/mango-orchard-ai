@@ -1,0 +1,50 @@
+# OHI sensitivity analysis
+
+Scenarios: n = 239 (MangoLeafBD test split; deployed classifier predictions; synthetic pest and weather pairing, see ml/severity/ohi_sensitivity.py). Nominal OHI mean 61.1 (SD 18.7, range 14.2–96.6); tiers {'Severe Outbreak / Critical': 65, 'Mild Stress / Warning': 67, 'High Infestation Risk': 86, 'Optimal Health': 21}.
+
+## One-at-a-time
+
+| Perturbation | mean abs. dOHI | p95 | max | Tier changed | Spearman rho |
+|---|---|---|---|---|---|
+| weight:diseasex0.8 | 1.67 | 4.52 | 4.77 | 0.121 | 0.9936 |
+| weight:diseasex0.9 | 0.79 | 2.15 | 2.28 | 0.063 | 0.9984 |
+| weight:diseasex1.1 | 0.73 | 1.97 | 2.08 | 0.021 | 0.9984 |
+| weight:diseasex1.2 | 1.39 | 3.78 | 3.99 | 0.063 | 0.9953 |
+| weight:pestx0.8 | 1.90 | 4.53 | 5.06 | 0.042 | 0.9936 |
+| weight:pestx0.9 | 0.91 | 2.16 | 2.43 | 0.021 | 0.9983 |
+| weight:pestx1.1 | 0.84 | 1.99 | 2.24 | 0.050 | 0.9988 |
+| weight:pestx1.2 | 1.61 | 3.85 | 4.33 | 0.121 | 0.9955 |
+| weight:weatherx0.8 | 0.72 | 1.73 | 4.15 | 0.063 | 0.9994 |
+| weight:weatherx0.9 | 0.35 | 0.85 | 2.01 | 0.029 | 0.9998 |
+| weight:weatherx1.1 | 0.34 | 0.82 | 1.90 | 0.013 | 0.9998 |
+| weight:weatherx1.2 | 0.67 | 1.61 | 3.68 | 0.017 | 0.9993 |
+| virulence:Anthracnosex0.8 | 0.80 | 3.44 | 3.52 | 0.054 | 0.9968 |
+| virulence:Anthracnosex1.2 | 0.80 | 3.43 | 3.51 | 0.025 | 0.9973 |
+| virulence:Bacterial Cankerx0.8 | 0.41 | 3.19 | 3.29 | 0.025 | 0.9982 |
+| virulence:Bacterial Cankerx1.2 | 0.41 | 3.19 | 3.28 | 0.013 | 0.9981 |
+| virulence:Powdery Mildewx0.8 | 0.34 | 2.88 | 2.98 | 0.013 | 0.9984 |
+| virulence:Powdery Mildewx1.2 | 0.34 | 2.88 | 2.98 | 0.021 | 0.9982 |
+| virulence:Sooty Moldx0.8 | 0.19 | 1.64 | 1.71 | 0.004 | 0.9994 |
+| virulence:Sooty Moldx1.2 | 0.19 | 1.63 | 1.72 | 0.000 | 0.9995 |
+| pest_impact:Fruit Flyx0.8 | 0.89 | 5.60 | 10.08 | 0.029 | 0.9944 |
+| pest_impact:Fruit Flyx1.2 | 0.72 | 4.20 | 10.08 | 0.033 | 0.9954 |
+| pest_impact:Mealy Bugx0.8 | 0.36 | 1.87 | 6.53 | 0.025 | 0.9977 |
+| pest_impact:Mealy Bugx1.2 | 0.34 | 1.87 | 6.23 | 0.025 | 0.9983 |
+| pest_impact:Scale Insectx0.8 | 0.51 | 2.33 | 3.11 | 0.075 | 0.9988 |
+| pest_impact:Scale Insectx1.2 | 0.51 | 2.33 | 3.11 | 0.021 | 0.9989 |
+
+## Monte Carlo weights (median [5th, 95th percentile] over draws)
+
+| Distribution | mean abs. dOHI | Tier changed | Spearman rho |
+|---|---|---|---|
+| moderate (c=100) | 1.554 [0.381, 3.586] | 0.075 [0.013, 0.201] | 0.996 [0.980, 1.000] |
+| wide (c=20) | 3.491 [0.928, 7.858] | 0.172 [0.038, 0.335] | 0.983 [0.897, 0.999] |
+| uniform Dirichlet(1,1,1) | 9.982 [3.041, 16.502] | 0.423 [0.146, 0.573] | 0.831 [0.367, 0.988] |
+
+## Component ablation
+
+| Perturbation | mean abs. dOHI | p95 | max | Tier changed | Spearman rho |
+|---|---|---|---|---|---|
+| without disease | 13.67 | 37.04 | 39.14 | 0.481 | 0.7590 |
+| without pest | 14.25 | 34.12 | 38.15 | 0.564 | 0.5988 |
+| without weather | 4.33 | 10.64 | 27.89 | 0.188 | 0.9870 |
