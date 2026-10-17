@@ -1,0 +1,21 @@
+{
+  "amp": true,
+  "arch": "mobilenetv3_large",
+  "augmentation": "strong",
+  "batch_size": 32,
+  "class_weights": true,
+  "cv_fold": 2,
+  "early_stop_fold": 3,
+  "epochs": 30,
+  "img_size": 224,
+  "label_smoothing": 0.1,
+  "lr": 0.0002,
+  "n_train": 1703,
+  "n_val": 280,
+  "patience": 6,
+  "pretrained": true,
+  "seed": 42,
+  "timm_id": "mobilenetv3_large_100.ra_in1k",
+  "warmup_epochs": 2,
+  "weight_decay": 0.05
+}

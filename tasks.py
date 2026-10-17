@@ -44,7 +44,12 @@ def data() -> None:
 
 
 def train_disease() -> None:
-    run(PY, "ml/disease_detection/train.py")
+    for what in ("cv", "final"):
+        run(PY, "ml/disease_detection/experiments.py", what)
+    run(PY, "ml/disease_detection/experiments.py", "ablation", "--arch", "efficientnet_b3")
+    run(PY, "ml/disease_detection/latency.py")
+    run(PY, "ml/disease_detection/analysis.py")
+    run(PY, "ml/disease_detection/deploy.py")
 
 
 def train_pest() -> None:

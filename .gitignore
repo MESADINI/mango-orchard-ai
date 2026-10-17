@@ -112,3 +112,4 @@ ml/pest_detection/weights/
 # Field photos added by the user (labels.csv is committed)
 ml/datasets/field/images/
 ml/datasets/field/pest_images/
+ml/disease_detection/pretrained/

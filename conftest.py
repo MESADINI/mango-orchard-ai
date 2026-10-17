@@ -36,7 +36,7 @@ def random_disease_checkpoint(tmp_path_factory):
     """A real EfficientNet-B3 checkpoint with random weights, in the format written by train.py."""
     torch.manual_seed(0)
     model = timm.create_model("efficientnet_b3", pretrained=False, num_classes=len(DISEASE_CLASSES))
-    path = tmp_path_factory.mktemp("weights") / "efficientnet_b3_best.pth"
+    path = tmp_path_factory.mktemp("weights") / "disease_classifier.pth"
     torch.save({"state_dict": model.state_dict(), "classes": list(DISEASE_CLASSES)}, path)
     return str(path)
 

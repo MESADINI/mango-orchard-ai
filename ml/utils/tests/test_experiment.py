@@ -31,3 +31,13 @@ def test_start_experiment_writes_config_and_env(tmp_path):
 def test_start_experiment_rejects_bad_ids(tmp_path):
     with pytest.raises(ValueError):
         start_experiment("bad:id", {}, results_dir=tmp_path)
+
+
+def test_hardware_info_without_a_visible_gpu(monkeypatch):
+    # e.g. CUDA_VISIBLE_DEVICES="" on a CUDA build: is_available() may be True while no device can be queried
+    import torch
+    from ml.utils.experiment import hardware_info
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "device_count", lambda: 0)
+    info = hardware_info()
+    assert info["cuda_available"] is False and info["gpu"] is None

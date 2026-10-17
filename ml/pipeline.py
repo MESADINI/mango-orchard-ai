@@ -48,7 +48,7 @@ DEFAULT_LONGITUDE = 78.2147
 # Neutral weather assumed only when live data is unavailable (disclosed in caveats)
 FALLBACK_WEATHER = {"temperature_2m": 28.0, "relative_humidity_2m": 70.0, "precipitation": 0.0}
 
-DEFAULT_DISEASE_WEIGHTS = REPO_DIR / "ml" / "disease_detection" / "weights" / "efficientnet_b3_best.pth"
+DEFAULT_DISEASE_WEIGHTS = REPO_DIR / "ml" / "disease_detection" / "weights" / "disease_classifier.pth"
 DEFAULT_PEST_WEIGHTS = REPO_DIR / "ml" / "pest_detection" / "weights" / "yolov8_best.pt"
 DEFAULT_ARTIFACTS_DIR = REPO_DIR / "ml" / "artifacts"
 

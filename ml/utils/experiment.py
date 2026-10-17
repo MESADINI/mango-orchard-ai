@@ -92,7 +92,7 @@ def hardware_info() -> Dict[str, Any]:
     try:
         import torch
         info["torch_cuda_build"] = torch.version.cuda
-        info["cuda_available"] = torch.cuda.is_available()
+        info["cuda_available"] = torch.cuda.is_available() and torch.cuda.device_count() > 0
         if info["cuda_available"]:
             info["gpu"] = torch.cuda.get_device_name(0)
     except ImportError:

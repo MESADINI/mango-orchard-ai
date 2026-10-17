@@ -1,0 +1,184 @@
+{
+  "arch": "efficientnet_b3.ra2_in1k",
+  "checkpoint": "C:\\Users\\thegr\\mango-orchard-ai\\ml\\disease_detection\\weights\\disease_classifier.pth",
+  "external": {
+    "accuracy": 0.11023622047244094,
+    "balanced_accuracy": 0.2014155982905983,
+    "classes_evaluated": [
+      "Anthracnose",
+      "Bacterial Canker",
+      "Powdery Mildew",
+      "Sooty Mold"
+    ],
+    "confusion_matrix": [
+      [
+        16,
+        1,
+        5,
+        2,
+        2
+      ],
+      [
+        146,
+        19,
+        5,
+        10,
+        60
+      ],
+      [
+        8,
+        0,
+        0,
+        1,
+        43
+      ],
+      [
+        4,
+        1,
+        50,
+        7,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "low_confidence_fraction": 0.968503937007874,
+    "macro_auc_ovr": 0.5909869432474579,
+    "macro_f1": 0.11856714213174536,
+    "n": 381,
+    "per_class": {
+      "Anthracnose": {
+        "auc_ovr": 0.6218851570964248,
+        "f1": 0.16,
+        "precision": 0.09195402298850575,
+        "recall": 0.6153846153846154,
+        "support": 26
+      },
+      "Bacterial Canker": {
+        "auc_ovr": 0.6004432624113476,
+        "f1": 0.14559386973180075,
+        "precision": 0.9047619047619048,
+        "recall": 0.07916666666666666,
+        "support": 240
+      },
+      "Healthy": {
+        "auc_ovr": null,
+        "f1": null,
+        "precision": 0.0,
+        "recall": null,
+        "support": 0
+      },
+      "Powdery Mildew": {
+        "auc_ovr": 0.4156534954407295,
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 52
+      },
+      "Sooty Mold": {
+        "auc_ovr": 0.7259658580413297,
+        "f1": 0.1686746987951807,
+        "precision": 0.35,
+        "recall": 0.1111111111111111,
+        "support": 63
+      }
+    }
+  },
+  "ood_threshold": 0.8152007082226095,
+  "sha256": "c6becbe02b0548d6c5caa5f63328e4c905aae57dd89dc27b569d4881179d8ff1",
+  "temperature": 1.0,
+  "test": {
+    "accuracy": 1.0,
+    "balanced_accuracy": 1.0,
+    "classes_evaluated": [
+      "Anthracnose",
+      "Bacterial Canker",
+      "Powdery Mildew",
+      "Sooty Mold",
+      "Healthy"
+    ],
+    "confusion_matrix": [
+      [
+        63,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        31,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        31,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        36,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        78
+      ]
+    ],
+    "low_confidence_fraction": 0.0794979079497908,
+    "macro_auc_ovr": 1.0,
+    "macro_f1": 1.0,
+    "n": 239,
+    "per_class": {
+      "Anthracnose": {
+        "auc_ovr": 1.0,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 63
+      },
+      "Bacterial Canker": {
+        "auc_ovr": 1.0,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 31
+      },
+      "Healthy": {
+        "auc_ovr": 1.0,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 78
+      },
+      "Powdery Mildew": {
+        "auc_ovr": 1.0,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 31
+      },
+      "Sooty Mold": {
+        "auc_ovr": 1.0,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 36
+      }
+    }
+  }
+}

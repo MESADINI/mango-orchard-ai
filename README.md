@@ -130,8 +130,10 @@ Put secrets such as `JWT_SECRET` in `backend/.env`.
    the pest set is flagged proxy data (see `docs/datasets/pest.md`).
 2. **Train**
    ```bash
-   python ml/disease_detection/train.py --epochs 25      # -> ml/disease_detection/weights/efficientnet_b3_best.pth
-   python ml/disease_detection/evaluate.py               # precision / recall / F1 / confusion matrix
+   python tasks.py train-disease     # 3 backbones x 5-fold group CV, final models, 3 ablations, latency, analysis
+                                     # -> results/disease/, deploys the CV-selected model to
+                                     #    ml/disease_detection/weights/disease_classifier.pth
+   python tasks.py eval              # evaluates the deployed checkpoint (test + external set)
    python ml/pest_detection/train.py --data ml/datasets/processed/pest/data.yaml   # -> ml/pest_detection/weights/yolov8_best.pt
    ```
 3. Restart the backend. `/health` should now report `disease_model_trained: true` / `pest_model_trained: true`.
@@ -143,7 +145,7 @@ Checkpoints written by `train.py` embed their class list, so labels always map c
 From the repository root, with the backend virtual environment active:
 
 ```bash
-python -m pytest            # 90 tests: ML pipeline, datasets + data integrity, detectors, Grad-CAM, OHI, API
+python -m pytest            # 112 tests: ML pipeline, datasets + data integrity, detectors, Grad-CAM, OHI, API
 cd frontend && npm run lint && npm run build
 ```
 
