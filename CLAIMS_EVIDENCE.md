@@ -23,6 +23,7 @@ Every claim the README, docs or paper may make, with the file that supports it. 
 | 14 | In 2015–2024 NASA POWER data for Krishnagiri, the NHM bulletin's "High" conditions occur on 0.0 days/year; the pre-audit rules flagged 216.2 days/year | `results/forecaster/backtest.json`, `monthly.md` |
 | 15 | Each treatment is linked and quoted from TNAU / NHM and checked against the CIB&RC banned list (31.07.2026) | `docs/sources.md`, `ml/forecasting/recommendations_db.json`, `ml/forecasting/tests/test_recommendations.py` |
 | 16 | 21 of 26 references verify against Crossref / arXiv; the other 5 are web, software or JSTOR sources checked by hand | `results/paper/references_check.json` |
+| 17 | Median POST /api/analyze latency on CPU is 404 ms for a dual scan (disease 345 ms, pest 99 ms), network weather excluded | `results/api/latency.md`, `latency.json` |
 
 ## Not supported (do not claim)
 | Claim | Why not |
@@ -34,5 +35,6 @@ Every claim the README, docs or paper may make, with the file that supports it. 
 | The OHI agrees with agronomists, or its tiers are calibrated | No expert ratings yet (`docs/annotation/OHI_EXPERT_RATING.md`) |
 | The forecaster predicts outbreaks, or has a lead time or false-alarm rate | No outbreak records; weather-only back-test |
 | Results for ConvNeXt-T, Swin-T, YOLOv8s, RT-DETR, multi-seed ablations, 288 px | Not run (PROGRESS.md, *Deferred, not run*) |
-| API latency or a working Docker deployment | Not yet measured or built (`docs/phases/PHASE_6.md`) |
+| GPU or production-server latency; latency including the weather API | Only in-process CPU latency was measured |
+| A working Docker deployment | The image was not built (`results/docker/build.txt`) |
 | Leaf Spot detection | Not a model class |

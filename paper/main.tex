@@ -210,6 +210,9 @@ and \ohiUniformTierChange{} (median) under uninformative weights.
 ${\ge}95\%$ is common, but never between 25 and 30\,$^\circ$C. The pre-audit rules raised a High alert on
 \fcPrevHighDays{} days per year.
 
+\textbf{System.} A full dual scan (classification, Grad-CAM, lesion segmentation, detection, OHI, storage) takes a
+median of \apiDualMs{}\,ms per request on a laptop CPU (16 threads), excluding the network weather call.
+
 \section{Discussion and Limitations}
 \textbf{Field readiness.} The central finding is negative. A leakage-controlled, near-perfect MangoLeafBD
 benchmark says little about field photographs. Calibrated abstention mitigates the risk of confident errors, but it

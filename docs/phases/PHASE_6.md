@@ -55,6 +55,16 @@
   - the full response with Grad-CAM;
   - the pest detector flagged host-unverified.
 - **API latency:** `backend/benchmark_latency.py` → `results/api/latency.{json,md}`.
-  **Results:** _placeholder, filled from `results/api/latency.md` (measured on an idle machine after training)._
-- **Docker build:** _pending. The Docker daemon was not running in this environment; result to be recorded in
-  `results/docker/build.txt`._
+  **Results** (CPU, in-process client, weather stubbed, 30 requests after 3 warm-up, commit 649aa60, from
+  `results/api/latency.md`):
+
+  | Scan type | Median (ms) | p95 (ms) |
+  |---|---|---|
+  | disease | 345 | 403 |
+  | pest | 99 | 105 |
+  | dual | 404 | 446 |
+
+  The dual scan includes Grad-CAM, severity segmentation, OHI and the database write. The network weather call is
+  excluded.
+- **Docker build:** not run. The Docker daemon was not running in this environment (attempt recorded in
+  `results/docker/build.txt`). Building the image remains an open check.

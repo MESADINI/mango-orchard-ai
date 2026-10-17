@@ -1,0 +1,4 @@
+Docker build check, 2026-10-17T15:22:26Z, commit 649aa60
+Command: docker info
+Result: NOT RUN (image not built). The daemon is unreachable:
+failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.
