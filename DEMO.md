@@ -7,7 +7,7 @@ A 5-minute walkthrough of the Mango Orchard Health app on this Windows laptop (R
 |---|---|
 | Python 3.11 backend venv | `python -m venv backend\venv` then `backend\venv\Scripts\pip install -r backend\requirements-dev.txt`. For the GPU build of torch, see the header of `requirements-ml.txt`. |
 | Frontend (Node 18+) | `cd frontend; npm ci; cd ..` |
-| Model weights | Not in git. Expected at `ml\disease_detection\weights\disease_classifier.pth` and `ml\pest_detection\weights\pest_detector.pt`. Check with `backend\venv\Scripts\python.exe ml\model_registry.py verify` (exit 0 = both match `ml\model_registry.json`). Rebuild with `python tasks.py train-disease` / `train-pest` (see README). |
+| Model weights | Not in git. `powershell -ExecutionPolicy Bypass -File .\scripts\download_weights.ps1` downloads them from the v1.0 release and checks each SHA-256 (`run_demo.ps1` also does this when they are missing). Before the release is published, this needs the GitHub CLI logged in as a collaborator. Files: `ml\disease_detection\weights\disease_classifier.pth`, `ml\pest_detection\weights\pest_detector.pt` (+ `.json`). Check with `backend\venv\Scripts\python.exe ml\model_registry.py verify` (exit 0 = both match `ml\model_registry.json`). Rebuild with `python tasks.py train-disease` / `train-pest` (see README). |
 | Demo account and farm | `backend\venv\Scripts\python.exe demo_data\seed_demo.py` (idempotent) |
 
 ## Start and stop

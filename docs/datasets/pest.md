@@ -90,3 +90,12 @@ proxy sources above.
   detector can tell classes apart by *context* instead of insect appearance (shortcut risk). Report per-source
   results, and test on mango field images (`ml/datasets/field/pest_images/`) before any claim.
 - Fruit-fly instances are much denser per image (many flies per trap photo) than the other classes.
+
+## Rebuild
+
+The images are not in the repository; each source is CC BY 4.0, with attribution to the Roboflow Universe projects
+listed above. Rebuild with a free Roboflow account:
+```bash
+export ROBOFLOW_API_KEY=...        # read from the environment only, never logged or written to disk
+python ml/datasets/build_pest_dataset.py all --include-non-mango    # or: python tasks.py data (all datasets)
+```

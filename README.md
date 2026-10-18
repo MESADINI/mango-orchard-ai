@@ -28,9 +28,38 @@ a pest-trap or canopy photo. The system then:
 > All numbers below come from `results/`; see [CLAIMS_EVIDENCE.md](CLAIMS_EVIDENCE.md) for what can and cannot be
 > claimed.
 
-> **Model weights are not committed.** `python tasks.py data`, `train-disease` and `train-pest` rebuild them. The
-> installed weights must match `ml/model_registry.json` (`GET /api/models`). Without weights the app still runs:
-> disease and pest results are reported as **unavailable**, and no diagnosis is fabricated.
+> **Model weights are not committed.** Download them from the v1.0 release with `scripts/download_weights.ps1`
+> (or `.sh`), which checks each file's SHA-256 against `ml/model_registry.json`; or rebuild them with
+> `python tasks.py data`, `train-disease` and `train-pest`. Without weights the app still runs: disease and pest
+> results are reported as **unavailable**, and no diagnosis is fabricated.
+
+> **Decision support, not a replacement for experts.** Confirm any diagnosis in the field and follow product labels
+> and local extension advice.
+
+## Quick start (Windows)
+
+**Prerequisites:** Git, Python 3.11, Node.js 18+, about 3 GB of disk. An NVIDIA GPU is optional; everything runs on
+CPU.
+
+```powershell
+git clone https://github.com/MESADINI/mango-orchard-ai.git     # until the PR is merged, add: -b enhance/real-data
+cd mango-orchard-ai
+python -m venv backend\venv
+backend\venv\Scripts\python.exe -m pip install -r backend\requirements-dev.txt
+# optional, NVIDIA GPU (CUDA 12.1 wheels):
+# backend\venv\Scripts\python.exe -m pip install --no-deps torch==2.3.0+cu121 torchvision==0.18.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+cd frontend; npm ci; cd ..
+powershell -ExecutionPolicy Bypass -File .\scripts\download_weights.ps1
+powershell -ExecutionPolicy Bypass -File .\run_demo.ps1        # opens http://localhost:3000; stop with .\stop_demo.ps1
+```
+
+- **Demo login:** `grower@mango.ai` / `orchard123` (a demo-only account, created on first start).
+- **Weights before the release is published:** the release assets are visible only to collaborators, so the download
+  script falls back to the GitHub CLI (`gh auth login` first).
+- **What to show:** the 5-minute script, troubleshooting and a screenshot backup are in [DEMO.md](DEMO.md). Sample
+  images and the models' actual outputs on them are in [demo_data/MANIFEST.md](demo_data/MANIFEST.md).
+- **macOS / Linux:** run `bash scripts/download_weights.sh`, then start the backend and frontend as in
+  [Installation](#installation--running-local-development).
 
 ---
 
@@ -103,15 +132,6 @@ mango-orchard-ai/
 - Internet access for the live weather forecast (everything else works offline)
 - Optional: Docker Desktop, for the containerised setup
 - Optional: GTK/Pango libraries for real PDF output (see Troubleshooting) — otherwise reports are served as printable HTML
-
-## Live demo (Windows, one command)
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\run_demo.ps1     # stop with .\stop_demo.ps1
-```
-Demo login: **`grower@mango.ai` / `orchard123`** (demo-only account, created by `demo_data/seed_demo.py`).
-Sample images and the models' actual outputs on them are in [demo_data/MANIFEST.md](demo_data/MANIFEST.md); the
-5-minute script is in [DEMO.md](DEMO.md).
 
 ## Installation & running (local development)
 

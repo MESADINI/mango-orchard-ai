@@ -24,8 +24,14 @@ foreach ($port in 8000, 3000) {
     }
 }
 
-# 2. Model weights must match the registry (the app still runs without them, but shows 'unavailable')
+# 2. Model weights must match the registry; missing ones are downloaded from the GitHub release and verified
+#    (the app still runs without them, but shows 'unavailable')
 & $Python (Join-Path $Root "ml\model_registry.py") verify *> $null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Model weights missing or not matching the registry: downloading (scripts\download_weights.ps1) ..."
+    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "scripts\download_weights.ps1")
+    & $Python (Join-Path $Root "ml\model_registry.py") verify *> $null
+}
 if ($LASTEXITCODE -eq 0) { Write-Host "Model weights: OK (match ml\model_registry.json)" -ForegroundColor Green }
 else { Write-Host "WARNING: model weights missing or not matching the registry; scans will report models as unavailable. See DEMO.md > Troubleshooting." -ForegroundColor Yellow }
 
