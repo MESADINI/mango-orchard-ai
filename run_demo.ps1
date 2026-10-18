@@ -36,7 +36,11 @@ if ($LASTEXITCODE -eq 0) { Write-Host "Model weights: OK (match ml\model_registr
 else { Write-Host "WARNING: model weights missing or not matching the registry; scans will report models as unavailable. See DEMO.md > Troubleshooting." -ForegroundColor Yellow }
 
 # 3. GPU check (CPU fallback is automatic)
+$ErrorActionPreference = "Continue"     # in PowerShell 5.1 a native program's stderr would otherwise throw
 $gpu = & $Python -c "import torch; print(torch.cuda.get_device_name(0) if torch.cuda.is_available() and torch.cuda.device_count() > 0 else '')" 2>$null
+$torchOk = ($LASTEXITCODE -eq 0)
+$ErrorActionPreference = "Stop"
+if (-not $torchOk) { Fail "PyTorch is not installed in backend\venv. Run: backend\venv\Scripts\python.exe -m pip install -r backend\requirements-dev.txt" }
 if ($gpu) { Write-Host "GPU: $gpu" -ForegroundColor Green }
 else { Write-Host "GPU not visible: running on CPU (scans take a little longer)." -ForegroundColor Yellow }
 

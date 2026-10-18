@@ -39,7 +39,8 @@ a pest-trap or canopy photo. The system then:
 ## Quick start (Windows)
 
 **Prerequisites:** Git, Python 3.11, Node.js 18+, about 3 GB of disk. An NVIDIA GPU is optional; everything runs on
-CPU.
+CPU. Clone into a short path such as `C:\src`: deep folders exceed Windows' 260-character path limit and break
+`pip install`.
 
 ```powershell
 git clone https://github.com/MESADINI/mango-orchard-ai.git     # until the PR is merged, add: -b enhance/real-data
