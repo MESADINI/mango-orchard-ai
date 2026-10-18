@@ -57,3 +57,17 @@ def test_alert_level_is_the_highest_known_risk():
            "hours_rh95_t25_30": None, "precipitation_mm": 0.0}
     a = assess_day(day)
     assert a["risks"]["anthracnose"] == "Unknown" and a["alert_level"] == "High"
+
+
+def test_forecast_fetch_retries_then_uses_recent_cache_only(monkeypatch):
+    from ml.forecasting import weather
+    monkeypatch.setattr(weather, "_forecast_cache", {})
+    calls = []
+    responses = iter([None, {"daily": {}}, None, None])           # retry succeeds; later both attempts fail
+    monkeypatch.setattr(weather, "_get_json", lambda url, timeout: calls.append(url) or next(responses))
+    clock = iter([100.0, 200.0, 2000.0])
+    monkeypatch.setattr(weather.time, "monotonic", lambda: next(clock))
+    assert weather.fetch_open_meteo_forecast(12.5, 78.2) == {"daily": {}} and len(calls) == 2
+    assert weather.fetch_open_meteo_forecast(12.5, 78.2) == {"daily": {}}   # 100 s old: reused
+    monkeypatch.setattr(weather, "_get_json", lambda url, timeout: None)
+    assert weather.fetch_open_meteo_forecast(12.5, 78.2) is None             # 1900 s old: too old, not reused

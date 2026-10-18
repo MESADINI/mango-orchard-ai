@@ -34,8 +34,30 @@ def _get_json(url: str, timeout: float) -> Optional[Dict[str, Any]]:
     return None
 
 
+# Last successful forecast per location: a transient network error then reuses data at most this old instead of
+# dropping the weather component; with no successful fetch in the window the caller still gets None.
+FORECAST_CACHE_SECONDS = 600
+_forecast_cache: Dict[tuple, tuple] = {}
+
+
 def fetch_open_meteo_forecast(latitude: float, longitude: float, timeout: float = 10.0) -> Optional[Dict[str, Any]]:
-    """Fetches the 7-day weather forecast from Open-Meteo. Returns None if the service is unreachable."""
+    """Fetches the 7-day weather forecast from Open-Meteo, retrying once. Returns None if the service is unreachable
+    and no forecast for this location was fetched in the last FORECAST_CACHE_SECONDS."""
+    key = (round(latitude, 3), round(longitude, 3))
+    url = _forecast_url(latitude, longitude)
+    data = _get_json(url, timeout) or _get_json(url, timeout)
+    now = time.monotonic()
+    if data is not None:
+        _forecast_cache[key] = (now, data)
+        return data
+    cached = _forecast_cache.get(key)
+    if cached and now - cached[0] <= FORECAST_CACHE_SECONDS:
+        logger.warning("Open-Meteo unreachable; using the forecast fetched %.0f s ago", now - cached[0])
+        return cached[1]
+    return None
+
+
+def _forecast_url(latitude: float, longitude: float) -> str:
     params = urllib.parse.urlencode({
         "latitude": latitude,
         "longitude": longitude,
@@ -45,7 +67,7 @@ def fetch_open_meteo_forecast(latitude: float, longitude: float, timeout: float 
         "timezone": "auto",
         "forecast_days": 7,
     })
-    return _get_json(f"{OPEN_METEO_BASE_URL}/forecast?{params}", timeout)
+    return f"{OPEN_METEO_BASE_URL}/forecast?{params}"
 
 
 def archive_url(latitude: float, longitude: float, start_date: str, end_date: str,

@@ -113,3 +113,7 @@ ml/pest_detection/weights/
 ml/datasets/field/images/
 ml/datasets/field/pest_images/
 ml/disease_detection/pretrained/
+
+# Live demo (run_demo.ps1)
+logs/
+.demo_pids.json

@@ -68,7 +68,9 @@ async def get_weather_forecast(
     """
     data = await run_in_threadpool(fetch_open_meteo_forecast, latitude, longitude)
     if not data or "daily" not in data:
-        raise HTTPException(status_code=503, detail="Weather service (Open-Meteo) is currently unreachable.")
+        raise HTTPException(status_code=503, detail="Weather forecast unavailable: Open-Meteo could not be reached "
+                                                    "(no internet connection?). Scans still work; the weather "
+                                                    "component is left out of the OHI and this is shown on each scan.")
 
     current = data.get("current") or {}
     days = []
