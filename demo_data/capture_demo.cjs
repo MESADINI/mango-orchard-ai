@@ -113,8 +113,15 @@ async function main() {
   await ask('ஆந்த்ராக்னோஸ் மருந்தளவு என்ன?')
   await shot('10_chatbot_tamil', false)
 
+  const video = page.video()
   await context.close()
   await browser.close()
+  if (video) {   // keep the main-tab recording under a fixed name; drop the short report-tab clip
+    const main = await video.path()
+    fs.renameSync(main, path.join(DIR, 'walkthrough.webm'))
+    for (const f of fs.readdirSync(DIR)) if (f.endsWith('.webm') && f !== 'walkthrough.webm') fs.unlinkSync(path.join(DIR, f))
+    console.log('saved walkthrough.webm')
+  }
   console.log('scan seconds:', JSON.stringify(timings))
   console.log(problems.length ? `PROBLEMS (${problems.length}):\n  ` + problems.join('\n  ') : 'no console errors or failed requests')
   process.exit(problems.length ? 2 : 0)
