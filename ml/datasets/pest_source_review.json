@@ -1,0 +1,20 @@
+{
+  "fruit_fly": {
+    "host": "other:trap",
+    "reviewed_by": "Claude (AI assistant), contact sheet results/data/pest_review/fruit_fly.jpg + label counts",
+    "date": "2026-10-17",
+    "notes": "Class 'Fruit fly': grayscale photos of flies on white trap/petri surfaces; no host plant visible; species not identifiable from the images (not confirmed as Bactrocera). Class 'Pest' = ants, snails, bees, grasshoppers etc. (unrelated) -> dropped. Grayscale only: colour field images are a domain shift."
+  },
+  "mealy_bug": {
+    "host": "other:grape",
+    "reviewed_by": "Claude (AI assistant), contact sheet results/data/pest_review/mealy_bug.jpg + label counts",
+    "date": "2026-10-17",
+    "notes": "Workspace 'grape'; classes Grape/Leaf/Mealybug; grape bunches, vine bark, and web/stock photos (watermarks: iStock, shutterstock, dreamstime) of mealybugs on assorted plants. Not mango; not Drosicha mangiferae. 'Grape' and 'Leaf' boxes dropped."
+  },
+  "scale_insect": {
+    "host": "other:coffee",
+    "reviewed_by": "Claude (AI assistant), contact sheet results/data/pest_review/scale_insect.jpg + label counts",
+    "date": "2026-10-17",
+    "notes": "Hemispherical scale (Saissetia coffeae) on coffee leaves; second class 'Coffee Leaf Rust' confirms coffee host -> dropped. Polygon labels converted to boxes."
+  }
+}

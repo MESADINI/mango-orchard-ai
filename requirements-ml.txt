@@ -1,0 +1,13 @@
+# Direct dependencies for ML research work (data preparation, training, evaluation, figures).
+# Exact transitive versions are pinned in requirements-ml.lock (generated with `pip freeze`).
+# Install:  pip install -r requirements-ml.lock
+# GPU (used here, RTX 3050), install first:
+#   pip install --no-deps torch==2.3.0+cu121 torchvision==0.18.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+-r backend/requirements.txt
+huggingface_hub==0.23.4   # 2.x removes EntryNotFoundError, which timm 1.0.3 imports
+ImageHash==4.3.2
+matplotlib==3.11.2
+pandas==3.0.6
+pyarrow==17.0.0           # reads the MangoLeafBD parquet; 18+ requires numpy 2 (torch 2.3 needs numpy 1.x)
+scipy==1.17.1
+seaborn==0.13.2

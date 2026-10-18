@@ -1,9 +1,11 @@
 """
 AI Mango Orchard Health & Pest Intelligence — Pest Detection Inference
-Architecture: YOLOv8 (Ultralytics)
-Enforces UNRELIABLE_CLASSES detection flags for Mango Hopper and Stem Borer.
+Architecture: YOLO (Ultralytics); the deployed model is chosen by ml/pest_detection/train.py.
+Enforces UNRELIABLE_CLASSES detection flags for Mango Hopper and Stem Borer, and marks every class whose training
+data did not come from mango (ml/datasets/pest_source_review.json) as host_verified = False.
 """
 
+import json
 import logging
 from pathlib import Path
 from typing import List, Dict, Any, Union, Optional
@@ -24,30 +26,57 @@ CONFIRMED_CLASSES = [
 ]
 
 UNRELIABLE_WARNING = "Sample size < 100 images; detection is marked unverified"
-DEFAULT_WEIGHTS_PATH = Path(__file__).resolve().parent / "weights" / "yolov8_best.pt"
+HOST_UNVERIFIED_WARNING = ("Trained on images from other host plants or traps, not mango; detection is marked "
+                           "unverified")
+DEFAULT_WEIGHTS_PATH = Path(__file__).resolve().parent / "weights" / "pest_detector.pt"
 
 
-def build_detection(pest_name: str, confidence: float, bbox: List[float]) -> Dict[str, Any]:
-    """Builds a detection record, applying the Rule 3 reliability flag by class name."""
+def load_host_verified(weights_path: Union[str, Path]) -> Dict[str, bool]:
+    """host_verified per class from the metadata written next to the weights at deployment; {} if absent."""
+    meta = Path(weights_path).with_suffix(".json")
+    if not meta.is_file():
+        return {}
+    return {str(k): bool(v) for k, v in json.loads(meta.read_text(encoding="utf-8")).get("host_verified", {}).items()}
+
+
+def build_detection(pest_name: str, confidence: float, bbox: List[float],
+                    host_verified: bool = False) -> Dict[str, Any]:
+    """Builds a detection record with the Rule 3 reliability flag (by class name) and the host-plant flag.
+    A class is host-verified only when the deployment metadata says so; the default is False."""
     is_unreliable = pest_name in UNRELIABLE_CLASSES
+    warning = UNRELIABLE_WARNING if is_unreliable else (None if host_verified else HOST_UNVERIFIED_WARNING)
     return {
         "pest_name": pest_name,
         "confidence": round(float(confidence), 4),
         "bbox": [float(v) for v in bbox],
         "is_unreliable": is_unreliable,
-        "warning": UNRELIABLE_WARNING if is_unreliable else None
+        "host_verified": bool(host_verified),
+        "warning": warning,
     }
 
 
+def select_yolo_device(device: Optional[str] = None) -> str:
+    """Device string for Ultralytics. Its own auto-selection queries CUDA whenever torch is a CUDA build, which
+    fails when no device is visible (e.g. CUDA_VISIBLE_DEVICES=""), so a visible device is required explicitly."""
+    if device is not None:
+        return "0" if device == "cuda" else device
+    import torch
+    if torch.cuda.is_available() and torch.cuda.device_count() > 0:
+        return "0"
+    return "cpu"
+
+
 class PestDetector:
-    def __init__(self, weights_path: Optional[str] = None):
+    def __init__(self, weights_path: Optional[str] = None, device: Optional[str] = None):
         self.weights_path = str(weights_path) if weights_path else str(DEFAULT_WEIGHTS_PATH)
+        self.device = select_yolo_device(device)
         self.model = None
+        self.host_verified = load_host_verified(self.weights_path)
         if Path(self.weights_path).is_file():
             try:
                 from ultralytics import YOLO
                 self.model = YOLO(self.weights_path)
-                logger.info("Loaded YOLOv8 weights from %s", self.weights_path)
+                logger.info("Loaded YOLO weights from %s", self.weights_path)
             except Exception as e:
                 logger.error("Failed to load YOLO model from %s: %s", self.weights_path, e)
         else:
@@ -59,6 +88,12 @@ class PestDetector:
     @property
     def is_trained(self) -> bool:
         return self.model is not None
+
+    @property
+    def has_host_verified_classes(self) -> bool:
+        """True if at least one class was trained on mango images. Without one, "no pest found" is not evidence
+        of a pest-free mango tree, so the pipeline excludes the pest component from the OHI."""
+        return any(self.host_verified.get(c, False) for c in CONFIRMED_CLASSES)
 
     def predict(
         self,
@@ -80,13 +115,14 @@ class PestDetector:
         if self.model is None:
             return detections
 
-        results = self.model(pil_image, conf=conf_threshold, verbose=False)
+        results = self.model(pil_image, conf=conf_threshold, device=self.device, verbose=False)
         for r in results:
             for box in r.boxes:
                 cls_id = int(box.cls[0].item())
                 cls_name = r.names.get(cls_id, f"class_{cls_id}")
                 detections.append(build_detection(
-                    cls_name, box.conf[0].item(), box.xyxy[0].tolist()
+                    cls_name, box.conf[0].item(), box.xyxy[0].tolist(),
+                    host_verified=self.host_verified.get(cls_name, False),
                 ))
         return detections
 
@@ -114,7 +150,7 @@ class PestDetector:
             x1, y1, x2, y2 = det["bbox"]
             cls_name = det["pest_name"]
             conf = det["confidence"]
-            is_unreliable = det.get("is_unreliable", False)
+            is_unreliable = det.get("is_unreliable", False) or not det.get("host_verified", True)
 
             if is_unreliable:
                 box_color = (234, 88, 12)    # Amber / Orange-600

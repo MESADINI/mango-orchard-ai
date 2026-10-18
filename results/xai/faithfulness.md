@@ -1,0 +1,10 @@
+# Grad-CAM faithfulness
+
+Deployed classifier, MangoLeafBD test split (n = 239), target = predicted class, 20 steps, removed pixels filled with a blurred copy. Lower deletion AUC / higher insertion AUC = more faithful. Wilcoxon signed-rank over images.
+
+| Curve | Grad-CAM | Random | Centre prior | Grad-CAM better than random (p) | Grad-CAM better than centre (p) |
+|---|---|---|---|---|---|
+| deletion AUC | 0.606 ± 0.177 | 0.286 ± 0.114 | 0.629 ± 0.159 | 0.08 (2e-36) | 0.59 (0.00068) |
+| insertion AUC | 0.821 ± 0.100 | 0.285 ± 0.114 | 0.807 ± 0.103 | 1.00 (5.9e-41) | 0.62 (0.00014) |
+
+Pointing game: not run: 0 annotated lesion masks, 50 required (docs/annotation/SEVERITY_MASKS.md)

@@ -12,9 +12,12 @@ DB_PATH = os.path.join(os.path.dirname(__file__), "recommendations_db.json")
 class RecommendationEngine:
     def __init__(self, db_path: str = DB_PATH):
         self.db = {}
+        self.meta = {}
         if os.path.exists(db_path):
             with open(db_path, "r", encoding="utf-8") as f:
-                self.db = json.load(f)
+                data = json.load(f)
+            self.meta = data.get("_meta", {})
+            self.db = {k: v for k, v in data.items() if not k.startswith("_")}
 
     def get_recommendations_for_condition(self, condition_name: str) -> List[Dict[str, Any]]:
         """Returns verified ICAR/TNAU recommendations for a given disease or pest (copies, tagged with the condition)."""

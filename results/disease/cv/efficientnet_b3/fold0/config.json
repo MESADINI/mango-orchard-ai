@@ -1,0 +1,21 @@
+{
+  "amp": true,
+  "arch": "efficientnet_b3",
+  "augmentation": "strong",
+  "batch_size": 32,
+  "class_weights": true,
+  "cv_fold": 0,
+  "early_stop_fold": 1,
+  "epochs": 30,
+  "img_size": 224,
+  "label_smoothing": 0.1,
+  "lr": 0.0002,
+  "n_train": 1720,
+  "n_val": 248,
+  "patience": 6,
+  "pretrained": true,
+  "seed": 42,
+  "timm_id": "efficientnet_b3.ra2_in1k",
+  "warmup_epochs": 2,
+  "weight_decay": 0.05
+}

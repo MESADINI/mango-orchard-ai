@@ -39,6 +39,10 @@ def _rows(rows: List[List[Any]]) -> str:
     return "".join("<tr>" + "".join(f"<td>{cell}</td>" for cell in row) + "</tr>" for row in rows)
 
 
+def _num(value) -> str:
+    """Formats a penalty value; None means the component was not assessed."""
+    return "not assessed" if value is None else f"{value:.2f}"
+
 def _empty_row(message: str, colspan: int) -> str:
     return f'<tr><td colspan="{colspan}" class="muted">{escape(message)}</td></tr>'
 
@@ -75,7 +79,8 @@ def render_report_html(scan: Dict[str, Any]) -> str:
             e(r["treatment_type"]),
             e(r["product_name"]),
             f"{e(r['dosage_rate'])}. {e(r['application_guidance'])} "
-            f"(Waiting period: {int(r.get('waiting_period_days', 0))} days)",
+            + (f"(Last spray at least {int(r['waiting_period_days'])} days before harvest)"
+             if r.get("waiting_period_days") is not None else "(Check the product label for the pre-harvest interval)"),
             f'<span class="citation">{e(r["citation_source"])}</span>',
         ]
         for r in scan.get("recommendations", [])
@@ -84,19 +89,23 @@ def render_report_html(scan: Dict[str, Any]) -> str:
     penalties = scan.get("penalty_breakdown", {})
     weights = scan.get("weights_used", {})
     penalty_html = _rows([
-        ["Disease severity (S<sub>d</sub>)", f"{penalties.get('disease_severity_penalty', 0):.2f}", f"{weights.get('disease', 0):.2f}"],
-        ["Pest pressure (P<sub>p</sub>)", f"{penalties.get('pest_pressure_penalty', 0):.2f}", f"{weights.get('pest', 0):.2f}"],
-        ["Weather vulnerability (W<sub>v</sub>)", f"{penalties.get('weather_vulnerability_index', 0):.2f}", f"{weights.get('weather', 0):.2f}"],
-        ["Nutrient deficiency (N<sub>d</sub>)", f"{penalties.get('nutrient_penalty', 0):.2f}", f"{weights.get('nutrient', 0):.2f}"],
-        ["<strong>Weighted total penalty</strong>", f"<strong>{penalties.get('weighted_total_penalty', 0):.2f}</strong>", ""],
+        ["Disease severity (S<sub>d</sub>)", _num(penalties.get("disease_severity_penalty")), f"{weights.get('disease', 0):.2f}"],
+        ["Pest pressure (P<sub>p</sub>)", _num(penalties.get("pest_pressure_penalty")), f"{weights.get('pest', 0):.2f}"],
+        ["Weather vulnerability (W<sub>v</sub>)", _num(penalties.get("weather_vulnerability_index")), f"{weights.get('weather', 0):.2f}"],
+        ["Nutrient deficiency (N<sub>d</sub>)", _num(penalties.get("nutrient_penalty")), f"{weights.get('nutrient', 0):.2f}"],
+        ["<strong>Weighted total penalty</strong>", f"<strong>{_num(penalties.get('weighted_total_penalty'))}</strong>", ""],
     ])
 
     weather = scan.get("weather_vulnerability", {})
-    weather_line = (
-        f"{weather.get('current_temperature_c', 0):.1f}°C, {weather.get('current_relative_humidity_pct', 0):.0f}% RH, "
-        f"{weather.get('current_precipitation_mm', 0):.1f} mm rain "
-        f"({'live Open-Meteo data' if weather.get('live_data') else 'defaults - live data unavailable'})"
-    )
+    if weather.get("live_data"):
+        weather_line = (
+            f"{weather['current_temperature_c']:.1f}°C, {weather['current_relative_humidity_pct']:.0f}% RH, "
+            f"{weather['current_precipitation_mm']:.1f} mm rain (live Open-Meteo data)"
+        )
+    else:
+        weather_line = "Live weather data unavailable; the weather component was not included."
+    score = scan.get("ohi_score")
+    score_text = "—" if score is None else f"{score:.1f} / 100"
 
     caveats_html = "".join(f'<div class="caveat">{e(c)}</div>' for c in scan.get("caveats", []))
     color = e(scan.get("badge_color", "#1e293b"))
@@ -120,7 +129,7 @@ def render_report_html(scan: Dict[str, Any]) -> str:
 
 <div class="card">
   <div class="muted" style="font-weight:600;">ORCHARD HEALTH INDEX (OHI)</div>
-  <div class="score" style="color:{color};">{scan['ohi_score']:.1f} / 100</div>
+  <div class="score" style="color:{color};">{score_text}</div>
   <span class="badge" style="color:{color};">{e(scan['health_status'])}</span>
   {partial_note}
   <div class="muted" style="margin-top:6px;">Location: {scan.get('latitude', 0):.4f}, {scan.get('longitude', 0):.4f}

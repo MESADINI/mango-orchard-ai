@@ -108,3 +108,12 @@ ml/artifacts/
 ml/*/artifacts/
 ml/disease_detection/weights/
 ml/pest_detection/weights/
+
+# Field photos added by the user (labels.csv is committed)
+ml/datasets/field/images/
+ml/datasets/field/pest_images/
+ml/disease_detection/pretrained/
+
+# Live demo (run_demo.ps1)
+logs/
+.demo_pids.json

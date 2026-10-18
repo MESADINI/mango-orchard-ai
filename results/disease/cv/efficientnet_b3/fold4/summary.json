@@ -1,0 +1,15 @@
+{
+  "arch": "efficientnet_b3",
+  "best_epoch": 12,
+  "best_val_macro_f1": 1.0,
+  "checkpoint_bytes": 43336944,
+  "checkpoint_sha256": "881d707b31eba37a02b4c784ee64310f52ec3bd989d5c5182719a229bb7b321b",
+  "epochs_run": 18,
+  "eval_sets": {
+    "val": 279,
+    "heldout": 310
+  },
+  "n_params": 10703917,
+  "train_seconds": 325.7,
+  "eval_precision": "fp32"
+}

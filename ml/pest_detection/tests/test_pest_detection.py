@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image
 
 from ml.pest_detection.inference import (
-    CONFIRMED_CLASSES, UNRELIABLE_CLASSES, PestDetector, build_detection,
+    CONFIRMED_CLASSES, UNRELIABLE_CLASSES, PestDetector, build_detection, load_host_verified,
 )
 
 SAMPLE_IMG = Image.new("RGB", (640, 640), color=(100, 140, 80))
@@ -26,7 +26,7 @@ def test_build_detection_flags_unreliable_classes():
         det = build_detection(name, 0.9, [1, 2, 3, 4])
         assert det["is_unreliable"] is True
         assert "Sample size < 100" in det["warning"]
-    det = build_detection("Fruit Fly", 0.9, [1, 2, 3, 4])
+    det = build_detection("Fruit Fly", 0.9, [1, 2, 3, 4], host_verified=True)
     assert det["is_unreliable"] is False and det["warning"] is None
 
 
@@ -70,3 +70,36 @@ def test_draw_detections_overlay(tmp_path):
     assert Path(out_path).is_file()
     # Boxes were actually drawn: the annotated image differs from the input
     assert not np.array_equal(annotated, np.array(SAMPLE_IMG))
+
+
+def test_host_verified_defaults_to_false():
+    det = build_detection("Fruit Fly", 0.9, [1, 2, 3, 4])
+    assert det["host_verified"] is False and "not mango" in det["warning"]
+    det = build_detection("Fruit Fly", 0.9, [1, 2, 3, 4], host_verified=True)
+    assert det["host_verified"] is True and det["warning"] is None
+
+
+def test_host_verified_is_read_from_deployment_metadata(tmp_path, fake_yolo):
+    import json
+    weights = tmp_path / "pest_detector.pt"
+    (tmp_path / "pest_detector.json").write_text(json.dumps(
+        {"host_verified": {"Fruit Fly": False, "Mealy Bug": True, "Scale Insect": False}}))
+    assert load_host_verified(weights) == {"Fruit Fly": False, "Mealy Bug": True, "Scale Insect": False}
+    assert load_host_verified(tmp_path / "other.pt") == {}
+    detector = PestDetector(weights_path=str(weights))
+    assert detector.has_host_verified_classes is True
+    detector.model = fake_yolo([(0, 0.9, [0, 0, 9, 9]), (1, 0.9, [0, 0, 9, 9])])
+    assert [d["host_verified"] for d in detector.predict(SAMPLE_IMG)] == [False, True]
+    detector.host_verified = {"Fruit Fly": False}
+    assert detector.has_host_verified_classes is False
+
+
+def test_yolo_device_requires_a_visible_cuda_device(monkeypatch):
+    import torch
+    from ml.pest_detection.inference import select_yolo_device
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "device_count", lambda: 0)
+    assert select_yolo_device() == "cpu"
+    monkeypatch.setattr(torch.cuda, "device_count", lambda: 1)
+    assert select_yolo_device() == "0"
+    assert select_yolo_device("cuda") == "0" and select_yolo_device("cpu") == "cpu"

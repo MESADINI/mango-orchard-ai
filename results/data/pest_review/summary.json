@@ -1,0 +1,59 @@
+{
+  "fruit_fly": {
+    "boxes_per_source_class": {
+      "Fruit fly": 9662,
+      "Pest": 6172
+    },
+    "contact_sheet": "results/data/pest_review/fruit_fly.jpg (red = class 0, blue = other classes)",
+    "images_per_source_class": {
+      "Fruit fly": 1084,
+      "Pest": 3673
+    },
+    "images_without_labels": 40,
+    "n_images": 4797,
+    "roboflow": "school-vakkx/mango-fruit-fly/v4",
+    "source_class_names": [
+      "Fruit fly",
+      "Pest"
+    ]
+  },
+  "mealy_bug": {
+    "boxes_per_source_class": {
+      "Grape": 51,
+      "Leaf": 18,
+      "Mealybug": 2532
+    },
+    "contact_sheet": "results/data/pest_review/mealy_bug.jpg (red = class 0, blue = other classes)",
+    "images_per_source_class": {
+      "Grape": 38,
+      "Leaf": 12,
+      "Mealybug": 599
+    },
+    "images_without_labels": 254,
+    "n_images": 881,
+    "roboflow": "grape-n5yol/mealybug-b8wfq/v8",
+    "source_class_names": [
+      "Grape",
+      "Leaf",
+      "Mealybug"
+    ]
+  },
+  "scale_insect": {
+    "boxes_per_source_class": {
+      "Coffee Leaf Rust": 336,
+      "Hemispherical Scale Insect": 1579
+    },
+    "contact_sheet": "results/data/pest_review/scale_insect.jpg (red = class 0, blue = other classes)",
+    "images_per_source_class": {
+      "Coffee Leaf Rust": 208,
+      "Hemispherical Scale Insect": 798
+    },
+    "images_without_labels": 1,
+    "n_images": 809,
+    "roboflow": "ralph-matthew-r-aquino/hemispherical-scale-insect/v1",
+    "source_class_names": [
+      "Coffee Leaf Rust",
+      "Hemispherical Scale Insect"
+    ]
+  }
+}

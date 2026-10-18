@@ -34,7 +34,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="AI Mango Orchard Health & Pest Intelligence API",
     description="Backend API for mango leaf disease detection, hook-based Grad-CAM explainability, YOLOv8 pest "
-                "detection, deterministic OHI scoring, and ICAR/TNAU-cited recommendations.",
+                "detection, deterministic OHI scoring, and TNAU/NHM-cited recommendations.",
     version=settings.VERSION,
     lifespan=lifespan
 )
@@ -59,6 +59,14 @@ app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(farm.router, prefix="/api/farm", tags=["Farm Management"])
 
 
+@app.get("/api/models", tags=["Models"])
+def model_registry():
+    """Deployed models from ml/model_registry.json: version, classes, calibration, and whether the installed
+    weights match the registered SHA-256 ("ok" / "missing" / "sha_mismatch")."""
+    from ml.model_registry import status
+    return status()
+
+
 @app.get("/health")
 def health_check():
     return {
@@ -68,11 +76,11 @@ def health_check():
         "models": {
             "disease_detection": "EfficientNet-B3 (PyTorch / timm)",
             "explainability": "Hook-based Grad-CAM",
-            "pest_detection": "YOLOv8 (Ultralytics)",
+            "pest_detection": "YOLO (Ultralytics); details at /api/models",
             **pipeline_service.model_status(),
             "rules_enforced": [
                 "Rule 1: Deterministic OHI",
-                "Rule 2: ICAR/TNAU Citations",
+                "Rule 2: Cited treatments (TNAU / NHM)",
                 "Rule 3: Unreliable Class Flagging",
                 "Rule 4: Disclosed Nutrient Default"
             ]

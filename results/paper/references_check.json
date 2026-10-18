@@ -1,0 +1,220 @@
+{
+  "checked_utc": "2026-10-17T14:15:52+00:00",
+  "bib": "paper\\refs.bib",
+  "entries": [
+    {
+      "key": "ahmed2023mangoleafbd",
+      "doi": "10.1016/j.dib.2023.108941",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "MangoLeafBD: A comprehensive image dataset to classify diseased and healthy mango leaves",
+      "registry_year": 2023,
+      "bib_year": "2023"
+    },
+    {
+      "key": "tan2019efficientnet",
+      "eprint": "1905.11946",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks",
+      "registry_year": 2019,
+      "bib_year": "2019"
+    },
+    {
+      "key": "he2016resnet",
+      "doi": "10.1109/CVPR.2016.90",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Deep Residual Learning for Image Recognition",
+      "registry_year": 2016,
+      "bib_year": "2016"
+    },
+    {
+      "key": "howard2019mobilenetv3",
+      "doi": "10.1109/ICCV.2019.00140",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Searching for MobileNetV3",
+      "registry_year": 2019,
+      "bib_year": "2019"
+    },
+    {
+      "key": "selvaraju2017gradcam",
+      "doi": "10.1109/ICCV.2017.74",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization",
+      "registry_year": 2017,
+      "bib_year": "2017"
+    },
+    {
+      "key": "guo2017calibration",
+      "eprint": "1706.04599",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "On Calibration of Modern Neural Networks",
+      "registry_year": 2017,
+      "bib_year": "2017"
+    },
+    {
+      "key": "hendrycks2017baseline",
+      "eprint": "1610.02136",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "A Baseline for Detecting Misclassified and Out-of-Distribution Examples in Neural Networks",
+      "registry_year": 2016,
+      "bib_year": "2017"
+    },
+    {
+      "key": "petsiuk2018rise",
+      "eprint": "1806.07421",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "RISE: Randomized Input Sampling for Explanation of Black-box Models",
+      "registry_year": 2018,
+      "bib_year": "2018"
+    },
+    {
+      "key": "hooker2019roar",
+      "eprint": "1806.10758",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "A Benchmark for Interpretability Methods in Deep Neural Networks",
+      "registry_year": 2018,
+      "bib_year": "2019"
+    },
+    {
+      "key": "zhang2018excitation",
+      "doi": "10.1007/s11263-017-1059-x",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Top-Down Neural Attention by Excitation Backprop",
+      "registry_year": 2018,
+      "bib_year": "2018"
+    },
+    {
+      "key": "redmon2016yolo",
+      "doi": "10.1109/CVPR.2016.91",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "You Only Look Once: Unified, Real-Time Object Detection",
+      "registry_year": 2016,
+      "bib_year": "2016"
+    },
+    {
+      "key": "jocher2023ultralytics",
+      "status": "not machine-verified",
+      "url": "\\url{https://github.com/ultralytics/ultralytics}"
+    },
+    {
+      "key": "lin2014coco",
+      "doi": "10.1007/978-3-319-10602-1_48",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Microsoft COCO: Common Objects in Context",
+      "registry_year": 2014,
+      "bib_year": "2014"
+    },
+    {
+      "key": "kapoor2023leakage",
+      "doi": "10.1016/j.patter.2023.100804",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Leakage and the reproducibility crisis in machine-learning-based science",
+      "registry_year": 2023,
+      "bib_year": "2023"
+    },
+    {
+      "key": "dietterich1998tests",
+      "doi": "10.1162/089976698300017197",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Approximate Statistical Tests for Comparing Supervised Classification Learning Algorithms",
+      "registry_year": 1998,
+      "bib_year": "1998"
+    },
+    {
+      "key": "holm1979",
+      "status": "not machine-verified",
+      "url": null
+    },
+    {
+      "key": "saltelli2008gsa",
+      "doi": "10.1002/9780470725184",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Global Sensitivity Analysis. The Primer",
+      "registry_year": 2007,
+      "bib_year": "2008"
+    },
+    {
+      "key": "mohanty2016plantvillage",
+      "doi": "10.3389/fpls.2016.01419",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Using Deep Learning for Image-Based Plant Disease Detection",
+      "registry_year": 2016,
+      "bib_year": "2016"
+    },
+    {
+      "key": "ferentinos2018deep",
+      "doi": "10.1016/j.compag.2018.01.009",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Deep learning models for plant disease detection and diagnosis",
+      "registry_year": 2018,
+      "bib_year": "2018"
+    },
+    {
+      "key": "gelaro2017merra2",
+      "doi": "10.1175/JCLI-D-16-0758.1",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "The Modern-Era Retrospective Analysis for Research and Applications, Version 2 (MERRA-2)",
+      "registry_year": 2017,
+      "bib_year": "2017"
+    },
+    {
+      "key": "oquab2024dinov2",
+      "eprint": "2304.07193",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "DINOv2: Learning Robust Visual Features without Supervision",
+      "registry_year": 2023,
+      "bib_year": "2024"
+    },
+    {
+      "key": "lowe2004sift",
+      "doi": "10.1023/B:VISI.0000029664.99615.94",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Distinctive Image Features from Scale-Invariant Keypoints",
+      "registry_year": 2004,
+      "bib_year": "2004"
+    },
+    {
+      "key": "fischler1981ransac",
+      "doi": "10.1145/358669.358692",
+      "status": "ok",
+      "title_overlap": 1.0,
+      "registry_title": "Random sample consensus a paradigm for model fitting with applications to image analysis and automated cartography",
+      "registry_year": 1981,
+      "bib_year": "1981"
+    },
+    {
+      "key": "nhm2012ipmmango",
+      "status": "not machine-verified",
+      "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-Mango-Revised-Sept2011.pdf"
+    },
+    {
+      "key": "cibrc2026banned",
+      "status": "not machine-verified",
+      "url": "\\url{https://ppqs.gov.in/sites/default/files/list_of_pesticides_which_are_banned_refused_registration_and_restricted_in_use.pdf}"
+    },
+    {
+      "key": "tnau2026mango",
+      "status": "not machine-verified",
+      "url": "\\url{https://agritech.tnau.ac.in/crop_protection/mango_1.html}"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "arch": "efficientnet_b3",
+  "deployed_to": "ml/disease_detection/weights/disease_classifier.pth",
+  "git": {
+    "branch": "enhance/real-data",
+    "commit": "72abe1a9e914e35ed67e6d4b5ed71319e816cd6f",
+    "dirty": true
+  },
+  "ood_threshold": 0.8152007082226095,
+  "selected_by_rule": "efficientnet_b3",
+  "selection": "highest mean CV macro-F1",
+  "sha256": "c6becbe02b0548d6c5caa5f63328e4c905aae57dd89dc27b569d4881179d8ff1",
+  "source_run": "results/disease/final/efficientnet_b3/best.pth",
+  "source_sha256": "692d53150bc7fab66ebb30708e602df6d8142a9833626153a41ed7aa0c7d967f",
+  "temperature": 1.0
+}

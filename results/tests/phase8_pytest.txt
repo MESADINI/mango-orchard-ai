@@ -1,0 +1,4 @@
+# Phase 8 full test suite, commit dbf2956, 2026-10-17T16:48:26Z
+# command: python -m pytest ml backend/tests -q -rs (data, weights and GPU available)
+# torch 2.3.0+cu121 | cuda True | NVIDIA GeForce RTX 3050 Laptop GPU
+243 passed in 82.85s (0:01:22)

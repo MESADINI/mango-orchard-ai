@@ -1,0 +1,15 @@
+{
+  "arch": "mobilenetv3_large",
+  "best_epoch": 14,
+  "best_val_macro_f1": 1.0,
+  "checkpoint_bytes": 17026254,
+  "checkpoint_sha256": "bfd4660ec7121983ca27315190bcb16c0135223fe99214aa2fe195d600805ec5",
+  "epochs_run": 20,
+  "eval_sets": {
+    "val": 279,
+    "heldout": 310
+  },
+  "n_params": 4208437,
+  "train_seconds": 255.6,
+  "eval_precision": "fp32"
+}

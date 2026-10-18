@@ -1,0 +1,11 @@
+# Phase 2 snapshot (staged tree, clean worktree without git-ignored data), 2026-10-17T13:42:06Z
+...................sssssss.............................................. [ 64%]
+........................................                                 [100%]
+=========================== short test summary info ===========================
+SKIPPED [4] ml\datasets\tests\test_data_integrity.py:23: ml\datasets\processed\disease\split.csv not built
+SKIPPED [1] ml\datasets\tests\test_data_integrity.py:23: ml\datasets\processed\external\manifest.csv not built
+SKIPPED [2] ml\datasets\tests\test_data_integrity.py:23: ml\datasets\processed\pest\split.csv not built
+105 passed, 7 skipped in 87.33s (0:01:27)
+
+# Data-integrity tests in the main checkout (datasets built):
+7 passed in 1.86s

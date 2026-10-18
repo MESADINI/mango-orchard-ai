@@ -36,7 +36,7 @@ def random_disease_checkpoint(tmp_path_factory):
     """A real EfficientNet-B3 checkpoint with random weights, in the format written by train.py."""
     torch.manual_seed(0)
     model = timm.create_model("efficientnet_b3", pretrained=False, num_classes=len(DISEASE_CLASSES))
-    path = tmp_path_factory.mktemp("weights") / "efficientnet_b3_best.pth"
+    path = tmp_path_factory.mktemp("weights") / "disease_classifier.pth"
     torch.save({"state_dict": model.state_dict(), "classes": list(DISEASE_CLASSES)}, path)
     return str(path)
 
@@ -77,7 +77,7 @@ class FakeYOLO:
         self.detections = detections  # list of (cls_id, conf, [x1, y1, x2, y2])
         self.calls = []
 
-    def __call__(self, image, conf=0.25, verbose=False):
+    def __call__(self, image, conf=0.25, device=None, verbose=False):
         self.calls.append(conf)
         boxes = [_Box(c, p, b) for c, p, b in self.detections if p >= conf]
         return [_Result(boxes, self.NAMES)]

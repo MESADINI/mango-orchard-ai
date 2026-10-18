@@ -1,0 +1,240 @@
+image,true_label,predicted,confidence,low_confidence,severity_pct,n_pests,weather_time,rh,temp_c,precip_mm,ohi_nominal
+ml/datasets/processed/disease/test/Bacterial Canker/20404c24f243603e.jpg,Bacterial Canker,Bacterial Canker,0.8790,False,15.48,14,2024-07-24T02:00,92.19,20.79,0.01,35.14
+ml/datasets/processed/disease/test/Bacterial Canker/333d5d63012cd341.jpg,Bacterial Canker,Bacterial Canker,0.9481,False,25.83,0,2015-05-17T14:00,55.62,29.92,1.96,71.50
+ml/datasets/processed/disease/test/Bacterial Canker/c4085d53a46cd78c.jpg,Bacterial Canker,Bacterial Canker,0.9427,False,4.34,17,2018-08-30T10:00,44.92,31.26,0.06,40.72
+ml/datasets/processed/disease/test/Bacterial Canker/8f1eb176d4fe5eef.jpg,Bacterial Canker,Bacterial Canker,0.8502,False,8.98,2,2017-02-01T01:00,97.79,15.08,0.0,67.49
+ml/datasets/processed/disease/test/Bacterial Canker/b176e7931ba8ac50.jpg,Bacterial Canker,Bacterial Canker,0.9531,False,26.90,2,2016-07-13T18:00,62.54,26.98,0.0,61.59
+ml/datasets/processed/disease/test/Bacterial Canker/4680924439828fb2.jpg,Bacterial Canker,Bacterial Canker,0.9727,False,24.72,16,2023-02-26T10:00,17.29,31.47,0.0,35.04
+ml/datasets/processed/disease/test/Bacterial Canker/705473f0490b4d43.jpg,Bacterial Canker,Bacterial Canker,0.9669,False,21.18,3,2023-10-30T21:00,97.44,21.23,0.12,55.87
+ml/datasets/processed/disease/test/Bacterial Canker/9f980f43e4de6efe.jpg,Bacterial Canker,Bacterial Canker,0.9194,False,14.57,5,2015-06-23T13:00,52.47,30.78,0.66,41.57
+ml/datasets/processed/disease/test/Bacterial Canker/90b6eadced7da96c.jpg,Bacterial Canker,Bacterial Canker,0.9482,False,4.24,15,2016-05-26T16:00,38.19,33.87,0.0,42.86
+ml/datasets/processed/disease/test/Bacterial Canker/e0b53d5652b74d10.jpg,Bacterial Canker,Bacterial Canker,0.9452,False,18.61,0,2018-06-24T15:00,43.76,30.09,0.01,75.31
+ml/datasets/processed/disease/test/Bacterial Canker/a1195d5b76fe2573.jpg,Bacterial Canker,Bacterial Canker,0.8931,False,23.50,13,2024-01-01T19:00,70.46,21.72,0.0,36.19
+ml/datasets/processed/disease/test/Bacterial Canker/fb45bce7c58bfe7f.jpg,Bacterial Canker,Bacterial Canker,0.9472,False,25.54,11,2023-05-24T03:00,88.72,23.07,0.0,29.31
+ml/datasets/processed/disease/test/Bacterial Canker/4aab5b46acfec44b.jpg,Bacterial Canker,Bacterial Canker,0.9243,False,18.79,1,2024-09-19T05:00,95.22,20.03,0.0,67.92
+ml/datasets/processed/disease/test/Bacterial Canker/dc70ea9f931fd4b6.jpg,Bacterial Canker,Bacterial Canker,0.9377,False,28.35,3,2023-02-24T02:00,98.96,15.54,0.0,54.56
+ml/datasets/processed/disease/test/Bacterial Canker/454bbbaf745280c4.jpg,Bacterial Canker,Bacterial Canker,0.8657,False,10.44,0,2018-04-18T21:00,41.22,29.9,0.0,78.83
+ml/datasets/processed/disease/test/Bacterial Canker/d3f8f9ec99657f61.jpg,Bacterial Canker,Bacterial Canker,0.8915,False,17.51,1,2023-10-24T04:00,78.64,18.91,0.0,70.65
+ml/datasets/processed/disease/test/Bacterial Canker/fac951a1e5c2ab88.jpg,Bacterial Canker,Bacterial Canker,0.9263,False,19.54,3,2015-02-05T11:00,20.31,30.2,0.0,54.56
+ml/datasets/processed/disease/test/Bacterial Canker/65de82f8cff58390.jpg,Bacterial Canker,Bacterial Canker,0.9684,False,8.37,11,2021-04-27T00:00,86.55,22.75,0.0,33.76
+ml/datasets/processed/disease/test/Bacterial Canker/ed9a2d1bb3b33548.jpg,Bacterial Canker,Bacterial Canker,0.9552,False,24.36,5,2019-02-26T13:00,14.05,36.94,0.0,41.50
+ml/datasets/processed/disease/test/Bacterial Canker/e51c3d5fc52bbfd3.jpg,Bacterial Canker,Bacterial Canker,0.9521,False,29.09,10,2018-03-21T21:00,54.97,24.75,0.0,32.38
+ml/datasets/processed/disease/test/Bacterial Canker/1d18b3d278baf2f6.jpg,Bacterial Canker,Bacterial Canker,0.9362,False,20.72,16,2016-07-12T04:00,89.97,21.61,0.0,32.96
+ml/datasets/processed/disease/test/Bacterial Canker/1a8c33d05652e9ab.jpg,Bacterial Canker,Bacterial Canker,0.9592,False,16.05,16,2020-09-05T21:00,95.67,22.8,0.0,30.57
+ml/datasets/processed/disease/test/Bacterial Canker/420ac19f607395d3.jpg,Bacterial Canker,Bacterial Canker,0.9347,False,4.41,2,2020-05-14T12:00,29.32,37.07,0.0,72.62
+ml/datasets/processed/disease/test/Bacterial Canker/bc74d70e6e6f57ed.jpg,Bacterial Canker,Bacterial Canker,0.9231,False,9.13,16,2024-01-11T03:00,95.33,17.83,0.0,35.31
+ml/datasets/processed/disease/test/Bacterial Canker/cb8a96ad2a8971cd.jpg,Bacterial Canker,Bacterial Canker,0.8966,False,33.76,2,2015-08-26T07:00,77.12,23.19,0.0,61.33
+ml/datasets/processed/disease/test/Bacterial Canker/d5bc62f03b998230.jpg,Bacterial Canker,Bacterial Canker,0.9420,False,4.16,2,2021-11-14T01:00,94.08,20.98,0.64,67.17
+ml/datasets/processed/disease/test/Bacterial Canker/a01bb7e513f3fae8.jpg,Bacterial Canker,Bacterial Canker,0.9503,False,21.00,1,2016-11-12T17:00,36.19,27.04,0.0,68.15
+ml/datasets/processed/disease/test/Bacterial Canker/d97f9588f84bf016.jpg,Bacterial Canker,Bacterial Canker,0.9278,False,11.16,2,2016-03-06T08:00,51.98,24.89,0.0,68.89
+ml/datasets/processed/disease/test/Bacterial Canker/70764e0df1f8e023.jpg,Bacterial Canker,Bacterial Canker,0.9372,False,11.19,2,2019-05-21T03:00,86.46,22.54,0.0,64.90
+ml/datasets/processed/disease/test/Bacterial Canker/ff97d275eb26183f.jpg,Bacterial Canker,Bacterial Canker,0.9592,False,22.06,5,2024-03-31T22:00,58.44,24.9,0.0,48.95
+ml/datasets/processed/disease/test/Bacterial Canker/c17bbedbf5e65499.jpg,Bacterial Canker,Bacterial Canker,0.9338,False,30.20,6,2023-08-20T02:00,92.15,21.69,0.02,30.32
+ml/datasets/processed/disease/test/Anthracnose/2a5801dbd06a341a.jpg,Anthracnose,Anthracnose,0.8789,False,9.80,3,2016-01-15T20:00,85.77,18.7,0.0,54.55
+ml/datasets/processed/disease/test/Anthracnose/b33bf35bab68ec50.jpg,Anthracnose,Anthracnose,0.8409,False,1.73,17,2024-11-20T09:00,70.52,24.11,0.0,38.55
+ml/datasets/processed/disease/test/Anthracnose/d8682178a99ba2ee.jpg,Anthracnose,Anthracnose,0.7174,True,1.81,13,2019-04-30T10:00,37.66,34.29,0.27,27.66
+ml/datasets/processed/disease/test/Anthracnose/752c02e0f073502f.jpg,Anthracnose,Anthracnose,0.8274,False,78.01,14,2018-06-25T08:00,51.86,25.71,0.0,23.83
+ml/datasets/processed/disease/test/Anthracnose/478228d2a55f7ccc.jpg,Anthracnose,Anthracnose,0.6852,True,72.37,1,2020-09-06T23:00,95.69,22.73,0.1,73.16
+ml/datasets/processed/disease/test/Anthracnose/cd131a5a989a0d28.jpg,Anthracnose,Anthracnose,0.9414,False,74.49,2,2021-10-12T05:00,98.0,20.71,1.95,47.44
+ml/datasets/processed/disease/test/Anthracnose/098739cf674296f5.jpg,Anthracnose,Anthracnose,0.8769,False,2.25,3,2020-06-15T11:00,36.63,33.55,0.02,61.71
+ml/datasets/processed/disease/test/Anthracnose/9a6a481018000e76.jpg,Anthracnose,Anthracnose,0.9709,False,3.97,1,2020-07-14T16:00,73.61,26.43,0.02,67.99
+ml/datasets/processed/disease/test/Anthracnose/ac03d741b7ae8165.jpg,Anthracnose,Anthracnose,0.9695,False,66.38,2,2018-02-18T04:00,99.46,16.89,0.0,49.24
+ml/datasets/processed/disease/test/Anthracnose/16de87260de65d9d.jpg,Anthracnose,Anthracnose,0.9171,False,79.50,1,2018-12-29T01:00,95.5,19.95,0.08,52.33
+ml/datasets/processed/disease/test/Anthracnose/25534791c06f7053.jpg,Anthracnose,Anthracnose,0.9041,False,93.86,2,2024-09-09T03:00,95.63,21.6,0.0,39.28
+ml/datasets/processed/disease/test/Anthracnose/052d3dae58012842.jpg,Anthracnose,Anthracnose,0.8863,False,0.00,2,2024-02-09T16:00,24.77,31.4,0.0,73.20
+ml/datasets/processed/disease/test/Anthracnose/89293d78b34ddc2b.jpg,Anthracnose,Anthracnose,0.9597,False,72.47,2,2017-07-23T15:00,36.85,33.43,0.0,55.45
+ml/datasets/processed/disease/test/Anthracnose/71d66a8f023081a3.jpg,Anthracnose,Anthracnose,0.8912,False,19.81,3,2018-08-29T23:00,81.87,22.74,0.0,50.32
+ml/datasets/processed/disease/test/Anthracnose/d7303a6384b7f1ea.jpg,Anthracnose,Anthracnose,0.9322,False,82.19,1,2021-11-29T13:00,81.4,23.76,0.26,49.54
+ml/datasets/processed/disease/test/Anthracnose/1105df4322557203.jpg,Anthracnose,Anthracnose,0.9777,False,91.42,2,2019-01-14T06:00,92.35,14.88,0.0,43.49
+ml/datasets/processed/disease/test/Anthracnose/21542338cbdad6f5.jpg,Anthracnose,Anthracnose,0.9661,False,25.38,15,2023-04-30T16:00,40.17,32.01,0.21,36.13
+ml/datasets/processed/disease/test/Anthracnose/cd7079e91980b252.jpg,Anthracnose,Anthracnose,0.9361,False,5.54,2,2019-11-07T00:00,94.99,20.59,0.0,60.06
+ml/datasets/processed/disease/test/Anthracnose/96a24b7a33e81d1d.jpg,Anthracnose,Anthracnose,0.8628,False,16.97,12,2018-06-04T21:00,93.01,23.42,0.08,31.63
+ml/datasets/processed/disease/test/Anthracnose/1248213f1ae47d45.jpg,Anthracnose,Anthracnose,0.9568,False,2.64,2,2019-09-19T19:00,87.35,23.49,0.08,63.55
+ml/datasets/processed/disease/test/Anthracnose/0d27ed6b8eb130e4.jpg,Anthracnose,Anthracnose,0.9859,False,3.52,17,2019-01-02T05:00,98.79,12.14,0.0,34.17
+ml/datasets/processed/disease/test/Anthracnose/0a08a66e3fe205ef.jpg,Anthracnose,Anthracnose,0.8851,False,6.33,2,2018-02-26T05:00,83.42,15.19,0.0,68.81
+ml/datasets/processed/disease/test/Anthracnose/d819a6a7e58cc2c0.jpg,Anthracnose,Anthracnose,0.9359,False,15.27,14,2019-09-15T13:00,52.62,29.54,0.03,35.90
+ml/datasets/processed/disease/test/Anthracnose/7da55f7448b22de0.jpg,Anthracnose,Anthracnose,0.9743,False,5.06,1,2024-10-19T13:00,76.92,26.08,1.14,66.79
+ml/datasets/processed/disease/test/Anthracnose/267a866cd085d12c.jpg,Anthracnose,Anthracnose,0.9651,False,14.20,2,2020-11-30T16:00,74.73,24.49,0.0,63.33
+ml/datasets/processed/disease/test/Anthracnose/72f246c00cf93425.jpg,Anthracnose,Anthracnose,0.9236,False,91.55,10,2021-11-10T22:00,94.22,18.78,0.27,14.21
+ml/datasets/processed/disease/test/Anthracnose/7bcde36535adf8c9.jpg,Anthracnose,Anthracnose,0.9236,False,20.67,14,2018-12-17T14:00,20.25,32.81,0.0,38.43
+ml/datasets/processed/disease/test/Anthracnose/4a43481d29a3577e.jpg,Anthracnose,Anthracnose,0.9102,False,57.45,4,2018-09-08T21:00,62.95,25.73,0.0,47.28
+ml/datasets/processed/disease/test/Anthracnose/77924889cf7c4a1e.jpg,Anthracnose,Anthracnose,0.9683,False,6.88,3,2023-01-22T12:00,28.88,28.08,0.0,54.81
+ml/datasets/processed/disease/test/Anthracnose/33609edd4b1f7c35.jpg,Anthracnose,Anthracnose,0.9426,False,5.86,5,2023-09-28T14:00,62.84,28.4,0.36,51.31
+ml/datasets/processed/disease/test/Anthracnose/9ec78ba3309f3d14.jpg,Anthracnose,Anthracnose,0.8848,False,0.00,1,2023-09-22T20:00,89.75,24.49,0.03,69.26
+ml/datasets/processed/disease/test/Anthracnose/bb35f326127819e9.jpg,Anthracnose,Anthracnose,0.9640,False,18.94,15,2020-05-30T23:00,78.99,25.55,0.0,29.77
+ml/datasets/processed/disease/test/Anthracnose/0bf0a8aa957bbbcb.jpg,Anthracnose,Anthracnose,0.8683,False,84.97,0,2017-01-25T11:00,27.58,28.92,0.0,60.18
+ml/datasets/processed/disease/test/Anthracnose/88eabb7875cf8517.jpg,Anthracnose,Anthracnose,0.9641,False,4.45,14,2022-05-19T06:00,93.62,22.51,0.6,32.77
+ml/datasets/processed/disease/test/Anthracnose/4463b0debe728b66.jpg,Anthracnose,Anthracnose,0.9653,False,7.46,14,2015-09-15T07:00,73.89,24.55,0.0,34.04
+ml/datasets/processed/disease/test/Anthracnose/e48c38a67fb55c0b.jpg,Anthracnose,Anthracnose,0.9512,False,96.18,2,2017-04-14T17:00,14.45,33.61,0.0,49.75
+ml/datasets/processed/disease/test/Anthracnose/955438f20692a681.jpg,Anthracnose,Anthracnose,0.9681,False,93.79,2,2017-05-23T17:00,54.25,30.22,0.0,46.21
+ml/datasets/processed/disease/test/Anthracnose/dbc92fddd51be6d1.jpg,Anthracnose,Anthracnose,0.9513,False,7.37,3,2021-04-24T13:00,47.35,31.26,0.02,66.19
+ml/datasets/processed/disease/test/Anthracnose/3e8bff5dd0879a9d.jpg,Anthracnose,Anthracnose,0.9844,False,6.63,12,2015-12-13T22:00,95.72,19.82,0.0,33.85
+ml/datasets/processed/disease/test/Anthracnose/30f1d650f26d6f98.jpg,Anthracnose,Anthracnose,0.8659,False,15.43,3,2020-09-15T03:00,96.19,19.18,0.1,61.23
+ml/datasets/processed/disease/test/Anthracnose/cc736850c7f9e786.jpg,Anthracnose,Anthracnose,0.9832,False,15.58,1,2021-12-31T04:00,98.55,18.76,0.02,66.09
+ml/datasets/processed/disease/test/Anthracnose/e9427e7afac1d4b9.jpg,Anthracnose,Anthracnose,0.9367,False,76.14,2,2018-10-05T01:00,97.49,21.42,0.14,48.19
+ml/datasets/processed/disease/test/Anthracnose/325c0dfab2f740f1.jpg,Anthracnose,Anthracnose,0.7931,True,1.67,2,2015-03-04T16:00,35.34,30.62,0.0,79.30
+ml/datasets/processed/disease/test/Anthracnose/04e68c50b7d1194f.jpg,Anthracnose,Anthracnose,0.9322,False,7.70,2,2016-09-17T14:00,41.58,30.25,0.0,69.80
+ml/datasets/processed/disease/test/Anthracnose/133d796ab0151425.jpg,Anthracnose,Anthracnose,0.9724,False,5.38,16,2023-01-11T13:00,35.05,27.4,0.0,36.83
+ml/datasets/processed/disease/test/Anthracnose/ac2e9658cc776e8e.jpg,Anthracnose,Anthracnose,0.9340,False,26.18,11,2024-08-01T12:00,47.83,32.06,0.04,36.80
+ml/datasets/processed/disease/test/Anthracnose/9dbf86401652387d.jpg,Anthracnose,Anthracnose,0.9568,False,7.31,0,2016-09-01T05:00,93.26,18.9,0.01,73.47
+ml/datasets/processed/disease/test/Anthracnose/e2ca70a62b1f12cc.jpg,Anthracnose,Anthracnose,0.8600,False,0.00,3,2021-07-02T09:00,69.96,26.82,0.01,54.98
+ml/datasets/processed/disease/test/Anthracnose/4793458b4d3995f9.jpg,Anthracnose,Anthracnose,0.9352,False,61.58,5,2021-10-13T22:00,94.98,21.63,0.52,24.84
+ml/datasets/processed/disease/test/Anthracnose/4b72ea277f331715.jpg,Anthracnose,Anthracnose,0.8936,False,74.11,2,2018-12-09T10:00,40.18,28.81,0.0,52.34
+ml/datasets/processed/disease/test/Anthracnose/4013e495e17041be.jpg,Anthracnose,Anthracnose,0.9377,False,2.21,0,2017-09-02T16:00,82.04,25.52,0.78,72.61
+ml/datasets/processed/disease/test/Anthracnose/8dfd7292708ecf99.jpg,Anthracnose,Anthracnose,0.9265,False,77.14,2,2016-08-04T03:00,95.43,20.31,0.0,48.71
+ml/datasets/processed/disease/test/Anthracnose/4665ce5aae0ad00f.jpg,Anthracnose,Anthracnose,0.9577,False,0.80,2,2019-06-18T21:00,70.27,26.01,0.0,66.70
+ml/datasets/processed/disease/test/Anthracnose/47047e16136e9b1e.jpg,Anthracnose,Anthracnose,0.9271,False,83.10,2,2022-08-04T12:00,72.12,26.57,0.53,46.03
+ml/datasets/processed/disease/test/Anthracnose/5d704cbf4387c288.jpg,Anthracnose,Anthracnose,0.9884,False,7.42,5,2017-12-22T07:00,89.43,19.35,0.0,38.39
+ml/datasets/processed/disease/test/Anthracnose/51fabb42c9e94314.jpg,Anthracnose,Anthracnose,0.9437,False,2.19,3,2020-08-04T01:00,94.42,21.86,0.08,53.80
+ml/datasets/processed/disease/test/Anthracnose/c90df4e1486716d7.jpg,Anthracnose,Anthracnose,0.9205,False,72.62,1,2023-01-24T17:00,64.35,23.2,0.0,56.15
+ml/datasets/processed/disease/test/Anthracnose/3f86289a88f77bfc.jpg,Anthracnose,Anthracnose,0.9416,False,67.92,3,2015-01-04T02:00,100.0,19.45,0.0,45.87
+ml/datasets/processed/disease/test/Anthracnose/c8018129a0005623.jpg,Anthracnose,Anthracnose,0.8670,False,2.22,2,2019-11-06T07:00,83.67,22.57,0.0,66.44
+ml/datasets/processed/disease/test/Anthracnose/af8b33154b41f0cc.jpg,Anthracnose,Anthracnose,0.9151,False,88.73,14,2015-04-17T08:00,63.24,26.6,0.13,15.54
+ml/datasets/processed/disease/test/Anthracnose/c0c0723bc89ff099.jpg,Anthracnose,Anthracnose,0.8096,True,1.91,2,2020-06-05T08:00,64.63,27.76,0.0,69.55
+ml/datasets/processed/disease/test/Anthracnose/c035efef49968c74.jpg,Anthracnose,Anthracnose,0.5996,True,68.77,4,2018-07-31T17:00,65.78,26.64,0.21,35.03
+ml/datasets/processed/disease/test/Anthracnose/6c5a38eb88866bb8.jpg,Anthracnose,Anthracnose,0.9693,False,80.14,2,2018-08-08T11:00,47.59,30.11,0.06,50.23
+ml/datasets/processed/disease/test/Healthy/3c25d09c20896ad2.jpg,Healthy,Healthy,0.9426,False,23.66,16,2016-03-06T02:00,92.23,20.22,0.0,53.61
+ml/datasets/processed/disease/test/Healthy/d5d2934c7c630631.jpg,Healthy,Healthy,0.8760,False,1.20,2,2022-04-08T03:00,88.36,22.48,0.0,77.05
+ml/datasets/processed/disease/test/Healthy/765feaa2e5c1863d.jpg,Healthy,Healthy,0.9646,False,10.80,3,2022-12-19T06:00,97.45,16.33,0.0,70.72
+ml/datasets/processed/disease/test/Healthy/5813a0cf3ecc576f.jpg,Healthy,Healthy,0.9268,False,2.59,2,2016-12-02T04:00,95.19,18.59,0.26,84.15
+ml/datasets/processed/disease/test/Healthy/251f9e9f777b4ef8.jpg,Healthy,Healthy,0.9343,False,0.03,2,2022-02-08T16:00,39.41,28.34,0.0,87.17
+ml/datasets/processed/disease/test/Healthy/e02a5ac4915b81cd.jpg,Healthy,Healthy,0.9430,False,0.13,16,2017-06-20T19:00,65.3,25.78,0.01,53.69
+ml/datasets/processed/disease/test/Healthy/c9be8995d5c67b85.jpg,Healthy,Healthy,0.9430,False,0.91,2,2022-11-21T19:00,96.02,19.12,0.0,84.15
+ml/datasets/processed/disease/test/Healthy/6175226a593139e1.jpg,Healthy,Healthy,0.8628,False,1.04,14,2021-04-29T21:00,65.0,25.85,0.0,53.70
+ml/datasets/processed/disease/test/Healthy/c9bd9ea5481d4dd6.jpg,Healthy,Healthy,0.9683,False,7.03,2,2023-01-24T06:00,96.46,17.71,0.0,84.09
+ml/datasets/processed/disease/test/Healthy/3dea241ea8141924.jpg,Healthy,Healthy,0.9474,False,3.30,3,2018-01-03T13:00,39.98,28.95,0.0,83.64
+ml/datasets/processed/disease/test/Healthy/abc0a5a0d66ed43b.jpg,Healthy,Healthy,0.9457,False,5.01,1,2019-08-30T09:00,61.29,25.79,0.0,88.51
+ml/datasets/processed/disease/test/Healthy/b4fb84ec5789fd42.jpg,Healthy,Healthy,0.9725,False,2.80,2,2024-09-19T04:00,94.68,20.22,0.0,82.80
+ml/datasets/processed/disease/test/Healthy/08e02eaabc93e1d0.jpg,Healthy,Healthy,0.9516,False,0.05,1,2021-07-20T14:00,57.55,29.52,0.01,90.61
+ml/datasets/processed/disease/test/Healthy/bafda98231e8c1c9.jpg,Healthy,Healthy,0.8791,False,0.00,16,2021-10-01T17:00,82.94,25.64,0.1,51.08
+ml/datasets/processed/disease/test/Healthy/5cea047b2e8b235f.jpg,Healthy,Healthy,0.9776,False,3.38,17,2018-09-15T21:00,88.42,23.21,0.77,51.34
+ml/datasets/processed/disease/test/Healthy/59b46744cdcce856.jpg,Healthy,Healthy,0.6838,True,0.00,10,2015-12-16T16:00,48.6,25.55,0.0,21.02
+ml/datasets/processed/disease/test/Healthy/122dda01dab346ef.jpg,Healthy,Healthy,0.9255,False,20.61,2,2015-04-25T21:00,87.74,22.95,0.1,83.04
+ml/datasets/processed/disease/test/Healthy/2f3e969913b0aa3e.jpg,Healthy,Healthy,0.8816,False,0.00,0,2023-04-14T03:00,50.34,22.78,0.0,96.58
+ml/datasets/processed/disease/test/Healthy/8c57047ca30192ec.jpg,Healthy,Healthy,0.8848,False,0.00,15,2023-10-19T16:00,57.84,27.76,0.0,54.55
+ml/datasets/processed/disease/test/Healthy/e04f24fa756d5658.jpg,Healthy,Healthy,0.9478,False,0.08,2,2015-02-09T06:00,91.6,16.55,0.0,78.59
+ml/datasets/processed/disease/test/Healthy/a11ca942aeb2d259.jpg,Healthy,Healthy,0.9615,False,9.02,14,2024-06-08T15:00,55.49,30.61,0.01,56.56
+ml/datasets/processed/disease/test/Healthy/fa62882dbd37d993.jpg,Healthy,Healthy,0.9132,False,0.00,17,2018-06-04T07:00,87.22,24.46,0.02,51.17
+ml/datasets/processed/disease/test/Healthy/50cfb31c449faa6e.jpg,Healthy,Healthy,0.7071,True,1.02,2,2015-06-21T13:00,45.74,30.19,0.16,75.91
+ml/datasets/processed/disease/test/Healthy/9d7b2813ee41ed68.jpg,Healthy,Healthy,0.9367,False,6.54,3,2016-01-22T23:00,94.24,19.5,0.0,80.53
+ml/datasets/processed/disease/test/Healthy/0e5bf662d4e9ae07.jpg,Healthy,Healthy,0.9356,False,3.03,1,2018-07-23T19:00,75.9,24.91,0.23,86.72
+ml/datasets/processed/disease/test/Healthy/9538a09513951f24.jpg,Healthy,Healthy,0.9776,False,0.03,14,2022-04-05T00:00,84.33,22.58,0.0,52.71
+ml/datasets/processed/disease/test/Healthy/cc59c1b78fefc5e4.jpg,Healthy,Healthy,0.8578,False,2.23,1,2023-01-23T22:00,97.06,19.0,0.0,84.77
+ml/datasets/processed/disease/test/Healthy/56bade3455860c01.jpg,Healthy,Healthy,0.9083,False,3.75,1,2023-07-16T15:00,43.83,32.19,0.0,94.94
+ml/datasets/processed/disease/test/Healthy/30a1dd77f7a7c18e.jpg,Healthy,Healthy,0.8945,False,3.47,17,2022-01-25T09:00,62.92,24.9,0.0,54.56
+ml/datasets/processed/disease/test/Healthy/81a024b02e604d54.jpg,Healthy,Healthy,0.9647,False,35.34,12,2022-01-27T01:00,95.77,18.84,0.0,53.08
+ml/datasets/processed/disease/test/Healthy/eb7f606940027354.jpg,Healthy,Healthy,0.9306,False,0.17,16,2017-11-05T21:00,97.35,20.97,0.44,52.62
+ml/datasets/processed/disease/test/Healthy/e351cb4794c002f4.jpg,Healthy,Healthy,0.9501,False,2.27,2,2016-06-13T08:00,52.08,26.93,0.0,86.12
+ml/datasets/processed/disease/test/Healthy/463fc4c060afed55.jpg,Healthy,Healthy,0.9529,False,1.24,1,2021-06-12T02:00,95.59,21.19,0.0,87.33
+ml/datasets/processed/disease/test/Healthy/25d848cf14cd9f66.jpg,Healthy,Healthy,0.9046,False,1.42,12,2021-05-02T07:00,77.15,25.64,0.0,52.00
+ml/datasets/processed/disease/test/Healthy/6c534af39d7c00d4.jpg,Healthy,Healthy,0.9270,False,0.25,2,2021-12-25T13:00,50.14,26.67,0.0,86.56
+ml/datasets/processed/disease/test/Healthy/14a9e5b853f331ef.jpg,Healthy,Healthy,0.7235,True,0.01,2,2015-10-23T20:00,74.51,21.48,0.0,77.28
+ml/datasets/processed/disease/test/Healthy/de258d335c2c99b2.jpg,Healthy,Healthy,0.9460,False,0.05,2,2024-10-08T17:00,85.53,25.05,0.98,81.71
+ml/datasets/processed/disease/test/Healthy/a2d851545a71ead5.jpg,Healthy,Healthy,0.8610,False,0.02,14,2016-06-21T11:00,56.53,28.89,0.04,55.38
+ml/datasets/processed/disease/test/Healthy/55c8c9a38e381913.jpg,Healthy,Healthy,0.9387,False,0.00,2,2021-01-07T20:00,96.39,21.43,0.02,84.09
+ml/datasets/processed/disease/test/Healthy/647d59babbe1b513.jpg,Healthy,Healthy,0.9207,False,0.90,3,2020-01-28T01:00,93.81,17.77,0.0,71.26
+ml/datasets/processed/disease/test/Healthy/5a95b8c4a0c56d2b.jpg,Healthy,Healthy,0.9617,False,0.00,6,2018-09-19T23:00,78.61,21.9,0.0,55.65
+ml/datasets/processed/disease/test/Healthy/8ce405f24155a21f.jpg,Healthy,Healthy,0.9518,False,1.88,2,2017-11-04T19:00,97.49,20.81,0.2,83.83
+ml/datasets/processed/disease/test/Healthy/f795afeed5c45bc4.jpg,Healthy,Healthy,0.9489,False,13.94,14,2021-09-16T00:00,92.45,22.64,0.01,51.45
+ml/datasets/processed/disease/test/Healthy/3464e43de9891fc2.jpg,Healthy,Healthy,0.9409,False,0.02,3,2021-04-23T00:00,75.39,25.61,0.49,69.92
+ml/datasets/processed/disease/test/Healthy/6ddee33033d56695.jpg,Healthy,Healthy,0.8027,True,0.01,0,2019-03-02T05:00,88.32,21.86,0.02,87.54
+ml/datasets/processed/disease/test/Healthy/ce5aae8b8c9d6228.jpg,Healthy,Healthy,0.9652,False,0.23,2,2018-09-26T06:00,94.23,22.03,0.01,76.43
+ml/datasets/processed/disease/test/Healthy/4dad096345706bbd.jpg,Healthy,Healthy,0.8888,False,0.00,2,2021-08-17T02:00,97.41,20.84,0.09,83.90
+ml/datasets/processed/disease/test/Healthy/18f94090c783b9cb.jpg,Healthy,Healthy,0.9597,False,0.00,2,2016-06-18T17:00,61.92,27.61,0.03,78.72
+ml/datasets/processed/disease/test/Healthy/156aafcf7b298696.jpg,Healthy,Healthy,0.9228,False,2.86,2,2024-10-01T13:00,42.53,33.06,0.03,91.04
+ml/datasets/processed/disease/test/Healthy/6b8df54bb76ac194.jpg,Healthy,Healthy,0.9210,False,0.91,16,2015-03-22T14:00,13.3,37.35,0.0,59.94
+ml/datasets/processed/disease/test/Healthy/4cad574378646d84.jpg,Healthy,Healthy,0.9120,False,0.24,3,2018-07-14T22:00,87.35,22.59,0.0,70.14
+ml/datasets/processed/disease/test/Healthy/95a78caec126a19f.jpg,Healthy,Healthy,0.9504,False,0.00,0,2021-01-28T13:00,37.93,29.04,0.0,95.36
+ml/datasets/processed/disease/test/Healthy/b4588b642b3a05fa.jpg,Healthy,Healthy,0.9212,False,2.48,14,2022-03-13T20:00,48.76,23.95,0.0,57.06
+ml/datasets/processed/disease/test/Healthy/1ea94807a8e88315.jpg,Healthy,Healthy,0.9166,False,0.01,14,2020-12-30T05:00,97.65,17.15,0.0,52.80
+ml/datasets/processed/disease/test/Healthy/7c882b819ee6ff9c.jpg,Healthy,Healthy,0.8914,False,0.14,1,2017-06-18T03:00,88.98,20.8,0.0,88.32
+ml/datasets/processed/disease/test/Healthy/d99ea05bca4d0ec4.jpg,Healthy,Healthy,0.9331,False,0.59,7,2015-01-12T18:00,49.58,19.62,0.0,66.17
+ml/datasets/processed/disease/test/Healthy/2f70db98636c0f09.jpg,Healthy,Healthy,0.8940,False,0.00,0,2018-12-19T08:00,67.98,20.17,0.0,96.14
+ml/datasets/processed/disease/test/Healthy/3cc4c750d7577f45.jpg,Healthy,Healthy,0.9637,False,0.00,3,2019-04-07T20:00,34.48,29.55,0.0,81.65
+ml/datasets/processed/disease/test/Healthy/9d3188a0c121ac23.jpg,Healthy,Healthy,0.9472,False,0.02,2,2023-04-24T05:00,87.29,24.07,0.01,82.50
+ml/datasets/processed/disease/test/Healthy/aa2805acafcab616.jpg,Healthy,Healthy,0.8649,False,0.01,5,2022-04-11T20:00,49.12,27.67,0.0,59.56
+ml/datasets/processed/disease/test/Healthy/dcf0eaae0ffbf4e0.jpg,Healthy,Healthy,0.9512,False,3.08,2,2017-11-03T02:00,96.1,18.65,0.01,82.58
+ml/datasets/processed/disease/test/Healthy/07a4119b8ef337e8.jpg,Healthy,Healthy,0.9622,False,0.02,4,2018-04-03T22:00,56.81,26.73,0.0,65.30
+ml/datasets/processed/disease/test/Healthy/1fb3b8f7db137385.jpg,Healthy,Healthy,0.9618,False,0.77,2,2023-08-30T02:00,93.64,22.71,0.07,82.31
+ml/datasets/processed/disease/test/Healthy/217bbae7242317e5.jpg,Healthy,Healthy,0.9703,False,0.00,14,2023-02-09T02:00,93.8,16.43,0.0,53.37
+ml/datasets/processed/disease/test/Healthy/7b2d61e70a9e1b61.jpg,Healthy,Healthy,0.9000,False,1.08,4,2019-09-09T16:00,62.69,28.04,0.0,64.87
+ml/datasets/processed/disease/test/Healthy/9c9e54ea4a2e3f49.jpg,Healthy,Healthy,0.9232,False,13.64,2,2015-10-01T20:00,86.41,23.37,0.04,83.02
+ml/datasets/processed/disease/test/Healthy/1e389b9301e5c6ab.jpg,Healthy,Healthy,0.9525,False,5.62,0,2022-02-16T21:00,77.67,19.96,0.0,94.68
+ml/datasets/processed/disease/test/Healthy/f4f07ffadc5fcc9c.jpg,Healthy,Healthy,0.9617,False,0.20,3,2022-12-10T15:00,88.43,22.52,0.54,69.75
+ml/datasets/processed/disease/test/Healthy/678cc6574234261f.jpg,Healthy,Healthy,0.8738,False,0.00,0,2015-11-07T15:00,63.56,27.01,0.03,92.12
+ml/datasets/processed/disease/test/Healthy/702e2295a05a986a.jpg,Healthy,Healthy,0.9493,False,0.00,11,2016-03-13T12:00,31.07,35.52,0.01,59.94
+ml/datasets/processed/disease/test/Healthy/fb842f454efc4d4f.jpg,Healthy,Healthy,0.8983,False,0.03,3,2016-01-10T05:00,100.0,12.28,0.0,79.67
+ml/datasets/processed/disease/test/Healthy/ad32fd27a253bedb.jpg,Healthy,Healthy,0.9658,False,0.02,2,2016-01-07T03:00,100.0,14.65,0.0,83.56
+ml/datasets/processed/disease/test/Healthy/114791e9eb289191.jpg,Healthy,Healthy,0.9760,False,0.01,2,2018-07-08T12:00,51.02,29.18,0.01,85.95
+ml/datasets/processed/disease/test/Healthy/035883c29b862eff.jpg,Healthy,Healthy,0.9533,False,5.46,2,2016-10-16T17:00,59.73,26.3,0.0,85.34
+ml/datasets/processed/disease/test/Healthy/4e46876c7274076d.jpg,Healthy,Healthy,0.9826,False,11.14,1,2018-09-06T15:00,29.45,33.85,0.0,94.94
+ml/datasets/processed/disease/test/Healthy/afda62e08a8c3c72.jpg,Healthy,Healthy,0.9563,False,2.76,4,2023-11-21T20:00,90.5,23.56,0.01,62.09
+ml/datasets/processed/disease/test/Healthy/cb2ad4614b1ca90d.jpg,Healthy,Healthy,0.9537,False,0.00,13,2024-04-05T15:00,12.42,39.13,0.0,59.94
+ml/datasets/processed/disease/test/Healthy/417af39bc4d88df6.jpg,Healthy,Healthy,0.9178,False,4.94,2,2021-04-08T12:00,12.13,37.99,0.0,91.06
+ml/datasets/processed/disease/test/Powdery Mildew/9d91f5371c011ad9.jpg,Powdery Mildew,Powdery Mildew,0.9532,False,15.79,4,2023-09-23T15:00,64.72,28.77,0.03,59.00
+ml/datasets/processed/disease/test/Powdery Mildew/2327630aafa28266.jpg,Powdery Mildew,Powdery Mildew,0.9722,False,0.91,2,2022-10-26T02:00,87.98,15.62,0.0,68.88
+ml/datasets/processed/disease/test/Powdery Mildew/1054c899161dae46.jpg,Powdery Mildew,Powdery Mildew,0.9311,False,0.06,2,2018-11-25T03:00,99.8,19.45,0.0,63.28
+ml/datasets/processed/disease/test/Powdery Mildew/08a138be5f383f14.jpg,Powdery Mildew,Powdery Mildew,0.8698,False,3.17,14,2019-09-12T20:00,91.7,23.19,0.57,37.08
+ml/datasets/processed/disease/test/Powdery Mildew/68401a84a0336216.jpg,Powdery Mildew,Powdery Mildew,0.8799,False,10.10,1,2018-12-21T14:00,30.81,31.88,0.0,76.68
+ml/datasets/processed/disease/test/Powdery Mildew/fa2674ae202cd267.jpg,Powdery Mildew,Powdery Mildew,0.9469,False,3.24,2,2016-12-15T18:00,71.89,20.91,0.0,72.65
+ml/datasets/processed/disease/test/Powdery Mildew/0db01095ba9729bd.jpg,Powdery Mildew,Powdery Mildew,0.9677,False,3.78,2,2024-08-26T07:00,84.65,23.47,0.01,66.09
+ml/datasets/processed/disease/test/Powdery Mildew/0da95ee1dc7a6c38.jpg,Powdery Mildew,Powdery Mildew,0.9369,False,9.72,2,2021-11-02T01:00,96.9,20.72,0.45,65.65
+ml/datasets/processed/disease/test/Powdery Mildew/f96b326313c9997e.jpg,Powdery Mildew,Powdery Mildew,0.9671,False,1.05,14,2016-02-01T04:00,98.95,14.39,0.0,37.72
+ml/datasets/processed/disease/test/Powdery Mildew/c2422a521630a45c.jpg,Powdery Mildew,Powdery Mildew,0.9643,False,0.59,2,2021-11-07T20:00,95.52,22.11,0.42,67.48
+ml/datasets/processed/disease/test/Powdery Mildew/6bcb1cdaabbad65a.jpg,Powdery Mildew,Powdery Mildew,0.8978,False,11.05,14,2023-06-02T16:00,40.1,33.12,0.0,43.73
+ml/datasets/processed/disease/test/Powdery Mildew/cfc57852c5c5223e.jpg,Powdery Mildew,Powdery Mildew,0.9638,False,0.03,2,2016-02-05T02:00,100.0,16.14,0.0,68.98
+ml/datasets/processed/disease/test/Powdery Mildew/b8997ad3f6c47e05.jpg,Powdery Mildew,Powdery Mildew,0.9573,False,16.00,0,2018-03-10T02:00,75.77,18.61,0.0,76.42
+ml/datasets/processed/disease/test/Powdery Mildew/70f861cf6d8db5d1.jpg,Powdery Mildew,Powdery Mildew,0.9547,False,0.37,1,2018-12-19T08:00,67.98,20.17,0.0,74.62
+ml/datasets/processed/disease/test/Powdery Mildew/e8bd783472e8ffa1.jpg,Powdery Mildew,Powdery Mildew,0.9347,False,0.04,2,2020-03-21T01:00,65.97,23.46,0.02,65.69
+ml/datasets/processed/disease/test/Powdery Mildew/6a1b3fc32a785c2a.jpg,Powdery Mildew,Powdery Mildew,0.9389,False,8.58,13,2018-08-27T02:00,91.92,21.06,0.01,37.32
+ml/datasets/processed/disease/test/Powdery Mildew/feb9f4475e77232a.jpg,Powdery Mildew,Powdery Mildew,0.8759,False,0.01,3,2019-04-06T09:00,22.18,33.64,0.0,64.60
+ml/datasets/processed/disease/test/Powdery Mildew/e5c9aaa7bd11f0ce.jpg,Powdery Mildew,Powdery Mildew,0.8991,False,1.05,1,2021-07-21T01:00,94.63,20.99,0.0,74.41
+ml/datasets/processed/disease/test/Powdery Mildew/adef7c4c15e99399.jpg,Powdery Mildew,Powdery Mildew,0.9329,False,0.08,2,2019-07-11T03:00,88.29,21.33,0.01,71.19
+ml/datasets/processed/disease/test/Powdery Mildew/3b1a8d337c9ccf6b.jpg,Powdery Mildew,Powdery Mildew,0.9735,False,3.69,1,2024-10-11T13:00,64.4,28.75,0.18,73.38
+ml/datasets/processed/disease/test/Powdery Mildew/5dcea76fc3493913.jpg,Powdery Mildew,Powdery Mildew,0.5858,True,0.49,2,2015-02-12T17:00,23.49,26.94,0.0,75.56
+ml/datasets/processed/disease/test/Powdery Mildew/28f0705e1c9c6cbd.jpg,Powdery Mildew,Powdery Mildew,0.9571,False,1.79,2,2023-04-17T20:00,31.98,27.63,0.0,70.28
+ml/datasets/processed/disease/test/Powdery Mildew/af38ac8e7c9b446d.jpg,Powdery Mildew,Powdery Mildew,0.8914,False,0.22,4,2024-12-01T23:00,94.62,21.8,0.57,50.33
+ml/datasets/processed/disease/test/Powdery Mildew/520943ff1875f20c.jpg,Powdery Mildew,Powdery Mildew,0.8093,True,2.38,16,2017-01-03T09:00,30.72,25.97,0.0,20.58
+ml/datasets/processed/disease/test/Powdery Mildew/0dd9fc4fef39a8ea.jpg,Powdery Mildew,Powdery Mildew,0.9583,False,7.95,3,2016-09-22T09:00,50.3,28.22,0.0,57.32
+ml/datasets/processed/disease/test/Powdery Mildew/feff109c97e23f49.jpg,Powdery Mildew,Powdery Mildew,0.9279,False,3.47,5,2023-04-10T08:00,30.87,29.4,0.0,45.69
+ml/datasets/processed/disease/test/Powdery Mildew/71985550cd31dbc3.jpg,Powdery Mildew,Powdery Mildew,0.9479,False,1.35,1,2019-01-27T09:00,54.38,26.32,0.0,74.57
+ml/datasets/processed/disease/test/Powdery Mildew/0aab651654b8b2bd.jpg,Powdery Mildew,Powdery Mildew,0.8971,False,1.81,17,2024-01-17T04:00,96.5,16.92,0.0,38.98
+ml/datasets/processed/disease/test/Powdery Mildew/9f6d5bf74fb7665f.jpg,Powdery Mildew,Powdery Mildew,0.9119,False,2.78,2,2020-02-16T14:00,14.26,34.46,0.0,70.38
+ml/datasets/processed/disease/test/Powdery Mildew/c1b386d00166a0cc.jpg,Powdery Mildew,Powdery Mildew,0.9849,False,6.10,16,2024-06-25T18:00,69.74,23.86,0.21,37.56
+ml/datasets/processed/disease/test/Powdery Mildew/03c2c36ff57a25dd.jpg,Powdery Mildew,Powdery Mildew,0.9723,False,20.09,2,2022-07-23T04:00,96.08,21.04,0.01,62.68
+ml/datasets/processed/disease/test/Sooty Mold/4c4bf705c2097dd4.jpg,Sooty Mold,Sooty Mold,0.8317,False,6.87,2,2018-10-03T10:00,54.89,29.26,0.03,71.82
+ml/datasets/processed/disease/test/Sooty Mold/bccc955d8642d0bd.jpg,Sooty Mold,Sooty Mold,0.9466,False,3.18,2,2016-05-19T01:00,92.55,23.33,0.26,72.80
+ml/datasets/processed/disease/test/Sooty Mold/e11df221946fdd99.jpg,Sooty Mold,Sooty Mold,0.8744,False,3.79,0,2021-05-02T06:00,89.25,24.0,0.0,81.37
+ml/datasets/processed/disease/test/Sooty Mold/62e6fecaa4b685b1.jpg,Sooty Mold,Sooty Mold,0.9549,False,3.01,5,2015-08-29T18:00,59.3,27.96,0.0,49.08
+ml/datasets/processed/disease/test/Sooty Mold/5d2ff68f55a5d444.jpg,Sooty Mold,Sooty Mold,0.8990,False,19.15,1,2019-12-27T15:00,40.36,29.79,0.0,76.21
+ml/datasets/processed/disease/test/Sooty Mold/4edddf052219eb4f.jpg,Sooty Mold,Sooty Mold,0.9631,False,3.76,3,2024-07-11T11:00,51.78,29.16,0.0,64.63
+ml/datasets/processed/disease/test/Sooty Mold/56c23ee17e1f6e3c.jpg,Sooty Mold,Sooty Mold,0.9603,False,54.68,0,2017-06-01T10:00,45.97,31.83,0.0,74.45
+ml/datasets/processed/disease/test/Sooty Mold/20542e59fd018567.jpg,Sooty Mold,Sooty Mold,0.9258,False,1.85,3,2023-04-01T21:00,57.88,27.03,0.07,72.61
+ml/datasets/processed/disease/test/Sooty Mold/8aa2d96b683c3318.jpg,Sooty Mold,Sooty Mold,0.9030,False,3.74,4,2021-05-24T17:00,75.87,26.66,0.0,66.00
+ml/datasets/processed/disease/test/Sooty Mold/b73afbe1af2fde18.jpg,Sooty Mold,Sooty Mold,0.7696,True,23.96,14,2015-02-22T19:00,37.47,23.7,0.0,22.97
+ml/datasets/processed/disease/test/Sooty Mold/ecac122953a2003f.jpg,Sooty Mold,Sooty Mold,0.9108,False,3.03,2,2016-02-15T22:00,89.08,19.99,0.0,76.36
+ml/datasets/processed/disease/test/Sooty Mold/a061b2de516be2fd.jpg,Sooty Mold,Sooty Mold,0.9043,False,3.04,2,2017-03-25T00:00,60.58,19.95,0.0,80.70
+ml/datasets/processed/disease/test/Sooty Mold/75b69f8ad68a2086.jpg,Sooty Mold,Sooty Mold,0.9037,False,6.25,13,2015-07-16T18:00,61.93,26.54,0.04,44.20
+ml/datasets/processed/disease/test/Sooty Mold/9c2e830827096494.jpg,Sooty Mold,Sooty Mold,0.8128,True,2.41,2,2023-09-17T06:00,93.61,21.86,0.02,72.11
+ml/datasets/processed/disease/test/Sooty Mold/f5bd71aaed58c8e4.jpg,Sooty Mold,Sooty Mold,0.9241,False,4.52,3,2017-03-19T18:00,38.24,30.29,0.0,72.76
+ml/datasets/processed/disease/test/Sooty Mold/b322ed9b98258d4e.jpg,Sooty Mold,Sooty Mold,0.8872,False,4.20,4,2016-11-27T00:00,82.48,16.02,0.0,57.08
+ml/datasets/processed/disease/test/Sooty Mold/dd38bed8172fded2.jpg,Sooty Mold,Sooty Mold,0.8935,False,57.62,5,2019-08-11T12:00,40.35,32.84,0.04,53.81
+ml/datasets/processed/disease/test/Sooty Mold/c345405a1923bd43.jpg,Sooty Mold,Sooty Mold,0.7173,True,3.27,1,2015-08-06T21:00,70.62,24.61,0.0,78.04
+ml/datasets/processed/disease/test/Sooty Mold/910af3656c678a24.jpg,Sooty Mold,Sooty Mold,0.9394,False,29.49,2,2018-02-21T07:00,69.95,20.15,0.0,72.33
+ml/datasets/processed/disease/test/Sooty Mold/74483dd550feda81.jpg,Sooty Mold,Sooty Mold,0.7867,True,48.75,2,2018-09-24T18:00,76.68,25.74,0.26,69.39
+ml/datasets/processed/disease/test/Sooty Mold/cbb84135c6884362.jpg,Sooty Mold,Sooty Mold,0.8525,False,19.06,1,2016-07-15T09:00,59.05,27.65,0.0,76.61
+ml/datasets/processed/disease/test/Sooty Mold/8bfa88ce7cd87c6f.jpg,Sooty Mold,Sooty Mold,0.7228,True,3.76,12,2023-05-16T17:00,43.91,33.9,0.01,27.89
+ml/datasets/processed/disease/test/Sooty Mold/5a7de75984a70d6a.jpg,Sooty Mold,Sooty Mold,0.9656,False,3.04,5,2024-04-12T15:00,25.22,37.32,0.0,54.47
+ml/datasets/processed/disease/test/Sooty Mold/c31ccfdc29171e43.jpg,Sooty Mold,Sooty Mold,0.8638,False,38.59,3,2018-07-16T21:00,78.46,22.46,0.01,54.97
+ml/datasets/processed/disease/test/Sooty Mold/3469ed54d3bc3cbf.jpg,Sooty Mold,Sooty Mold,0.9178,False,25.62,1,2017-08-24T22:00,93.39,21.84,0.07,73.19
+ml/datasets/processed/disease/test/Sooty Mold/7049346a78f5ed46.jpg,Sooty Mold,Sooty Mold,0.9259,False,6.02,7,2015-05-16T08:00,78.3,25.99,0.62,41.60
+ml/datasets/processed/disease/test/Sooty Mold/13e0047f86088a55.jpg,Sooty Mold,Sooty Mold,0.9165,False,65.12,12,2019-12-20T04:00,100.0,17.17,0.0,28.38
+ml/datasets/processed/disease/test/Sooty Mold/61a7566edd96308e.jpg,Sooty Mold,Sooty Mold,0.9414,False,5.27,16,2018-09-17T07:00,88.0,22.47,0.01,42.52
+ml/datasets/processed/disease/test/Sooty Mold/a144c2c549cc1ea4.jpg,Sooty Mold,Sooty Mold,0.7569,True,17.14,1,2017-05-19T10:00,55.03,30.19,0.11,84.39
+ml/datasets/processed/disease/test/Sooty Mold/c0831011ccb0bc1a.jpg,Sooty Mold,Sooty Mold,0.8023,True,10.29,1,2016-08-13T08:00,68.05,26.16,0.01,77.10
+ml/datasets/processed/disease/test/Sooty Mold/2b80074dde1a6386.jpg,Sooty Mold,Sooty Mold,0.9563,False,3.50,0,2015-07-31T11:00,39.71,32.82,0.02,89.43
+ml/datasets/processed/disease/test/Sooty Mold/8704dd898fb030a7.jpg,Sooty Mold,Sooty Mold,0.9025,False,7.93,2,2018-04-29T18:00,35.77,32.38,0.0,74.90
+ml/datasets/processed/disease/test/Sooty Mold/9d2e05c1b4015aeb.jpg,Sooty Mold,Sooty Mold,0.8571,False,4.03,2,2021-11-18T20:00,95.89,21.04,2.94,72.61
+ml/datasets/processed/disease/test/Sooty Mold/e25a1e1872a83ebf.jpg,Sooty Mold,Sooty Mold,0.9267,False,1.97,17,2019-07-25T17:00,67.7,27.08,0.85,43.52
+ml/datasets/processed/disease/test/Sooty Mold/1ceba0d8db1d8c78.jpg,Sooty Mold,Sooty Mold,0.6941,True,18.27,13,2018-05-02T11:00,48.38,32.24,0.03,27.87
+ml/datasets/processed/disease/test/Sooty Mold/56ef0a4e58704dab.jpg,Sooty Mold,Sooty Mold,0.8779,False,46.67,6,2024-11-13T15:00,78.34,25.57,0.03,33.12

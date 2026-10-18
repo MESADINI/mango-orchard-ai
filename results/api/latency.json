@@ -1,0 +1,96 @@
+{
+  "device": "cpu",
+  "env": {
+    "git": {
+      "branch": "enhance/real-data",
+      "commit": "649aa607e7d5cd4522c17e4c276ba4c7e92f14d6",
+      "dirty": false
+    },
+    "hardware": {
+      "cpu_count": 16,
+      "cuda_available": false,
+      "gpu": null,
+      "nvidia_smi": "NVIDIA GeForce RTX 3050 Laptop GPU, 4096 MiB, 617.42",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+      "torch_cuda_build": "12.1"
+    },
+    "packages": {
+      "ImageHash": "4.3.2",
+      "Pillow": "10.3.0",
+      "kaggle": "2.2.4",
+      "matplotlib": "3.11.2",
+      "numpy": "1.26.4",
+      "opencv-python-headless": "4.9.0.80",
+      "pandas": "3.0.6",
+      "scikit-learn": "1.5.0",
+      "scipy": "1.17.1",
+      "timm": "1.0.3",
+      "torch": "2.3.0+cu121",
+      "torchvision": "0.18.0+cu121",
+      "ultralytics": "8.3.40"
+    },
+    "python": "3.11.9",
+    "timestamp_utc": "2026-10-17T15:21:54+00:00"
+  },
+  "models": {
+    "disease_classifier": {
+      "arch": "efficientnet_b3",
+      "calibration": {
+        "low_confidence_rule": "top probability below the value that keeps 95% of validation images -> 'retake photo', disease excluded from the OHI",
+        "low_confidence_threshold": 0.8152007082226095,
+        "temperature": 1.0
+      },
+      "classes": [
+        "Anthracnose",
+        "Bacterial Canker",
+        "Powdery Mildew",
+        "Sooty Mold",
+        "Healthy"
+      ],
+      "status": "ok",
+      "version": "c6becbe02b05"
+    },
+    "pest_detector": {
+      "arch": "yolo11n",
+      "classes": [
+        "Fruit Fly",
+        "Mealy Bug",
+        "Scale Insect"
+      ],
+      "host_verified": {
+        "Fruit Fly": false,
+        "Mealy Bug": false,
+        "Scale Insect": false
+      },
+      "status": "ok",
+      "version": "dfd2d0e2db47"
+    }
+  },
+  "n": 30,
+  "scan_types": {
+    "disease": {
+      "max_ms": 412.23189999436727,
+      "mean_ms": 341.1200466660375,
+      "median_ms": 345.1222500007134,
+      "min_ms": 288.6285999993561,
+      "p95_ms": 403.3082599999033
+    },
+    "dual": {
+      "max_ms": 456.3217999966582,
+      "mean_ms": 410.26270333362237,
+      "median_ms": 404.33000000120956,
+      "min_ms": 384.66199999675155,
+      "p95_ms": 446.3014399978419
+    },
+    "pest": {
+      "max_ms": 107.82230000040727,
+      "mean_ms": 99.33823000004243,
+      "median_ms": 98.73939999670256,
+      "min_ms": 96.28080000402406,
+      "p95_ms": 104.99756499957584
+    }
+  },
+  "warmup": 3,
+  "weather": "stubbed (network excluded)"
+}

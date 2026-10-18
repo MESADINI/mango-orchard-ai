@@ -1,0 +1,1443 @@
+{
+  "ablation": {
+    "baseline": {
+      "accuracy": 1.0,
+      "augmentation": "strong",
+      "best_epoch": 11,
+      "ci95_macro_f1": [
+        1.0,
+        1.0
+      ],
+      "img_size": 224,
+      "macro_f1": 1.0,
+      "n": 279,
+      "pretrained": true,
+      "run": "cv/efficientnet_b3/fold0"
+    },
+    "basic_augmentation": {
+      "accuracy": 0.989247311827957,
+      "augmentation": "basic",
+      "best_epoch": 18,
+      "ci95_macro_f1": [
+        0.9536710634581094,
+        1.0
+      ],
+      "delta_macro_f1_vs_baseline": -0.020468499666636886,
+      "img_size": 224,
+      "macro_f1": 0.9795315003333631,
+      "mcnemar_vs_baseline": {
+        "a_right_b_wrong": 0,
+        "a_wrong_b_right": 3,
+        "p_value": 0.25
+      },
+      "n": 279,
+      "pretrained": true,
+      "run": "ablation/efficientnet_b3/basic_augmentation/fold0"
+    },
+    "img_size_256": {
+      "accuracy": 0.996415770609319,
+      "augmentation": "strong",
+      "best_epoch": 18,
+      "ci95_macro_f1": [
+        0.9712072638402425,
+        1.0
+      ],
+      "delta_macro_f1_vs_baseline": -0.008159934720522344,
+      "img_size": 256,
+      "macro_f1": 0.9918400652794777,
+      "mcnemar_vs_baseline": {
+        "a_right_b_wrong": 0,
+        "a_wrong_b_right": 1,
+        "p_value": 1.0
+      },
+      "n": 279,
+      "pretrained": true,
+      "run": "ablation/efficientnet_b3/img_size_256/fold0"
+    },
+    "no_pretraining": {
+      "accuracy": 0.7885304659498208,
+      "augmentation": "strong",
+      "best_epoch": 27,
+      "ci95_macro_f1": [
+        0.5839548120395104,
+        0.7009185653752135
+      ],
+      "delta_macro_f1_vs_baseline": -0.3505897483719329,
+      "img_size": 224,
+      "macro_f1": 0.6494102516280671,
+      "mcnemar_vs_baseline": {
+        "a_right_b_wrong": 0,
+        "a_wrong_b_right": 59,
+        "p_value": 3.469446951953614e-18
+      },
+      "n": 279,
+      "pretrained": false,
+      "run": "ablation/efficientnet_b3/no_pretraining/fold0"
+    }
+  },
+  "complete": {
+    "ablation": [
+      "baseline",
+      "basic_augmentation",
+      "img_size_256",
+      "no_pretraining"
+    ],
+    "cv": [
+      "efficientnet_b3",
+      "mobilenetv3_large",
+      "resnet50"
+    ],
+    "final": [
+      "efficientnet_b3",
+      "mobilenetv3_large",
+      "resnet50"
+    ]
+  },
+  "cv": {
+    "efficientnet_b3": {
+      "accuracy": {
+        "mean": 0.9992857142857143,
+        "per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          0.9964285714285714,
+          1.0
+        ],
+        "sd": 0.0015971914124998442
+      },
+      "balanced_accuracy": {
+        "mean": 0.998918918918919,
+        "per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          0.9945945945945945,
+          1.0
+        ],
+        "sd": 0.002417370786486284
+      },
+      "epochs_best": [
+        11,
+        11,
+        25,
+        17,
+        12
+      ],
+      "macro_auc_ovr": {
+        "mean": 1.0,
+        "per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "sd": 0.0
+      },
+      "macro_f1": {
+        "mean": 0.9983091976516635,
+        "per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          0.9915459882583171,
+          1.0
+        ],
+        "sd": 0.0037807489873968804
+      },
+      "pooled_oof": {
+        "accuracy": 0.999275887038378,
+        "balanced_accuracy": 0.9990196078431373,
+        "classes_evaluated": [
+          "Anthracnose",
+          "Bacterial Canker",
+          "Powdery Mildew",
+          "Sooty Mold",
+          "Healthy"
+        ],
+        "confusion_matrix": [
+          [
+            423,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            196,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            203,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            136,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            422
+          ]
+        ],
+        "macro_auc_ovr": 0.9999988188046303,
+        "macro_f1": 0.9987759987759988,
+        "n": 1381,
+        "per_class": {
+          "Anthracnose": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 423
+          },
+          "Bacterial Canker": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 196
+          },
+          "Healthy": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 422
+          },
+          "Powdery Mildew": {
+            "auc_ovr": 1.0,
+            "f1": 0.9975429975429976,
+            "precision": 1.0,
+            "recall": 0.9950980392156863,
+            "support": 204
+          },
+          "Sooty Mold": {
+            "auc_ovr": 0.9999940940231514,
+            "f1": 0.9963369963369962,
+            "precision": 0.9927007299270073,
+            "recall": 1.0,
+            "support": 136
+          }
+        }
+      }
+    },
+    "mobilenetv3_large": {
+      "accuracy": {
+        "mean": 0.9978829772378159,
+        "per_fold": [
+          1.0,
+          1.0,
+          0.9962121212121212,
+          0.9964285714285714,
+          0.9967741935483871
+        ],
+        "sd": 0.0019429377330294647
+      },
+      "balanced_accuracy": {
+        "mean": 0.996032644409115,
+        "per_fold": [
+          1.0,
+          1.0,
+          0.9945945945945945,
+          0.9882352941176471,
+          0.9973333333333333
+        ],
+        "sd": 0.0048999558998917
+      },
+      "epochs_best": [
+        12,
+        18,
+        12,
+        23,
+        14
+      ],
+      "macro_auc_ovr": {
+        "mean": 0.9999955511066622,
+        "per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          0.9999777555333111,
+          1.0
+        ],
+        "sd": 9.948027927903598e-06
+      },
+      "macro_f1": {
+        "mean": 0.9960384455323522,
+        "per_fold": [
+          1.0,
+          1.0,
+          0.9941833508956798,
+          0.9912727272727272,
+          0.9947361494933544
+        ],
+        "sd": 0.0038482869310448964
+      },
+      "pooled_oof": {
+        "accuracy": 0.997827661115134,
+        "balanced_accuracy": 0.996078431372549,
+        "classes_evaluated": [
+          "Anthracnose",
+          "Bacterial Canker",
+          "Powdery Mildew",
+          "Sooty Mold",
+          "Healthy"
+        ],
+        "confusion_matrix": [
+          [
+            423,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            196,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            203,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            134,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            422
+          ]
+        ],
+        "macro_auc_ovr": 0.9999911104260111,
+        "macro_f1": 0.9963189851947419,
+        "n": 1381,
+        "per_class": {
+          "Anthracnose": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 423
+          },
+          "Bacterial Canker": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 196
+          },
+          "Healthy": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 422
+          },
+          "Powdery Mildew": {
+            "auc_ovr": 0.9999791760374499,
+            "f1": 0.9926650366748165,
+            "precision": 0.9902439024390244,
+            "recall": 0.9950980392156863,
+            "support": 204
+          },
+          "Sooty Mold": {
+            "auc_ovr": 0.9999763760926057,
+            "f1": 0.988929889298893,
+            "precision": 0.9925925925925926,
+            "recall": 0.9852941176470589,
+            "support": 136
+          }
+        }
+      }
+    },
+    "resnet50": {
+      "accuracy": {
+        "mean": 0.9985714285714286,
+        "per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          0.9928571428571429,
+          1.0
+        ],
+        "sd": 0.0031943828249996883
+      },
+      "balanced_accuracy": {
+        "mean": 0.9978378378378379,
+        "per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          0.9891891891891891,
+          1.0
+        ],
+        "sd": 0.004834741572972568
+      },
+      "epochs_best": [
+        11,
+        11,
+        16,
+        6,
+        11
+      ],
+      "macro_auc_ovr": {
+        "mean": 1.0,
+        "per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "sd": 0.0
+      },
+      "macro_f1": {
+        "mean": 0.9966666666666667,
+        "per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          0.9833333333333334,
+          1.0
+        ],
+        "sd": 0.007453559924999273
+      },
+      "pooled_oof": {
+        "accuracy": 0.998551774076756,
+        "balanced_accuracy": 0.9980392156862745,
+        "classes_evaluated": [
+          "Anthracnose",
+          "Bacterial Canker",
+          "Powdery Mildew",
+          "Sooty Mold",
+          "Healthy"
+        ],
+        "confusion_matrix": [
+          [
+            423,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            196,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            202,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            136,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            422
+          ]
+        ],
+        "macro_auc_ovr": 1.0,
+        "macro_f1": 0.9975549243105245,
+        "n": 1381,
+        "per_class": {
+          "Anthracnose": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 423
+          },
+          "Bacterial Canker": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 196
+          },
+          "Healthy": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 422
+          },
+          "Powdery Mildew": {
+            "auc_ovr": 1.0,
+            "f1": 0.9950738916256158,
+            "precision": 1.0,
+            "recall": 0.9901960784313726,
+            "support": 204
+          },
+          "Sooty Mold": {
+            "auc_ovr": 1.0,
+            "f1": 0.9927007299270074,
+            "precision": 0.9855072463768116,
+            "recall": 1.0,
+            "support": 136
+          }
+        }
+      }
+    }
+  },
+  "cv_tests": {
+    "mcnemar_pooled_oof": {
+      "efficientnet_b3 vs mobilenetv3_large": {
+        "a_right_b_wrong": 3,
+        "a_wrong_b_right": 1,
+        "p_holm": 1.0,
+        "p_value": 0.625
+      },
+      "efficientnet_b3 vs resnet50": {
+        "a_right_b_wrong": 2,
+        "a_wrong_b_right": 1,
+        "p_holm": 1.0,
+        "p_value": 1.0
+      },
+      "resnet50 vs mobilenetv3_large": {
+        "a_right_b_wrong": 3,
+        "a_wrong_b_right": 2,
+        "p_holm": 1.0,
+        "p_value": 1.0
+      }
+    },
+    "wilcoxon_fold_macro_f1": {
+      "efficientnet_b3 vs mobilenetv3_large": {
+        "min_attainable_p": 0.0625,
+        "n": 5,
+        "p_holm": 0.75,
+        "p_value": 0.25,
+        "statistic": 0.0
+      },
+      "efficientnet_b3 vs resnet50": {
+        "min_attainable_p": 0.0625,
+        "n": 5,
+        "p_holm": 1.0,
+        "p_value": 1.0,
+        "statistic": 0.0
+      },
+      "resnet50 vs mobilenetv3_large": {
+        "min_attainable_p": 0.0625,
+        "n": 5,
+        "p_holm": 1.0,
+        "p_value": 1.0,
+        "statistic": 3.0
+      }
+    }
+  },
+  "deferred_not_run": [
+    "convnext_tiny",
+    "swin_tiny"
+  ],
+  "final": {
+    "efficientnet_b3": {
+      "calibration_external": {
+        "accuracy": 0.11023622047244094,
+        "ece_deployed_T": 0.41630570520564414,
+        "ece_with_fitted_T": 0.8639877109867681,
+        "mean_confidence": 0.5250296766146167,
+        "nll_deployed_T": 2.1659851502953225
+      },
+      "calibration_test": {
+        "ece_after": 0.0855324069628868,
+        "ece_before": 0.0855324069628868,
+        "ece_with_fitted_T": 5.840550265645561e-12,
+        "nll_after": 0.09230239766144802,
+        "nll_before": 0.09230239766144802
+      },
+      "external": {
+        "accuracy": 0.11023622047244094,
+        "balanced_accuracy": 0.2014155982905983,
+        "ci95_macro_f1": [
+          0.08307058238828081,
+          0.15538224265488257
+        ],
+        "classes_evaluated": [
+          "Anthracnose",
+          "Bacterial Canker",
+          "Powdery Mildew",
+          "Sooty Mold"
+        ],
+        "confusion_matrix": [
+          [
+            16,
+            1,
+            5,
+            2,
+            2
+          ],
+          [
+            146,
+            19,
+            5,
+            10,
+            60
+          ],
+          [
+            8,
+            0,
+            0,
+            1,
+            43
+          ],
+          [
+            4,
+            1,
+            50,
+            7,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "macro_auc_ovr": 0.5909877595636115,
+        "macro_f1": 0.11856714213174536,
+        "n": 381,
+        "per_class": {
+          "Anthracnose": {
+            "auc_ovr": 0.6219934994582882,
+            "f1": 0.16,
+            "precision": 0.09195402298850575,
+            "recall": 0.6153846153846154,
+            "support": 26
+          },
+          "Bacterial Canker": {
+            "auc_ovr": 0.6004137115839243,
+            "f1": 0.14559386973180075,
+            "precision": 0.9047619047619048,
+            "recall": 0.07916666666666666,
+            "support": 240
+          },
+          "Healthy": {
+            "auc_ovr": null,
+            "f1": null,
+            "precision": 0.0,
+            "recall": null,
+            "support": 0
+          },
+          "Powdery Mildew": {
+            "auc_ovr": 0.4154781388823942,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 52
+          },
+          "Sooty Mold": {
+            "auc_ovr": 0.7260656883298392,
+            "f1": 0.1686746987951807,
+            "precision": 0.35,
+            "recall": 0.1111111111111111,
+            "support": 63
+          }
+        },
+        "predicted_healthy_fraction": 0.2782152230971129,
+        "rejected_by_ood_threshold": 0.968503937007874
+      },
+      "ood": {
+        "ood_far": {
+          "auroc": 0.9626080892608089,
+          "fpr_at_95_tpr": 0.08333333333333333,
+          "in_accepted": 0.9205020920502092,
+          "n_in": 239,
+          "n_out": 300,
+          "out_rejected": 0.9366666666666666,
+          "predicted_class_distribution": {
+            "Anthracnose": 0.23333333333333334,
+            "Bacterial Canker": 0.45666666666666667,
+            "Healthy": 0.05,
+            "Powdery Mildew": 0.13666666666666666,
+            "Sooty Mold": 0.12333333333333334
+          },
+          "threshold": 0.8152007082226095
+        },
+        "ood_near": {
+          "auroc": 0.9543840572602409,
+          "fpr_at_95_tpr": 0.23576691225720026,
+          "in_accepted": 0.9205020920502092,
+          "n_in": 239,
+          "n_out": 1493,
+          "out_rejected": 0.8184862692565305,
+          "predicted_class_distribution": {
+            "Anthracnose": 0.739450770261219,
+            "Bacterial Canker": 0.034829202947086406,
+            "Healthy": 0.09310113864701942,
+            "Powdery Mildew": 0.09778968519758875,
+            "Sooty Mold": 0.034829202947086406
+          },
+          "threshold": 0.8152007082226095
+        }
+      },
+      "ood_threshold": 0.8152007082226095,
+      "summary": {
+        "arch": "efficientnet_b3",
+        "best_epoch": 10,
+        "best_val_macro_f1": 1.0,
+        "checkpoint_bytes": 43336880,
+        "checkpoint_sha256": "692d53150bc7fab66ebb30708e602df6d8142a9833626153a41ed7aa0c7d967f",
+        "epochs_run": 16,
+        "eval_precision": "fp32",
+        "eval_sets": {
+          "external": 381,
+          "ood_far": 300,
+          "ood_near": 1493,
+          "test": 239,
+          "val": 240
+        },
+        "n_params": 10703917,
+        "train_seconds": 420.4
+      },
+      "temperature": 1.0,
+      "temperature_at_bound": true,
+      "temperature_fitted": 0.05000018271617771,
+      "temperature_identifiable": false,
+      "temperature_rule": "fitted on val; T = 1 if not identifiable (val perfectly separated or fit on the search bound) - post-hoc rule, disclosed",
+      "test": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "ci95_accuracy": [
+          1.0,
+          1.0
+        ],
+        "ci95_macro_f1": [
+          1.0,
+          1.0
+        ],
+        "classes_evaluated": [
+          "Anthracnose",
+          "Bacterial Canker",
+          "Powdery Mildew",
+          "Sooty Mold",
+          "Healthy"
+        ],
+        "confusion_matrix": [
+          [
+            63,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            31,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            31,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            36,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            78
+          ]
+        ],
+        "macro_auc_ovr": 1.0,
+        "macro_f1": 1.0,
+        "n": 239,
+        "per_class": {
+          "Anthracnose": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 63
+          },
+          "Bacterial Canker": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 31
+          },
+          "Healthy": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 78
+          },
+          "Powdery Mildew": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 31
+          },
+          "Sooty Mold": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 36
+          }
+        }
+      },
+      "test_rejected_by_ood_threshold": 0.0794979079497908,
+      "val_accuracy": 1.0
+    },
+    "mobilenetv3_large": {
+      "calibration_external": {
+        "accuracy": 0.12073490813648294,
+        "ece_deployed_T": 0.4430276044920682,
+        "ece_with_fitted_T": 0.8497022754715687,
+        "mean_confidence": 0.563762512628551,
+        "nll_deployed_T": 2.3547373287741626
+      },
+      "calibration_test": {
+        "ece_after": 0.08784197204388468,
+        "ece_before": 0.08784197204388468,
+        "ece_with_fitted_T": 0.010918528085868077,
+        "nll_after": 0.11761692806648129,
+        "nll_before": 0.11761692806648129
+      },
+      "external": {
+        "accuracy": 0.12073490813648294,
+        "balanced_accuracy": 0.1903235653235653,
+        "ci95_macro_f1": [
+          0.11822472816126874,
+          0.21387039350952944
+        ],
+        "classes_evaluated": [
+          "Anthracnose",
+          "Bacterial Canker",
+          "Powdery Mildew",
+          "Sooty Mold"
+        ],
+        "confusion_matrix": [
+          [
+            11,
+            0,
+            14,
+            0,
+            1
+          ],
+          [
+            72,
+            20,
+            37,
+            4,
+            107
+          ],
+          [
+            6,
+            0,
+            5,
+            0,
+            41
+          ],
+          [
+            1,
+            1,
+            44,
+            10,
+            7
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "macro_auc_ovr": 0.5906401321785261,
+        "macro_f1": 0.16711040270477656,
+        "n": 381,
+        "per_class": {
+          "Anthracnose": {
+            "auc_ovr": 0.6208017334777898,
+            "f1": 0.18965517241379312,
+            "precision": 0.12222222222222222,
+            "recall": 0.4230769230769231,
+            "support": 26
+          },
+          "Bacterial Canker": {
+            "auc_ovr": 0.6577718676122932,
+            "f1": 0.15325670498084293,
+            "precision": 0.9523809523809523,
+            "recall": 0.08333333333333333,
+            "support": 240
+          },
+          "Healthy": {
+            "auc_ovr": null,
+            "f1": null,
+            "precision": 0.0,
+            "recall": null,
+            "support": 0
+          },
+          "Powdery Mildew": {
+            "auc_ovr": 0.3874210895487491,
+            "f1": 0.06578947368421052,
+            "precision": 0.05,
+            "recall": 0.09615384615384616,
+            "support": 52
+          },
+          "Sooty Mold": {
+            "auc_ovr": 0.6965658380752721,
+            "f1": 0.2597402597402597,
+            "precision": 0.7142857142857143,
+            "recall": 0.15873015873015872,
+            "support": 63
+          }
+        },
+        "predicted_healthy_fraction": 0.4094488188976378,
+        "rejected_by_ood_threshold": 0.8713910761154856
+      },
+      "ood": {
+        "ood_far": {
+          "auroc": 0.939344490934449,
+          "fpr_at_95_tpr": 0.26,
+          "in_accepted": 0.9037656903765691,
+          "n_in": 239,
+          "n_out": 300,
+          "out_rejected": 0.8633333333333333,
+          "predicted_class_distribution": {
+            "Anthracnose": 0.13666666666666666,
+            "Bacterial Canker": 0.38333333333333336,
+            "Healthy": 0.11333333333333333,
+            "Powdery Mildew": 0.2633333333333333,
+            "Sooty Mold": 0.10333333333333333
+          },
+          "threshold": 0.7841480525845435
+        },
+        "ood_near": {
+          "auroc": 0.9493311885031122,
+          "fpr_at_95_tpr": 0.2973878097789685,
+          "in_accepted": 0.9037656903765691,
+          "n_in": 239,
+          "n_out": 1493,
+          "out_rejected": 0.8653717347622237,
+          "predicted_class_distribution": {
+            "Anthracnose": 0.5405224380442063,
+            "Bacterial Canker": 0.08506363027461487,
+            "Healthy": 0.09912926992632284,
+            "Powdery Mildew": 0.23576691225720026,
+            "Sooty Mold": 0.03951774949765573
+          },
+          "threshold": 0.7841480525845435
+        }
+      },
+      "ood_threshold": 0.7841480525845435,
+      "summary": {
+        "arch": "mobilenetv3_large",
+        "best_epoch": 9,
+        "best_val_macro_f1": 1.0,
+        "checkpoint_bytes": 17026190,
+        "checkpoint_sha256": "c4d24a9c0b8f5324a6ce55fb4bf42b9973c864ebb4e993ef151d4672c5ce2d38",
+        "epochs_run": 15,
+        "eval_precision": "fp32",
+        "eval_sets": {
+          "external": 381,
+          "ood_far": 300,
+          "ood_near": 1493,
+          "test": 239,
+          "val": 240
+        },
+        "n_params": 4208437,
+        "train_seconds": 265.7
+      },
+      "temperature": 1.0,
+      "temperature_at_bound": true,
+      "temperature_fitted": 0.05000031797468601,
+      "temperature_identifiable": false,
+      "temperature_rule": "fitted on val; T = 1 if not identifiable (val perfectly separated or fit on the search bound) - post-hoc rule, disclosed",
+      "test": {
+        "accuracy": 0.9916317991631799,
+        "balanced_accuracy": 0.9888888888888889,
+        "ci95_accuracy": [
+          0.9785384601154359,
+          1.0
+        ],
+        "ci95_macro_f1": [
+          0.9638839984350548,
+          1.0
+        ],
+        "classes_evaluated": [
+          "Anthracnose",
+          "Bacterial Canker",
+          "Powdery Mildew",
+          "Sooty Mold",
+          "Healthy"
+        ],
+        "confusion_matrix": [
+          [
+            63,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            31,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            31,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            34,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            78
+          ]
+        ],
+        "macro_auc_ovr": 0.9999379652605459,
+        "macro_f1": 0.9880357142857144,
+        "n": 239,
+        "per_class": {
+          "Anthracnose": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 63
+          },
+          "Bacterial Canker": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 31
+          },
+          "Healthy": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 78
+          },
+          "Powdery Mildew": {
+            "auc_ovr": 0.9996898263027295,
+            "f1": 0.96875,
+            "precision": 0.9393939393939394,
+            "recall": 1.0,
+            "support": 31
+          },
+          "Sooty Mold": {
+            "auc_ovr": 1.0,
+            "f1": 0.9714285714285714,
+            "precision": 1.0,
+            "recall": 0.9444444444444444,
+            "support": 36
+          }
+        }
+      },
+      "test_rejected_by_ood_threshold": 0.09623430962343096,
+      "val_accuracy": 1.0
+    },
+    "resnet50": {
+      "calibration_external": {
+        "accuracy": 0.08398950131233596,
+        "ece_deployed_T": 0.7027923307304843,
+        "ece_with_fitted_T": 0.9082433996158555,
+        "mean_confidence": 0.7835301970500341,
+        "nll_deployed_T": 3.432317732601951
+      },
+      "calibration_test": {
+        "ece_after": 0.0805135339202588,
+        "ece_before": 0.0805135339202588,
+        "ece_with_fitted_T": 0.0,
+        "nll_after": 0.08444749093829823,
+        "nll_before": 0.08444749093829823
+      },
+      "external": {
+        "accuracy": 0.08398950131233596,
+        "balanced_accuracy": 0.23052884615384614,
+        "ci95_macro_f1": [
+          0.056095296278307324,
+          0.10159612453197701
+        ],
+        "classes_evaluated": [
+          "Anthracnose",
+          "Bacterial Canker",
+          "Powdery Mildew",
+          "Sooty Mold"
+        ],
+        "confusion_matrix": [
+          [
+            23,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            132,
+            9,
+            1,
+            2,
+            96
+          ],
+          [
+            5,
+            0,
+            0,
+            1,
+            46
+          ],
+          [
+            3,
+            1,
+            54,
+            0,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "macro_auc_ovr": 0.5821665252773405,
+        "macro_f1": 0.07877484769915047,
+        "n": 381,
+        "per_class": {
+          "Anthracnose": {
+            "auc_ovr": 0.8213434452871073,
+            "f1": 0.24338624338624334,
+            "precision": 0.1411042944785276,
+            "recall": 0.8846153846153846,
+            "support": 26
+          },
+          "Bacterial Canker": {
+            "auc_ovr": 0.4294030732860521,
+            "f1": 0.07171314741035856,
+            "precision": 0.8181818181818182,
+            "recall": 0.0375,
+            "support": 240
+          },
+          "Healthy": {
+            "auc_ovr": null,
+            "f1": null,
+            "precision": 0.0,
+            "recall": null,
+            "support": 0
+          },
+          "Powdery Mildew": {
+            "auc_ovr": 0.4603694178162263,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 52
+          },
+          "Sooty Mold": {
+            "auc_ovr": 0.617550164719976,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support": 63
+          }
+        },
+        "predicted_healthy_fraction": 0.3858267716535433,
+        "rejected_by_ood_threshold": 0.5433070866141733
+      },
+      "ood": {
+        "ood_far": {
+          "auroc": 0.9950627615062761,
+          "fpr_at_95_tpr": 0.02666666666666667,
+          "in_accepted": 0.9497907949790795,
+          "n_in": 239,
+          "n_out": 300,
+          "out_rejected": 0.9733333333333334,
+          "predicted_class_distribution": {
+            "Anthracnose": 0.55,
+            "Bacterial Canker": 0.11333333333333333,
+            "Healthy": 0.0033333333333333335,
+            "Powdery Mildew": 0.11,
+            "Sooty Mold": 0.22333333333333333
+          },
+          "threshold": 0.8622847815789612
+        },
+        "ood_near": {
+          "auroc": 0.9762770193959538,
+          "fpr_at_95_tpr": 0.09042196918955124,
+          "in_accepted": 0.9497907949790795,
+          "n_in": 239,
+          "n_out": 1493,
+          "out_rejected": 0.9095780308104487,
+          "predicted_class_distribution": {
+            "Anthracnose": 0.8037508372404555,
+            "Bacterial Canker": 0.044876088412592094,
+            "Healthy": 0.038178164768921635,
+            "Powdery Mildew": 0.1058271935699933,
+            "Sooty Mold": 0.007367716008037508
+          },
+          "threshold": 0.8622847815789612
+        }
+      },
+      "ood_threshold": 0.8622847815789612,
+      "summary": {
+        "arch": "resnet50",
+        "best_epoch": 11,
+        "best_val_macro_f1": 1.0,
+        "checkpoint_bytes": 94375974,
+        "checkpoint_sha256": "b1d370b20bf6e01b883a7d4601fee301c916ef07e48e939689a8e88c674e066e",
+        "epochs_run": 17,
+        "eval_precision": "fp32",
+        "eval_sets": {
+          "external": 381,
+          "ood_far": 300,
+          "ood_near": 1493,
+          "test": 239,
+          "val": 240
+        },
+        "n_params": 23518277,
+        "train_seconds": 375.7
+      },
+      "temperature": 1.0,
+      "temperature_at_bound": true,
+      "temperature_fitted": 0.05000019438620661,
+      "temperature_identifiable": false,
+      "temperature_rule": "fitted on val; T = 1 if not identifiable (val perfectly separated or fit on the search bound) - post-hoc rule, disclosed",
+      "test": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "ci95_accuracy": [
+          1.0,
+          1.0
+        ],
+        "ci95_macro_f1": [
+          1.0,
+          1.0
+        ],
+        "classes_evaluated": [
+          "Anthracnose",
+          "Bacterial Canker",
+          "Powdery Mildew",
+          "Sooty Mold",
+          "Healthy"
+        ],
+        "confusion_matrix": [
+          [
+            63,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            31,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            31,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            36,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            78
+          ]
+        ],
+        "macro_auc_ovr": 1.0,
+        "macro_f1": 1.0,
+        "n": 239,
+        "per_class": {
+          "Anthracnose": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 63
+          },
+          "Bacterial Canker": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 31
+          },
+          "Healthy": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 78
+          },
+          "Powdery Mildew": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 31
+          },
+          "Sooty Mold": {
+            "auc_ovr": 1.0,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 36
+          }
+        }
+      },
+      "test_rejected_by_ood_threshold": 0.0502092050209205,
+      "val_accuracy": 1.0
+    }
+  },
+  "git": {
+    "branch": "enhance/real-data",
+    "commit": "72abe1a9e914e35ed67e6d4b5ed71319e816cd6f",
+    "dirty": true
+  },
+  "latency": {
+    "_setup": {
+      "batch": 1,
+      "cpu": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+      "dtype": "float32",
+      "env": {
+        "git": {
+          "branch": "enhance/real-data",
+          "commit": "72abe1a9e914e35ed67e6d4b5ed71319e816cd6f",
+          "dirty": true
+        },
+        "hardware": {
+          "cpu_count": 16,
+          "cuda_available": true,
+          "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+          "nvidia_smi": "NVIDIA GeForce RTX 3050 Laptop GPU, 4096 MiB, 617.42",
+          "platform": "Windows-10-10.0.26200-SP0",
+          "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+          "torch_cuda_build": "12.1"
+        },
+        "packages": {
+          "ImageHash": "4.3.2",
+          "Pillow": "10.3.0",
+          "kaggle": "2.2.4",
+          "matplotlib": "3.11.2",
+          "numpy": "1.26.4",
+          "opencv-python-headless": "4.9.0.80",
+          "pandas": "3.0.6",
+          "scikit-learn": "1.5.0",
+          "scipy": "1.17.1",
+          "timm": "1.0.3",
+          "torch": "2.3.0+cu121",
+          "torchvision": "0.18.0+cu121",
+          "ultralytics": "8.2.18"
+        },
+        "python": "3.11.9",
+        "timestamp_utc": "2026-10-17T13:02:36+00:00"
+      },
+      "img_size": 224,
+      "runs": 50,
+      "threads": 4
+    },
+    "efficientnet_b3": {
+      "checkpoint_from_trained_run": true,
+      "checkpoint_mb": 41.32926940917969,
+      "median_ms": 48.738249999587424,
+      "p90_ms": 55.665260000751005,
+      "params_m": 10.703917
+    },
+    "mobilenetv3_large": {
+      "checkpoint_from_trained_run": true,
+      "checkpoint_mb": 16.23744010925293,
+      "median_ms": 19.743650000236812,
+      "p90_ms": 22.74448999996821,
+      "params_m": 4.208437
+    },
+    "resnet50": {
+      "checkpoint_from_trained_run": true,
+      "checkpoint_mb": 90.00394248962402,
+      "median_ms": 48.483650001799106,
+      "p90_ms": 53.12048999949184,
+      "params_m": 23.518277
+    }
+  },
+  "selected": "efficientnet_b3",
+  "selection_rule": "highest mean CV macro-F1",
+  "study_archs": [
+    "efficientnet_b3",
+    "resnet50",
+    "mobilenetv3_large"
+  ]
+}

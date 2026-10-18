@@ -25,6 +25,7 @@ class DiseaseDetectionResult(BaseModel):
     is_healthy: bool
     gradcam_overlay_url: Optional[str] = None
     probabilities: Dict[str, float] = {}
+    low_confidence: bool = False  # below the calibrated threshold: ask the user to retake the photo
 
 
 class PestDetectionResult(BaseModel):
@@ -32,6 +33,7 @@ class PestDetectionResult(BaseModel):
     confidence: float
     bbox: List[float]  # [x1, y1, x2, y2]
     is_unreliable: bool  # True for Mango Hopper & Stem Borer (<100 annotated samples)
+    host_verified: bool = False  # True only if the class was trained on mango images; else excluded from the OHI
     warning: Optional[str] = None
 
 
@@ -43,9 +45,11 @@ class RecommendationItem(BaseModel):
     active_ingredient: str
     dosage_rate: str
     application_guidance: str
-    waiting_period_days: int
+    waiting_period_days: Optional[int] = None  # only when the cited source states a pre-harvest interval
     citation_source: str
     citation_url: str
+    citation_quote: str = ""
+    verified_on: str = ""
 
 
 class AnalysisResponse(BaseModel):
@@ -59,7 +63,7 @@ class AnalysisResponse(BaseModel):
     latitude: float
     longitude: float
     model_status: Dict[str, bool]
-    ohi_score: float
+    ohi_score: Optional[float]  # None when neither disease nor pest could be assessed
     health_status: str
     badge_color: str
     ohi_is_partial: bool
@@ -71,7 +75,9 @@ class AnalysisResponse(BaseModel):
     recommendations: List[RecommendationItem]
     nutrient_input_was_defaulted: bool = True
     caveats: List[str]
-    penalty_breakdown: Dict[str, float]
+    penalty_breakdown: Dict[str, Optional[float]]  # None for components that were not assessed
+    healthy_lesion_inconsistency: bool = False
+    excluded_unverified_pest_detections: int = 0
     weights_used: Dict[str, float]
     weather_vulnerability: Dict[str, Any]
     image_url: Optional[str] = None
@@ -102,7 +108,7 @@ def analyze_image(
     Analyzes uploaded mango orchard imagery:
     - Disease Detection (EfficientNet-B3) + Grad-CAM heatmap + lesion surface area %
     - Pest Detection (YOLOv8) with Rule 3 unreliable-class flagging
-    - Open-Meteo microclimate, deterministic OHI and ICAR/TNAU recommendations
+    - Open-Meteo microclimate, deterministic OHI and cited TNAU/NHM recommendations
 
     Declared as a sync endpoint so FastAPI runs the CPU-bound inference in its threadpool.
     """

@@ -1,0 +1,25 @@
+{
+  "batch": 16,
+  "close_mosaic": 10,
+  "cos_lr": false,
+  "data": "ml\\datasets\\processed\\pest\\data.yaml",
+  "data_yaml_sha256": "c9343a95b717a10aee48b422368faf7a54ae669c91f53538c009d6b14f60f8c1",
+  "deterministic": true,
+  "device": "0",
+  "epochs": 50,
+  "host_verified": {
+    "Fruit Fly": false,
+    "Mealy Bug": false,
+    "Scale Insect": false
+  },
+  "imgsz": 640,
+  "lr0": 0.01,
+  "model": "yolo11n",
+  "model_selection": "val mAP50-95 (Ultralytics fitness = 0.1 mAP50 + 0.9 mAP50-95)",
+  "optimizer": "SGD",
+  "patience": 15,
+  "pretrained": "ml\\pest_detection\\pretrained\\yolo11n.pt",
+  "pretrained_sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+  "seed": 42,
+  "workers": 2
+}

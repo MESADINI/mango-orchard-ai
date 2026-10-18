@@ -4,6 +4,8 @@
 **Document Purpose:** Presentation script, slide deck structure, speaker notes, and demonstration flow for project defense, stakeholder pitches, investor reviews, or university capstone presentations.  
 **File:** `PROJECT_PRESENTATION_SUMMARY.md`  
 
+> ⚠️ **UNVERIFIED DRAFT (audit 2026-10-17).** No model in this repository has been trained yet, so the system currently reports disease and pest results as *unavailable*. Invented figures that previously appeared here (demo confidences, OHI demo score, yield/pesticide impact percentages, accuracy claims, market statistics) have been removed. Re-add numbers only from `results/` files (see `PROGRESS.md`).
+
 ---
 
 ## 1. Executive Presentation Overview
@@ -38,14 +40,14 @@
 - **Subheader:** A Deterministic Multi-Modal Decision Support System for Sustainable Mango Cultivation
 - **Presenter:** [Your Name / Research Team]
 - **Speaker Talking Points:**
-  > "Good morning/afternoon, everyone. Today, I am proud to present our project: *AI Mango Orchard Health & Pest Intelligence*. Mango is known as the 'King of Fruits' and represents billions of dollars in global agricultural trade, with India producing over 45% of the world's supply. Yet, orchardists lose up to 30 to 40% of their yields each year to foliar diseases and insect pests, while overusing indiscriminate chemicals. Today, I will demonstrate how our system solves this using state-of-the-art vision models, deterministic mathematical scoring, microclimate forecasting, and verified agronomic protocols."
+  > "Good morning/afternoon, everyone. Today, I am proud to present our project: *AI Mango Orchard Health & Pest Intelligence*. Mango is known as the 'King of Fruits', and India is its largest producer [cite a verified FAO/NHB figure]. Yet orchardists lose a significant share of their yields to foliar diseases and insect pests [citation needed], while often overusing chemicals. Today, I will demonstrate how our system solves this using state-of-the-art vision models, deterministic mathematical scoring, microclimate forecasting, and verified agronomic protocols."
 
 ---
 
 ### Slide 2: The Core Problem in Mango Cultivation
 - **Visuals:** Split screen showing Anthracnose-damaged leaves, Fruit Fly fruit damage, and blanket chemical sprayers.
 - **Bullet Points:**
-  - **Yield Loss:** 30–40% crop destruction from Anthracnose, Powdery Mildew, Bacterial Canker, and Fruit Flies.
+  - **Yield Loss:** Significant losses from Anthracnose, Powdery Mildew, Bacterial Canker, and Fruit Flies [citation needed — no figure until sourced].
   - **Diagnostic Delay:** Laboratory pathology or expert field scouting takes days to weeks—by then, sporulation has spread.
   - **The 'Black Box' AI Crisis:** Most agricultural AI systems provide opaque percentages without explaining why or how severe the infection is.
   - **Pesticide Abuse:** Growers spray broad-spectrum chemicals blindly, risking pesticide resistance, export rejections due to Maximum Residue Limit (MRL) violations, and environmental harm.
@@ -108,14 +110,14 @@ graph TD
 ---
 
 ### Slide 5: Foliar Disease Diagnostics (EfficientNet-B3)
-- **Visuals:** Sample leaf images of the 6 classes with classification confidence cards.
+- **Visuals:** Sample leaf images of the 5 classes with classification confidence cards.
 - **Classes Covered:**
   1. *Anthracnose* (*Colletotrichum gloeosporioides*)
   2. *Bacterial Canker* (*Xanthomonas citri* pv. *mangiferaeindicae*)
   3. *Powdery Mildew* (*Oidium mangiferae*)
   4. *Sooty Mold* (*Capnodium mangiferae*)
-  5. *Leaf Spot* (*Pestalotiopsis mangiferae*)
-  6. *Healthy Foliage*
+  5. *Healthy Foliage*
+  (Leaf Spot was dropped: no openly licensed training images exist.)
 - **Technical Highlights:**
   - Architecture: **EfficientNet-B3** via PyTorch & `timm` (12.2M parameters; optimal trade-off between edge throughput and representation capacity).
   - Input: $300 \times 300$ resolution with ImageNet normalization.
@@ -130,7 +132,7 @@ graph TD
 - **Core Innovations:**
   - **Zero Model Surgery:** Uses PyTorch forward and backward tensor hooks registered directly on `model.conv_head`.
   - **No Retraining or Architecture Modifications:** Operates dynamically during the inference forward-backward pass.
-  - **Trust & Verification:** Proves that the neural network is activating on actual fungal lesions, not background soil or camera artifacts.
+  - **Trust & Verification:** Lets a user check whether the network is attending to lesions rather than background (Grad-CAM is a qualitative aid; quantitative evaluation is planned).
 - **Speaker Talking Points:**
   > "To eliminate the black-box problem, we implemented hook-based Grad-CAM. By attaching non-invasive PyTorch forward and backward hooks to the final convolutional layer, we generate a high-resolution attention heatmap. Growers and extension officers can immediately see that the AI is making its diagnosis based on the authentic necrotic spots rather than image background noise."
 
@@ -177,7 +179,7 @@ graph TD
     - Rain Washout / Spore Splash: Precipitation $\ge 2.0\text{ mm}$.
   - Computes a 7-day forward-looking outbreak probability curve, allowing growers to apply prophylactic organic fungicides *before* spores germinate.
 - **Speaker Talking Points:**
-  > "Treating a fungal outbreak after it has consumed 20% of the canopy is too late. Our system connects to Open-Meteo to track microclimate humidity and temperature windows. If relative humidity exceeds 80% with temperatures between 22 and 32 degrees Celsius, our forecaster warns the grower 72 hours in advance to spray prophylactic biocontrols before spore germination begins."
+  > "Treating a fungal outbreak after it has consumed 20% of the canopy is too late. Our system connects to Open-Meteo to track microclimate humidity and temperature windows. If relative humidity exceeds 80% with temperatures between 22 and 32 degrees Celsius, our forecaster flags upcoming days with favourable conditions in the 7-day forecast. (These rules have not yet been validated against outbreak records.)"
 
 ---
 
@@ -185,13 +187,14 @@ graph TD
 - **Visuals:** Excerpt of ICAR and TNAU research bulletins; sample treatment recommendation card.
 - **Inviolable Architectural Rule 2:**
   > *Every chemical dosage, active ingredient, biological agent, and cultural practice must have an explicit citation to ICAR, TNAU, or DPPQS.*
-- **Sample Verified Protocols:**
-  - **Anthracnose:** Copper Oxychloride 50% WP @ 3.0 g/L or Azoxystrobin 23% SC @ 1.0 mL/L (*TNAU Agritech Portal*).
-  - **Powdery Mildew:** Wettable Sulphur 80% WP @ 2.0 g/L or Hexaconazole 5% EC @ 1.0 mL/L (*ICAR-CISH Bulletin 45*).
-  - **Fruit Fly:** Methyl Eugenol parapheromone traps @ 10–15 traps/hectare + jaggery/malathion bait sprays (*ICAR-CISH*).
-  - **Bacterial Canker:** Streptocycline (100 ppm) + Copper Oxychloride (2.5 g/L) (*DPPQS Standard Guidelines*).
+- **Sample Verified Protocols** (checked against the live sources on 2026-10-17; see `docs/sources.md`):
+  - **Anthracnose:** *Pseudomonas fluorescens* (FP 7) 5 g/L on flowers every 3 weeks from October (*TNAU Agritech, Anthracnose*); copper oxychloride 0.3% for leaf infection (*NHM IPM Schedule for Mango, 2012*).
+  - **Powdery Mildew:** Wettable sulphur 0.2% when panicles are 3–4 inches, second spray 15 days later (*TNAU Agritech; NHM 2012*).
+  - **Fruit Fly:** Destroy fallen fruit, summer ploughing (*TNAU*); methyl eugenol traps 10/ha during fruiting (*NHM 2012*). Malathion is banned on mango (CIB&RC, 2023) and is no longer suggested.
+  - **Bacterial Canker:** Sanitation, windbreaks, copper oxychloride 0.3% in severe infection (*NHM 2012*).
+- **Verification finding:** the earlier sample protocols included chemicals that are banned or restricted for mango (malathion, dimethoate, dichlorvos, dinocap). They were removed; every remaining entry has a deep link and a quote.
 - **Speaker Talking Points:**
-  > "In agriculture, incorrect dosage kills crops and violates export standards. Under Inviolable Rule 2, no recommendation exists in our database without a verified citation to the Indian Council of Agricultural Research, Tamil Nadu Agricultural University, or DPPQS. We provide exact chemical formulations, organic alternatives, and safety pre-harvest intervals."
+  > "In agriculture, incorrect dosage kills crops and violates export standards. Under Inviolable Rule 2, no recommendation exists in our database without a verified citation to the Indian Council of Agricultural Research, Tamil Nadu Agricultural University, or DPPQS. Every entry links to the exact page and was checked against India's banned-pesticide list; the app asks the farmer to confirm the product label allows use on mango."
 
 ---
 
@@ -199,10 +202,10 @@ graph TD
 - **Visuals:** Side-by-side screenshot of conversational UI in English and Tamil (தமிழ்).
 - **Features:**
   - Instant vernacular query resolution for smallholder farmers.
-  - Supports Tamil queries: e.g., *"மா மரத்தில் ஆந்த்ராக்னோஸ் இலை நோய் தீர்வு என்ன?"* $\rightarrow$ Returns Copper Oxychloride dosage and TNAU citations in fluent Tamil.
+  - Supports Tamil queries about Anthracnose only (other topics not yet covered): e.g., *"மா மரத்தில் ஆந்த்ராக்னோஸ் இலை நோய் தீர்வு என்ன?"* $\rightarrow$ returns the Copper Oxychloride dosage with a TNAU citation.
   - Guardrailed against generic LLM hallucinations: queries our curated agronomic database first.
 - **Speaker Talking Points:**
-  > "Over 70% of mango farm managers in South India operate in regional languages. We built a bilingual chatbot that speaks English and Tamil. A farmer in Dharmapuri or Krishnagiri can type or speak in Tamil and receive verified, dosage-accurate advice backed by TNAU and ICAR publications."
+  > "Many mango growers in South India work primarily in Tamil. We built a keyword-based chatbot that answers in English and Tamil. Tamil coverage is currently limited (Anthracnose plus a greeting), and treatment citations are still being verified."
 
 ---
 
@@ -211,8 +214,8 @@ graph TD
 - **Frontend Stack:**
   - React 18 + Vite + Tailwind CSS v3 (modern dark-mode glassmorphic aesthetics).
   - Interactive Grad-CAM previewer and pest bounding-box visualization.
-  - Chart.js trends showing OHI score progression across orchard blocks.
-  - Single-click Executive PDF Audit generation via WeasyPrint, ready for export certification and bank crop loans.
+  - Scan history with OHI scores per scan.
+  - Single-click PDF report via WeasyPrint (HTML fallback when native libraries are missing). Not a certified document.
 - **Speaker Talking Points:**
   > "Our user interface is designed for speed and clarity in the field. Built with React 18 and Tailwind CSS, it provides real-time visualizations, historical scan tracking, and a one-click executive PDF generator that creates audit-ready health certificates for farm managers and agricultural loan officers."
 
@@ -220,22 +223,17 @@ graph TD
 
 ### Slide 13: Live Demonstration Script
 - **Step 1 (Scan Upload):** Drag-and-drop `ml/datasets/sample_leaves/anthracnose_sample.jpg` and `sample_pests/fruit_fly_sample.jpg`.
-- **Step 2 (Instant AI Inference):** Watch the pipeline classify Anthracnose at 89.2% confidence and detect Fruit Flies with bounding boxes.
+- **Step 2 (AI Inference):** With trained weights installed, the pipeline shows the predicted disease with its confidence and any pest boxes. Without weights (the current state), it shows *unavailable* and a PARTIAL OHI. Note: the bundled sample images are synthetic drawings, not field photos.
 - **Step 3 (Explainability View):** Click the Grad-CAM toggle to reveal the activation overlay pinpointing the foliar necrotic lesions.
-- **Step 4 (OHI & Penalty Audit):** Inspect the OHI score of 82.5/100, showing exact point deductions for disease severity (14.5% leaf surface) and pest count.
+- **Step 4 (OHI & Penalty Audit):** Inspect the OHI score and its penalty breakdown, caveats and missing components, all exactly as returned by the API.
 - **Step 5 (Tamil Chatbot Interaction):** Ask in Tamil: *"ஆந்த்ராக்னோஸ் மருந்து என்ன?"* and observe the verified TNAU response.
 - **Step 6 (Download Audit PDF):** Click 'Export Report' to download the formatted PDF audit document.
 
 ---
 
-### Slide 14: Agronomic & Economic Impact
-- **Quantifiable Outcomes:**
-  - **Yield Loss Reduction:** Prevents an estimated 20–25% in preventable harvest losses.
-  - **Pesticide Cost Savings:** 30–35% reduction in pesticide expenditures by transitioning from blanket spraying to weather-targeted prophylactic intervention.
-  - **Export Compliance:** Drastically lowers chemical residue rejections by enforcing strict ICAR/DPPQS waiting periods.
-  - **Accessible Technology:** Zero hardware cost for the base system—operates entirely from smartphone cameras and free Open-Meteo weather APIs.
-- **Speaker Talking Points:**
-  > "The economic impact is transformative. By timing treatments to microclimate sporulation windows, growers can cut chemical use by up to a third, saving money while protecting pollinators and meeting strict export standards for premium markets like Europe and the Middle East."
+### Slide 14: Expected Impact (hypotheses, not results)
+- **No impact has been measured.** Earlier versions of this slide claimed yield-loss and pesticide-cost reductions; they were not based on any data and have been removed.
+- **Hypotheses to test in a field study:** weather-timed spraying may reduce unnecessary applications; enforcing label waiting periods may help residue compliance; the base system needs only a smartphone camera and the free Open-Meteo API.
 
 ---
 
@@ -256,4 +254,4 @@ graph TD
 | **"Why not train a single end-to-end deep neural network to predict the 0–100 OHI score directly?"** | "An end-to-end regression model would be a complete black box. If it scored an orchard 65/100, neither the agronomist nor the farmer could tell if that was caused by fungal lesions, pest pressure, or weather stress. Our deterministic formula ensures every point deducted is auditable, legally defensible, and directly tied to an agronomic action." |
 | **"Why do you gate Mango Hopper and Stem Borer instead of letting the model predict them?"** | "This is Inviolable Rule 3. Responsible AI requires acknowledging data limitations. With fewer than 100 public verified bounding boxes, any YOLO model would suffer high false-positive or false-negative rates. Falsely confirming a Stem Borer could lead a farmer to unnecessarily inject lethal organophosphates into the tree trunk. Gating unreliable classes protects the grower." |
 | **"How does the weather model function without on-farm meteorological stations?"** | "We integrate Open-Meteo's high-resolution global weather reanalysis models based on orchard GPS coordinates. While physical stations are ideal, Open-Meteo provides immediate zero-cost access to hourly relative humidity, temperature, and precipitation forecasts without burdening smallholders with expensive hardware." |
-| **"Why did you choose EfficientNet-B3 over a heavy Vision Transformer like ViT-L?"** | "Orchard diagnostics must be deployable on edge devices and local farm servers. EfficientNet-B3 achieves over 98% accuracy on foliar benchmarks with only 12.2 million parameters and 1.8 GFLOPs, making it 5 to 10 times faster than ViT-L with negligible difference in diagnostic accuracy." |
+| **"Why did you choose EfficientNet-B3 over a heavy Vision Transformer like ViT-L?"** | "Orchard diagnostics must be deployable on edge devices and local farm servers. EfficientNet-B3 has about 12 million parameters, far fewer than large Vision Transformers, which suits CPU serving. Whether it is as accurate on our data will be decided by the planned backbone comparison; we report no accuracy until it is run." |

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { errorMessage, sendChatMessage } from '../services/api'
 import toast from 'react-hot-toast'
 
@@ -8,11 +8,15 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([
     {
       sender: 'assistant',
-      text: 'Hello! I am your Mango Orchard Advisor. Ask about diseases (Anthracnose, Powdery Mildew, Bacterial Canker, Sooty Mold) or pests (Fruit Fly, Mealy Bug, Scale Insect, Mango Hopper, Stem Borer). Answers are keyword-matched to ICAR and TNAU-cited guidance.',
-      sources: ['ICAR-CISH Lucknow', 'TNAU Agritech Portal']
+      text: 'Hello! I am your Mango Orchard Advisor. Ask about diseases (Anthracnose, Powdery Mildew, Bacterial Canker, Sooty Mold) or pests (Fruit Fly, Mealy Bug, Scale Insect, Mango Hopper, Stem Borer). Answers are keyword-matched to cited TNAU and NHM guidance.',
+      sources: ['TNAU Agritech Portal', 'NHM IPM Schedule for Mango Pests']
     }
   ])
   const [loading, setLoading] = useState(false)
+  const endRef = useRef(null)
+
+  // keep the newest message in view
+  useEffect(() => { endRef.current?.scrollIntoView({ block: 'end' }) }, [messages, loading])
 
   const handleLanguageChange = (lang) => {
     setLanguage(lang)
@@ -30,8 +34,8 @@ export default function Chatbot() {
         ...prev,
         {
           sender: 'assistant',
-          text: 'Switched to English. Ask any question regarding disease diagnostics, weather risks, or ICAR treatment guidelines.',
-          sources: ['ICAR-CISH Lucknow']
+          text: 'Switched to English. Ask about mango diseases, pests and their cited treatments.',
+          sources: ['TNAU Agritech Portal', 'NHM IPM Schedule for Mango Pests']
         }
       ])
     }
@@ -134,10 +138,11 @@ export default function Chatbot() {
               <span className="animate-bounce">●</span>
               <span className="animate-bounce [animation-delay:0.2s]">●</span>
               <span className="animate-bounce [animation-delay:0.4s]">●</span>
-              <span className="text-[11px] ml-1">Consulting ICAR/TNAU knowledge repository...</span>
+              <span className="text-[11px] ml-1">Looking up cited TNAU / NHM guidance...</span>
             </div>
           </div>
         )}
+        <div ref={endRef} />
       </div>
 
       {/* Query Input Bar */}

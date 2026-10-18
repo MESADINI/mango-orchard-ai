@@ -1,0 +1,15 @@
+{
+  "arch": "resnet50",
+  "best_epoch": 16,
+  "best_val_macro_f1": 1.0,
+  "checkpoint_bytes": 94376038,
+  "checkpoint_sha256": "0fa2d6bfcb09ace2955461374737b1c1a31ff57b05931fa76d52af006a59cf34",
+  "epochs_run": 22,
+  "eval_sets": {
+    "val": 280,
+    "heldout": 264
+  },
+  "n_params": 23518277,
+  "train_seconds": 384.7,
+  "eval_precision": "fp32"
+}

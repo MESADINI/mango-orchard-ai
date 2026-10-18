@@ -1,26 +1,88 @@
 # 🥭 AI Mango Orchard Health & Pest Intelligence
 
-A decision-support web app for mango growers. Upload a photo of a mango leaf (and optionally a canopy or
-pest-trap photo) and the system:
+A research prototype of a decision-support app for mango growers. Upload a photo of a mango leaf, and optionally
+a pest-trap or canopy photo. The system then:
 
-1. **Classifies leaf disease** with an EfficientNet-B3 model (Anthracnose, Bacterial Canker, Powdery Mildew,
-   Sooty Mold, Leaf Spot, Healthy) and draws a **Grad-CAM heatmap** showing which parts of the leaf drove the prediction.
-2. **Estimates lesion area** (% of the leaf that looks diseased) with HSV colour segmentation.
-3. **Detects pests** with a YOLOv8 model (Fruit Fly, Mealy Bug, Scale Insect). Mango Hopper and Stem Borer
-   are always flagged **UNVERIFIED** because fewer than 100 labelled examples exist (Rule 3).
-4. **Fetches live weather** for the orchard from Open-Meteo and forecasts 7-day Anthracnose / Powdery Mildew spread risk.
-5. Combines everything into a transparent, rule-based **Orchard Health Index (OHI, 0–100)**
-   — see [docs/OHI_METHODOLOGY.md](docs/OHI_METHODOLOGY.md).
-6. Shows **treatment protocols with ICAR / TNAU / DPPQS citations**, a bilingual (English/Tamil) advisor chatbot,
-   scan history and a downloadable report.
+1. **Classifies leaf disease** into 5 classes (Anthracnose, Bacterial Canker, Powdery Mildew, Sooty Mold, Healthy)
+   with an EfficientNet-B3 model. It shows a **Grad-CAM heatmap**, and asks for a **retake** when the prediction is
+   below a calibrated confidence threshold.
+2. **Estimates lesion area** with a rule-based HSV segmenter that also handles sooty mould and soil backgrounds.
+3. **Detects pests** (Fruit Fly, Mealy Bug, Scale Insect) with YOLO11n.
+   - The training images come from traps, grape and coffee, not mango, so every detection is shown as
+     **unverified**.
+   - Mango Hopper and Stem Borer are gated (fewer than 100 labelled examples).
+4. **Flags disease-favourable weather** for the next 7 days from Open-Meteo, using thresholds from the National
+   Horticulture Mission IPM bulletin.
+5. Combines everything into a transparent, rule-based **Orchard Health Index (OHI, 0–100)**. Components that could
+   not be assessed are excluded, never assumed healthy. See [docs/OHI_METHODOLOGY.md](docs/OHI_METHODOLOGY.md).
+6. Shows **treatments verified against TNAU / NHM sources and the Indian banned-pesticide list**
+   ([docs/sources.md](docs/sources.md)), alongside a bilingual (English/Tamil) chatbot, scan history and a PDF
+   report.
 
-> **Important — model weights are not included.** The repository does not contain trained model files
-> (`*.pth`, `*.pt` are git-ignored). Until you train them (see [Training the models](#training-the-models)),
-> the app still runs, but disease classification and pest detection are reported as **unavailable**, the OHI is
-> marked **PARTIAL**, and no fabricated diagnosis is ever shown. Lesion-area estimation, weather risk, the
-> chatbot, farm management and history all work without weights.
+> **Read the results before relying on it.**
+> - The disease model is near-perfect on its own dataset but scores only about 0.12 macro-F1 on independent
+>   images.
+> - The pest detector has never seen a mango tree.
+> - The OHI and the weather rules have not been validated against expert judgement or outbreak records.
+>
+> All numbers below come from `results/`; see [CLAIMS_EVIDENCE.md](CLAIMS_EVIDENCE.md) for what can and cannot be
+> claimed.
+
+> **Model weights are not committed.** Download them from the v1.0 release with `scripts/download_weights.ps1`
+> (or `.sh`), which checks each file's SHA-256 against `ml/model_registry.json`; or rebuild them with
+> `python tasks.py data`, `train-disease` and `train-pest`. Without weights the app still runs: disease and pest
+> results are reported as **unavailable**, and no diagnosis is fabricated.
+
+> **Decision support, not a replacement for experts.** Confirm any diagnosis in the field and follow product labels
+> and local extension advice.
+
+## Quick start (Windows)
+
+**Prerequisites:** Git, Python 3.11, Node.js 18+, about 3 GB of disk. An NVIDIA GPU is optional; everything runs on
+CPU. Clone into a short path such as `C:\src`: deep folders exceed Windows' 260-character path limit and break
+`pip install`.
+
+```powershell
+git clone https://github.com/MESADINI/mango-orchard-ai.git     # until the PR is merged, add: -b enhance/real-data
+cd mango-orchard-ai
+python -m venv backend\venv
+backend\venv\Scripts\python.exe -m pip install -r backend\requirements-dev.txt
+# optional, NVIDIA GPU (CUDA 12.1 wheels):
+# backend\venv\Scripts\python.exe -m pip install --no-deps torch==2.3.0+cu121 torchvision==0.18.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+cd frontend; npm ci; cd ..
+powershell -ExecutionPolicy Bypass -File .\scripts\download_weights.ps1
+powershell -ExecutionPolicy Bypass -File .\run_demo.ps1        # opens http://localhost:3000; stop with .\stop_demo.ps1
+```
+
+- **Demo login:** `grower@mango.ai` / `orchard123` (a demo-only account, created on first start).
+- **Weights before the release is published:** the release assets are visible only to collaborators, so the download
+  script falls back to the GitHub CLI (`gh auth login` first).
+- **What to show:** the 5-minute script, troubleshooting and a screenshot backup are in [DEMO.md](DEMO.md). Sample
+  images and the models' actual outputs on them are in [demo_data/MANIFEST.md](demo_data/MANIFEST.md).
+- **macOS / Linux:** run `bash scripts/download_weights.sh`, then start the backend and frontend as in
+  [Installation](#installation--running-local-development).
 
 ---
+
+## Results
+
+<!-- RESULTS:START -->
+| Component | Metric | Value | Source |
+|---|---|---|---|
+| Disease classifier | 5-fold group CV macro-F1 (selected model, mean ± SD) | 0.998 ± 0.004 (efficientnet_b3) | `results/disease/summary.json` |
+| Disease classifier | Test-split accuracy (n = 239) | 1.000 | `results/disease/summary.json` |
+| Disease classifier | **External set macro-F1 [95% CI]** (independent images) | **0.119 [0.083, 0.155]** | `results/disease/summary.json` |
+| Disease classifier | External images flagged low-confidence (retake photo) | 96.9% | `results/disease/summary.json` |
+| Pest detector | Test mAP50-95 (selected by val; non-mango proxy data) | 0.520 (yolo11n) | `results/pest/deployed.json` |
+| Lesion severity | Lesion IoU vs expert masks | pending (`results/severity/validation.json`) | `results/severity/validation.json` |
+| Grad-CAM | Deletion AUC: Grad-CAM vs centre prior (lower is better) | 0.606 vs 0.629 | `results/xai/faithfulness.json` |
+| OHI | Max tier change, one weight ±20% | 12.1% | `results/ohi/sensitivity.json` |
+| OHI | Agreement with expert ratings (Spearman) | pending (`results/ohi/expert_agreement.json`) | `results/ohi/expert_agreement.json` |
+| Forecaster | Days/year meeting documented 'High' conditions (Krishnagiri, 2015–2024) | anthracnose 0.0, bacterial canker 0.0, powdery mildew 0.0 | `results/forecaster/backtest.json` |
+| API | Median POST /api/analyze latency, dual scan, CPU | 404 ms | `results/api/latency.json` |
+
+Generated by `python tasks.py paper-tables` from `results/`; full tables in [docs/RESULTS.md](docs/RESULTS.md). Outbreak prediction, field accuracy and expert agreement have not been validated (see Known limitations).
+<!-- RESULTS:END -->
 
 ## Tech stack
 
@@ -28,8 +90,8 @@ pest-trap photo) and the system:
 |---|---|
 | Frontend | React 18, Vite 5, Tailwind CSS 3, React Router, Axios, react-dropzone |
 | Backend | Python 3.11, FastAPI, Pydantic v2, SQLite (built-in), PyJWT + bcrypt, WeasyPrint (PDF) |
-| ML | PyTorch, timm (EfficientNet-B3), Ultralytics YOLOv8, OpenCV, scikit-learn |
-| External | Open-Meteo weather API (no key), optional Supabase Auth |
+| ML | PyTorch 2.3, timm (EfficientNet-B3), Ultralytics 8.3 (YOLO11n), OpenCV, scikit-learn, SciPy |
+| External | Open-Meteo weather API (no key). Research data: MangoLeafBD, Roboflow Universe, NASA POWER |
 
 ## Folder structure
 
@@ -48,14 +110,18 @@ mango-orchard-ai/
 ├── frontend/             # React app (pages: Dashboard, Scan, History, Chatbot, Farm Admin)
 ├── ml/
 │   ├── pipeline.py       # End-to-end orchestration used by the backend
-│   ├── disease_detection/  # EfficientNet-B3 inference, training, evaluation
-│   ├── pest_detection/     # YOLOv8 inference + training
-│   ├── explainability/     # Hook-based Grad-CAM
-│   ├── severity/           # Lesion segmentation + OHI engine
-│   ├── forecasting/        # Open-Meteo client, spread forecaster, cited recommendations DB
-│   └── datasets/           # Dataset download/preparation scripts and sample images
+│   ├── disease_detection/  # classifier study (CV, final models, ablations, calibration), inference, deploy
+│   ├── pest_detection/     # YOLO study, deployment with host_verified flags, inference
+│   ├── explainability/     # Hook-based Grad-CAM + deletion/insertion faithfulness
+│   ├── severity/           # Lesion segmentation, mask validation, OHI engine + sensitivity analysis
+│   ├── forecasting/        # weather clients, NHM-threshold rules, back-test, verified recommendations DB
+│   ├── reporting/          # results tables / LaTeX numbers from results/, reference checker
+│   ├── model_registry.py   # deployed-model registry (ml/model_registry.json)
+│   └── datasets/           # Reproducible dataset download/build scripts (see docs/datasets/)
 ├── database/             # Supabase/PostgreSQL schema (optional, for a hosted deployment)
-├── docs/                 # OHI methodology and source citations
+├── docs/                 # architecture, results, OHI methodology, sources, dataset/model cards, phase reports
+├── paper/                # IEEE manuscript (numbers generated from results/)
+├── results/              # every reported number, written only by code
 ├── conftest.py, pytest.ini, testing_support.py   # Test configuration
 └── docker-compose.yml
 ```
@@ -117,19 +183,27 @@ Put secrets such as `JWT_SECRET` in `backend/.env`.
 
 ## Training the models
 
-1. **Get data**
-   - Disease: put a Kaggle token at `~/.kaggle/kaggle.json`, then `python ml/datasets/phase1_disease.py`
-     (downloads MangoLeafBD and creates `ml/datasets/processed/disease/{train,val,test}/<Class>/`).
-     MangoLeafBD has no *Leaf Spot* class — add a supplemental source or that class cannot be learned.
-   - Pests: `export ROBOFLOW_API_KEY=...` then `python ml/datasets/phase1_pest.py`, and build a YOLO `data.yaml`.
-   - Without credentials these scripts generate *synthetic cartoon images*; they are only useful for testing
-     the code paths, **not** for training a model you would trust.
+1. **Get data** (all steps verify SHA-256 checksums; details in `docs/datasets/`)
+   ```bash
+   pip install -r requirements-ml.txt   # GPU torch build: see the header of requirements-ml.txt
+   # exact environment of the reported results (CUDA 12.1):
+   # pip install -r requirements-ml.lock --extra-index-url https://download.pytorch.org/whl/cu121
+   export ROBOFLOW_API_KEY=...           # free Roboflow account; only for the pest data
+   python tasks.py data                  # or: make data
+   ```
+   This downloads MangoLeafBD (CC BY-NC 3.0) and builds a de-duplicated, group-aware 70/15/15 split in
+   `ml/datasets/processed/disease/`. It also builds an external test set from a second, independent mango dataset
+   (`processed/external/`) and the merged pest set with `data.yaml` (`processed/pest/`). Statistics are written to
+   `results/data_stats.json`. **The public pest sources show pests on trap, grape and coffee, not on mango**:
+   the pest set is flagged proxy data (see `docs/datasets/pest.md`).
 2. **Train**
    ```bash
-   pip install kaggle roboflow           # only needed for dataset download
-   python ml/disease_detection/train.py --epochs 25      # -> ml/disease_detection/weights/efficientnet_b3_best.pth
-   python ml/disease_detection/evaluate.py               # precision / recall / F1 / confusion matrix
-   python ml/pest_detection/train.py --data path/to/data.yaml   # -> ml/pest_detection/weights/yolov8_best.pt
+   python tasks.py train-disease     # 3 backbones x 5-fold group CV, final models, 3 ablations, latency, analysis
+                                     # -> results/disease/, deploys the CV-selected model to
+                                     #    ml/disease_detection/weights/disease_classifier.pth
+   python tasks.py eval              # evaluates the deployed checkpoint (test + external set)
+   python tasks.py train-pest        # YOLOv8n / YOLO11n (+ YOLOv8s, not run yet) -> results/pest/, deploys the val-selected model to
+                                     #    ml/pest_detection/weights/pest_detector.pt (classes flagged host_verified: false)
    ```
 3. Restart the backend. `/health` should now report `disease_model_trained: true` / `pest_model_trained: true`.
 
@@ -140,7 +214,7 @@ Checkpoints written by `train.py` embed their class list, so labels always map c
 From the repository root, with the backend virtual environment active:
 
 ```bash
-python -m pytest            # 41 tests: ML pipeline, pest/disease detectors, Grad-CAM, OHI, all API endpoints
+python -m pytest            # full suite: data integrity, models, OHI, forecaster, API, real-model e2e
 cd frontend && npm run lint && npm run build
 ```
 
@@ -152,11 +226,12 @@ trained-model code path with a randomly initialised EfficientNet-B3 checkpoint.
 | Method & path | Auth | Purpose |
 |---|---|---|
 | `GET /health` | – | Service status, which models are trained |
+| `GET /api/models` | – | Deployed model versions, classes, calibration; whether installed weights match the registry |
 | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me` | –/–/✓ | Accounts and JWT tokens |
 | `POST /api/analyze/` | ✓ | Multipart upload: `file` (leaf), `pest_file`, `scan_type` (`dual`/`disease`/`pest`), `farm_id`, `latitude`, `longitude` |
 | `GET /api/analyze/`, `GET /api/analyze/{scan_id}` | ✓ | Scan history / single scan |
 | `GET /api/report/generate/{scan_id}` | ✓ | PDF report (HTML fallback) |
-| `GET /api/weather/forecast?latitude=&longitude=` | – | 7-day disease-spread forecast (503 if Open-Meteo is unreachable) |
+| `GET /api/weather/forecast?latitude=&longitude=` | – | 7-day disease-favourable-weather levels (503 if Open-Meteo is unreachable) |
 | `GET/POST /api/farm/`, `GET/PUT /api/farm/{id}`, `GET/POST /api/farm/{id}/trees` | ✓ | Orchards and tagged trees |
 | `POST /api/chatbot/` | – | English/Tamil advisory chatbot |
 
@@ -165,8 +240,8 @@ trained-model code path with a randomly initialised EfficientNet-B3 checkpoint.
 | Problem | Fix |
 |---|---|
 | Scans say "Disease classification unavailable" | Expected until you train models — see above. |
-| Report opens as a web page, not a PDF | WeasyPrint needs Pango/Cairo. On Windows install the GTK3 runtime (see WeasyPrint docs); the Docker image already includes them. Use the browser's *Print → Save as PDF* meanwhile. |
-| Dashboard shows "Weather service (Open-Meteo) is currently unreachable" | No internet access, or Open-Meteo is down. Scans still work and disclose that default weather was used. |
+| Report opens as a web page, not a PDF | WeasyPrint needs Pango/Cairo. On Windows install the GTK3 runtime (see WeasyPrint docs); the Dockerfile installs them (image build not yet verified, `results/docker/build.txt`). Use the browser's *Print → Save as PDF* meanwhile. |
+| Dashboard shows "Weather service (Open-Meteo) is currently unreachable" | No internet access, or Open-Meteo is down. Scans still work; the weather component is excluded from the OHI. |
 | Frontend shows "Cannot reach the backend server" | Start the backend on port 8000, or set `VITE_PROXY_TARGET`. |
 | Log warns `JWT_SECRET is set to the insecure default` | Set a random `JWT_SECRET` in `backend/.env`. Changing it signs everyone out. |
 | Forgot the demo password / want a fresh start | Stop the backend and delete `backend/data/mango_orchard.db`; it is recreated and re-seeded on start. |
@@ -174,10 +249,24 @@ trained-model code path with a randomly initialised EfficientNet-B3 checkpoint.
 
 ## Known limitations
 
-- No trained weights are shipped, and the bundled sample images are synthetic drawings, not field photos.
-- The chatbot is keyword-based, not a language model. English disease/pest answers come from the same cited
-  database as scan recommendations; Tamil coverage is limited to Anthracnose plus a greeting.
-- Treatment dosages and citations are reproduced from the project's database (`ml/forecasting/recommendations_db.json`)
-  and have not been independently re-verified; confirm against current label and extension guidance before use.
-- Uploaded images are served from `/media` to anyone who has the (random, unguessable) URL.
-- The Supabase SQL schema in `database/` is not used by the running backend, which stores data in SQLite.
+- **Disease model, field accuracy:** the external-set macro-F1 is about 0.12 (`results/disease/`).
+  - The model learned MangoLeafBD's imaging conditions. 97% of independent images fall below the confidence
+    threshold and get a "retake photo" message.
+  - Field images from Indian orchards are needed.
+- **Pest detector, proxy data:** each class comes from one non-mango source.
+  - Its mAP does not measure orchard performance, and Mealy Bug detection is poor (AP50 0.26).
+  - Pest results are excluded from the OHI.
+- **OHI:** the weights, factors and tiers are expert-assigned. Tiers change for up to 12% of scenarios when one
+  weight moves by ±20% (`results/ohi/`). No expert ratings have been collected yet.
+- **Forecaster:**
+  - It reports weather that matches published favourable conditions. It is not an outbreak predictor; no
+    outbreak records exist to test it.
+  - In 10 years of reanalysis data for Krishnagiri, the bulletin's "High" conditions never occur
+    (`results/forecaster/`).
+- **Lesion area:** not yet validated. It needs at least 50 expert masks (`docs/annotation/SEVERITY_MASKS.md`).
+  The white powdery-mildew coating is not segmented.
+- **Chatbot:** keyword-based, not a language model. Answers come only from the verified treatment database, and
+  product label claims for mango were not checked product by product.
+- **Privacy:** uploaded images are served from `/media` to anyone who has the (random, unguessable) URL.
+- **Database schema:** the Supabase SQL schema in `database/` is not used by the running backend, which stores data
+  in SQLite.

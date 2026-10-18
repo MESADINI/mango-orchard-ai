@@ -1,0 +1,61 @@
+path,label,group,mask_file
+ml/datasets/processed/disease/test/Anthracnose/955438f20692a681.jpg,Anthracnose,169,955438f20692a681.png
+ml/datasets/processed/disease/test/Anthracnose/0a08a66e3fe205ef.jpg,Anthracnose,200,0a08a66e3fe205ef.png
+ml/datasets/processed/disease/test/Anthracnose/e9427e7afac1d4b9.jpg,Anthracnose,105,e9427e7afac1d4b9.png
+ml/datasets/processed/disease/test/Anthracnose/88eabb7875cf8517.jpg,Anthracnose,183,88eabb7875cf8517.png
+ml/datasets/processed/disease/test/Anthracnose/1248213f1ae47d45.jpg,Anthracnose,192,1248213f1ae47d45.png
+ml/datasets/processed/disease/test/Anthracnose/6c5a38eb88866bb8.jpg,Anthracnose,151,6c5a38eb88866bb8.png
+ml/datasets/processed/disease/test/Anthracnose/3f86289a88f77bfc.jpg,Anthracnose,318,3f86289a88f77bfc.png
+ml/datasets/processed/disease/test/Anthracnose/30f1d650f26d6f98.jpg,Anthracnose,184,30f1d650f26d6f98.png
+ml/datasets/processed/disease/test/Anthracnose/9ec78ba3309f3d14.jpg,Anthracnose,152,9ec78ba3309f3d14.png
+ml/datasets/processed/disease/test/Anthracnose/c035efef49968c74.jpg,Anthracnose,106,c035efef49968c74.png
+ml/datasets/processed/disease/test/Anthracnose/bb35f326127819e9.jpg,Anthracnose,157,bb35f326127819e9.png
+ml/datasets/processed/disease/test/Anthracnose/7da55f7448b22de0.jpg,Anthracnose,207,7da55f7448b22de0.png
+ml/datasets/processed/disease/test/Bacterial Canker/705473f0490b4d43.jpg,Bacterial Canker,37,705473f0490b4d43.png
+ml/datasets/processed/disease/test/Bacterial Canker/20404c24f243603e.jpg,Bacterial Canker,10,20404c24f243603e.png
+ml/datasets/processed/disease/test/Bacterial Canker/d3f8f9ec99657f61.jpg,Bacterial Canker,36,d3f8f9ec99657f61.png
+ml/datasets/processed/disease/test/Bacterial Canker/d5bc62f03b998230.jpg,Bacterial Canker,13,d5bc62f03b998230.png
+ml/datasets/processed/disease/test/Bacterial Canker/dc70ea9f931fd4b6.jpg,Bacterial Canker,58,dc70ea9f931fd4b6.png
+ml/datasets/processed/disease/test/Bacterial Canker/bc74d70e6e6f57ed.jpg,Bacterial Canker,31,bc74d70e6e6f57ed.png
+ml/datasets/processed/disease/test/Bacterial Canker/70764e0df1f8e023.jpg,Bacterial Canker,64,70764e0df1f8e023.png
+ml/datasets/processed/disease/test/Bacterial Canker/fb45bce7c58bfe7f.jpg,Bacterial Canker,54,fb45bce7c58bfe7f.png
+ml/datasets/processed/disease/test/Bacterial Canker/454bbbaf745280c4.jpg,Bacterial Canker,59,454bbbaf745280c4.png
+ml/datasets/processed/disease/test/Bacterial Canker/90b6eadced7da96c.jpg,Bacterial Canker,49,90b6eadced7da96c.png
+ml/datasets/processed/disease/test/Bacterial Canker/cb8a96ad2a8971cd.jpg,Bacterial Canker,70,cb8a96ad2a8971cd.png
+ml/datasets/processed/disease/test/Bacterial Canker/420ac19f607395d3.jpg,Bacterial Canker,69,420ac19f607395d3.png
+ml/datasets/processed/disease/test/Powdery Mildew/c2422a521630a45c.jpg,Powdery Mildew,867,c2422a521630a45c.png
+ml/datasets/processed/disease/test/Powdery Mildew/9d91f5371c011ad9.jpg,Powdery Mildew,825,9d91f5371c011ad9.png
+ml/datasets/processed/disease/test/Powdery Mildew/520943ff1875f20c.jpg,Powdery Mildew,854,520943ff1875f20c.png
+ml/datasets/processed/disease/test/Powdery Mildew/e8bd783472e8ffa1.jpg,Powdery Mildew,890,e8bd783472e8ffa1.png
+ml/datasets/processed/disease/test/Powdery Mildew/5dcea76fc3493913.jpg,Powdery Mildew,928,5dcea76fc3493913.png
+ml/datasets/processed/disease/test/Powdery Mildew/03c2c36ff57a25dd.jpg,Powdery Mildew,977,03c2c36ff57a25dd.png
+ml/datasets/processed/disease/test/Powdery Mildew/70f861cf6d8db5d1.jpg,Powdery Mildew,885,70f861cf6d8db5d1.png
+ml/datasets/processed/disease/test/Powdery Mildew/08a138be5f383f14.jpg,Powdery Mildew,852,08a138be5f383f14.png
+ml/datasets/processed/disease/test/Powdery Mildew/68401a84a0336216.jpg,Powdery Mildew,853,68401a84a0336216.png
+ml/datasets/processed/disease/test/Powdery Mildew/9f6d5bf74fb7665f.jpg,Powdery Mildew,968,9f6d5bf74fb7665f.png
+ml/datasets/processed/disease/test/Powdery Mildew/e5c9aaa7bd11f0ce.jpg,Powdery Mildew,902,e5c9aaa7bd11f0ce.png
+ml/datasets/processed/disease/test/Powdery Mildew/feb9f4475e77232a.jpg,Powdery Mildew,899,feb9f4475e77232a.png
+ml/datasets/processed/disease/test/Sooty Mold/56c23ee17e1f6e3c.jpg,Sooty Mold,1625,56c23ee17e1f6e3c.png
+ml/datasets/processed/disease/test/Sooty Mold/b73afbe1af2fde18.jpg,Sooty Mold,1629,b73afbe1af2fde18.png
+ml/datasets/processed/disease/test/Sooty Mold/b322ed9b98258d4e.jpg,Sooty Mold,1610,b322ed9b98258d4e.png
+ml/datasets/processed/disease/test/Sooty Mold/c31ccfdc29171e43.jpg,Sooty Mold,1623,c31ccfdc29171e43.png
+ml/datasets/processed/disease/test/Sooty Mold/20542e59fd018567.jpg,Sooty Mold,1626,20542e59fd018567.png
+ml/datasets/processed/disease/test/Sooty Mold/c0831011ccb0bc1a.jpg,Sooty Mold,1679,c0831011ccb0bc1a.png
+ml/datasets/processed/disease/test/Sooty Mold/13e0047f86088a55.jpg,Sooty Mold,1675,13e0047f86088a55.png
+ml/datasets/processed/disease/test/Sooty Mold/a144c2c549cc1ea4.jpg,Sooty Mold,1644,a144c2c549cc1ea4.png
+ml/datasets/processed/disease/test/Sooty Mold/910af3656c678a24.jpg,Sooty Mold,1643,910af3656c678a24.png
+ml/datasets/processed/disease/test/Sooty Mold/ecac122953a2003f.jpg,Sooty Mold,1593,ecac122953a2003f.png
+ml/datasets/processed/disease/test/Sooty Mold/56ef0a4e58704dab.jpg,Sooty Mold,1694,56ef0a4e58704dab.png
+ml/datasets/processed/disease/test/Sooty Mold/dd38bed8172fded2.jpg,Sooty Mold,1640,dd38bed8172fded2.png
+ml/datasets/processed/disease/test/Healthy/6ddee33033d56695.jpg,Healthy,609,6ddee33033d56695.png
+ml/datasets/processed/disease/test/Healthy/c9be8995d5c67b85.jpg,Healthy,363,c9be8995d5c67b85.png
+ml/datasets/processed/disease/test/Healthy/3dea241ea8141924.jpg,Healthy,389,3dea241ea8141924.png
+ml/datasets/processed/disease/test/Healthy/a2d851545a71ead5.jpg,Healthy,545,a2d851545a71ead5.png
+ml/datasets/processed/disease/test/Healthy/9d3188a0c121ac23.jpg,Healthy,687,9d3188a0c121ac23.png
+ml/datasets/processed/disease/test/Healthy/035883c29b862eff.jpg,Healthy,768,035883c29b862eff.png
+ml/datasets/processed/disease/test/Healthy/702e2295a05a986a.jpg,Healthy,748,702e2295a05a986a.png
+ml/datasets/processed/disease/test/Healthy/b4588b642b3a05fa.jpg,Healthy,657,b4588b642b3a05fa.png
+ml/datasets/processed/disease/test/Healthy/4cad574378646d84.jpg,Healthy,650,4cad574378646d84.png
+ml/datasets/processed/disease/test/Healthy/9c9e54ea4a2e3f49.jpg,Healthy,718,9c9e54ea4a2e3f49.png
+ml/datasets/processed/disease/test/Healthy/d5d2934c7c630631.jpg,Healthy,336,d5d2934c7c630631.png
+ml/datasets/processed/disease/test/Healthy/cc59c1b78fefc5e4.jpg,Healthy,471,cc59c1b78fefc5e4.png

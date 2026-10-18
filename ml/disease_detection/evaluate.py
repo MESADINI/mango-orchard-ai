@@ -1,31 +1,48 @@
 """
-AI Mango Orchard Health & Pest Intelligence — Model Evaluation Pipeline
-Computes precision, recall, F1-score, and confusion matrix on the test split.
+AI Mango Orchard Health & Pest Intelligence — Evaluation of the DEPLOYED disease checkpoint.
+
+Runs the checkpoint exactly as the backend loads it (DiseaseDetector: arch, input size, normalisation and
+temperature from the checkpoint) on the group-aware test split and the external set, and writes
+results/disease/deployed_eval.json. Refuses to report anything for a missing/untrained checkpoint.
+The model comparison itself (CV, statistics, calibration, OOD) is in experiments.py / analysis.py.
 """
 
 import argparse
-import os
 import sys
 from pathlib import Path
 
+import numpy as np
 import torch
-from sklearn.metrics import classification_report, confusion_matrix
 from torch.utils.data import DataLoader
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from ml.disease_detection.inference import DISEASE_CLASSES, DiseaseDetector, build_eval_transform
-from ml.disease_detection.train import DEFAULT_DATA_DIR, DEFAULT_SAVE_DIR, CHECKPOINT_NAME, load_split
+from ml.disease_detection.experiments import external_rows  # noqa: E402
+from ml.disease_detection.inference import DISEASE_CLASSES, DiseaseDetector  # noqa: E402
+from ml.disease_detection.metrics import classification_metrics, softmax  # noqa: E402
+from ml.disease_detection.train import DEFAULT_SAVE_DIR, CHECKPOINT_NAME, RowDataset, read_split, sha256_file  # noqa: E402
+from ml.utils.experiment import write_json  # noqa: E402
+
+OUT = REPO_ROOT / "results" / "disease" / "deployed_eval.json"
 
 
-def evaluate_model(data_dir: str, weights_path: str):
-    test_dir = os.path.join(data_dir, "test")
-    if not os.path.isdir(test_dir):
-        print(f"Test directory {test_dir} not found.")
-        return None
+def evaluate_rows(detector: DiseaseDetector, rows) -> dict:
+    loader = DataLoader(RowDataset(rows, detector.transform), batch_size=32, shuffle=False)
+    logits = []
+    with torch.no_grad():
+        for x, _ in loader:
+            logits.append(detector.model(x.to(detector.device)).float().cpu().numpy())
+    probs = softmax(np.concatenate(logits), detector.temperature)
+    y = np.array([r["y"] for r in rows])
+    m = classification_metrics(y, probs, detector.classes)
+    if detector.ood_threshold is not None:
+        m["low_confidence_fraction"] = float((probs.max(1) < detector.ood_threshold).mean())
+    return m
 
+
+def evaluate_model(weights_path: str):
     detector = DiseaseDetector(weights_path=weights_path)
     if not detector.is_trained:
         print(f"No trained weights at {weights_path}; refusing to report metrics for an untrained model.")
@@ -33,36 +50,20 @@ def evaluate_model(data_dir: str, weights_path: str):
     if detector.classes != DISEASE_CLASSES:
         print(f"Checkpoint class order {detector.classes} differs from {DISEASE_CLASSES}; aborting.")
         return None
-
-    test_dataset = load_split(test_dir, build_eval_transform())
-    if len(test_dataset) == 0:
-        print("Test split is empty.")
-        return None
-    test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False)
-
-    y_true, y_pred = [], []
-    with torch.no_grad():
-        for images, labels in test_loader:
-            preds = detector.model(images.to(detector.device)).argmax(dim=1)
-            y_true.extend(labels.tolist())
-            y_pred.extend(preds.cpu().tolist())
-
-    labels = list(range(len(DISEASE_CLASSES)))
-    report = classification_report(y_true, y_pred, labels=labels, target_names=DISEASE_CLASSES, zero_division=0)
-    matrix = confusion_matrix(y_true, y_pred, labels=labels)
-
-    print("\n" + "=" * 60)
-    print("EfficientNet-B3 Disease Detection Classification Report")
-    print("=" * 60)
-    print(report)
-    print("Confusion Matrix (rows = true, cols = predicted, order = DISEASE_CLASSES):")
-    print(matrix)
-    return {"report": report, "confusion_matrix": matrix.tolist()}
+    rows = read_split()
+    result = {"checkpoint": str(weights_path), "sha256": sha256_file(Path(weights_path)), "arch": detector.arch,
+              "temperature": detector.temperature, "ood_threshold": detector.ood_threshold,
+              "test": evaluate_rows(detector, [r for r in rows if r["split"] == "test"]),
+              "external": evaluate_rows(detector, external_rows())}
+    write_json(OUT, result)
+    for name in ("test", "external"):
+        m = result[name]
+        print(f"{name}: n={m['n']} accuracy={m['accuracy']:.4f} macro-F1={m['macro_f1']:.4f} "
+              f"(classes evaluated: {', '.join(m['classes_evaluated'])})")
+    return result
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_dir", type=str, default=str(DEFAULT_DATA_DIR))
     parser.add_argument("--weights", type=str, default=str(DEFAULT_SAVE_DIR / CHECKPOINT_NAME))
-    args = parser.parse_args()
-    evaluate_model(args.data_dir, args.weights)
+    evaluate_model(parser.parse_args().weights)

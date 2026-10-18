@@ -21,9 +21,11 @@ export function OhiScore({ scan, size = 'text-4xl' }) {
   return (
     <div className="flex items-baseline gap-2">
       <span className={`${size} font-extrabold`} style={{ color: scan.badge_color }}>
-        {scan.ohi_score.toFixed(1)}
+        {scan.ohi_score == null ? '—' : scan.ohi_score.toFixed(1)}
       </span>
-      <span className="text-slate-500 text-xs font-semibold">/ 100</span>
+      <span className="text-slate-500 text-xs font-semibold">
+        {scan.ohi_score == null ? 'not enough data' : '/ 100'}
+      </span>
       {scan.ohi_is_partial && (
         <span
           className="text-[10px] font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-1.5 py-0.5 rounded"
