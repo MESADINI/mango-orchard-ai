@@ -104,6 +104,15 @@ mango-orchard-ai/
 - Optional: Docker Desktop, for the containerised setup
 - Optional: GTK/Pango libraries for real PDF output (see Troubleshooting) — otherwise reports are served as printable HTML
 
+## Live demo (Windows, one command)
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\run_demo.ps1     # stop with .\stop_demo.ps1
+```
+Demo login: **`grower@mango.ai` / `orchard123`** (demo-only account, created by `demo_data/seed_demo.py`).
+Sample images and the models' actual outputs on them are in [demo_data/MANIFEST.md](demo_data/MANIFEST.md); the
+5-minute script is in [DEMO.md](DEMO.md).
+
 ## Installation & running (local development)
 
 ### 1. Backend
