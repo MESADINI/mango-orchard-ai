@@ -74,8 +74,8 @@ export default function Dashboard() {
         <span className="text-xl">⚠️</span>
         <div className="text-xs text-amber-200/90 leading-relaxed">
           <strong className="font-semibold text-amber-200">Policy Disclosure:</strong> Soil/leaf nutrient sensors are not
-          integrated. Per the OHI methodology the nutrient input is defaulted to 0 and its weight is reallocated to the
-          disease and pest penalties.
+          integrated, so nutrient status is not measured. Per the OHI methodology it is excluded from the score and the
+          remaining weights are renormalised over the components that were assessed.
         </div>
       </div>
 

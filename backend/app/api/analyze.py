@@ -108,7 +108,7 @@ def analyze_image(
     Analyzes uploaded mango orchard imagery:
     - Disease Detection (EfficientNet-B3) + Grad-CAM heatmap + lesion surface area %
     - Pest Detection (YOLOv8) with Rule 3 unreliable-class flagging
-    - Open-Meteo microclimate, deterministic OHI and ICAR/TNAU recommendations
+    - Open-Meteo microclimate, deterministic OHI and cited TNAU/NHM recommendations
 
     Declared as a sync endpoint so FastAPI runs the CPU-bound inference in its threadpool.
     """

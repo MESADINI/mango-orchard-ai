@@ -75,3 +75,9 @@ def test_tamil_reply_keeps_doses_from_the_database_verbatim():
 def test_reply_is_capped_at_three_conditions():
     r = build_reply("anthracnose canker mildew sooty scale", "en")
     assert len(r.matched_conditions) == 3
+
+
+def test_cultural_advice_omits_missing_product_and_dose():
+    from app.api.chatbot import _advice_lines
+    lines, _, _ = _advice_lines("Fruit Fly")
+    assert lines and not any("N/A" in line for line in lines)

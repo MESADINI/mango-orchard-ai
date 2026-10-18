@@ -34,7 +34,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="AI Mango Orchard Health & Pest Intelligence API",
     description="Backend API for mango leaf disease detection, hook-based Grad-CAM explainability, YOLOv8 pest "
-                "detection, deterministic OHI scoring, and ICAR/TNAU-cited recommendations.",
+                "detection, deterministic OHI scoring, and TNAU/NHM-cited recommendations.",
     version=settings.VERSION,
     lifespan=lifespan
 )
@@ -80,7 +80,7 @@ def health_check():
             **pipeline_service.model_status(),
             "rules_enforced": [
                 "Rule 1: Deterministic OHI",
-                "Rule 2: ICAR/TNAU Citations",
+                "Rule 2: Cited treatments (TNAU / NHM)",
                 "Rule 3: Unreliable Class Flagging",
                 "Rule 4: Disclosed Nutrient Default"
             ]

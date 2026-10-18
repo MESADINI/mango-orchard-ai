@@ -139,7 +139,9 @@ def _advice_lines(condition: str) -> Tuple[List[str], List[str], List[str]]:
     for i, r in enumerate(recs, 1):
         phi = (f" Last spray at least {r['waiting_period_days']} days before harvest."
                if r.get("waiting_period_days") is not None else "")
-        lines.append(f"{i}. {r['title']}: {r['product_name']}, {r['dosage_rate']}. {r['application_guidance']}{phi}"
+        # cultural measures have no product or dose ("N/A"); leave those fields out instead of printing "N/A, N/A"
+        product = ", ".join(v for v in (r["product_name"], r["dosage_rate"]) if v and v != "N/A")
+        lines.append(f"{i}. {r['title']}: {product + '. ' if product else ''}{r['application_guidance']}{phi}"
                      f" [Source: {r['citation_source']}]")
     return lines, list(dict.fromkeys(r["citation_source"] for r in recs)), \
         list(dict.fromkeys(r["citation_url"] for r in recs))

@@ -126,7 +126,7 @@ export default function ScanResult({ result }) {
 
       <div className="glass-panel p-6 rounded-2xl border-slate-700/80 space-y-4">
         <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-          <span>📜</span><span>ICAR/TNAU Treatment Protocol</span>
+          <span>📜</span><span>TNAU / NHM Treatment Protocol</span>
         </h3>
         {result.recommendations?.length ? (
           <div className="space-y-3">
@@ -136,8 +136,12 @@ export default function ScanResult({ result }) {
                   <h4 className="text-xs font-bold text-emerald-400">{rec.condition}: {rec.title}</h4>
                   <span className="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">{rec.treatment_type}</span>
                 </div>
-                <p className="text-xs text-slate-300"><strong>Product:</strong> {rec.product_name}</p>
-                <p className="text-xs text-slate-300"><strong>Dosage:</strong> {rec.dosage_rate}</p>
+                {rec.product_name !== 'N/A' && (
+                  <p className="text-xs text-slate-300"><strong>Product:</strong> {rec.product_name}</p>
+                )}
+                {rec.dosage_rate !== 'N/A' && (
+                  <p className="text-xs text-slate-300"><strong>Dosage:</strong> {rec.dosage_rate}</p>
+                )}
                 <p className="text-xs text-slate-400">{rec.application_guidance}</p>
                 <div className="border-t border-slate-700/60 pt-2 flex items-center justify-between text-[11px] text-slate-500">
                   <a href={rec.citation_url} target="_blank" rel="noreferrer" className="italic hover:text-slate-300">
